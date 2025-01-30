@@ -1,7 +1,8 @@
 all_models_*
 non-publish
 *test*
-o
 venv
+o
+predictions
 
-_DS_Store
+.DS_Store
