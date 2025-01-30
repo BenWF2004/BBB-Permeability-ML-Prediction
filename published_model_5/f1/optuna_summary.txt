@@ -1,0 +1,12 @@
+Best trial for f1: 0.9024819784401139
+Best params:
+num_boost_round: 1122
+early_stopping_rounds: 354
+max_depth: 26
+learning_rate: 0.03602356958596271
+subsample: 0.6957107885241479
+colsample_bytree: 0.8543057574630333
+min_child_weight: 10
+gamma: 0.2655796045375347
+reg_alpha: 4.795529162686073
+reg_lambda: 1.7497820245255609

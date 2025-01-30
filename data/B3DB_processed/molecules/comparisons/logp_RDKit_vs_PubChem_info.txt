@@ -1,0 +1,10 @@
+Descriptor Analysis Information
+--------------------------------
+Descriptor: LogP
+RDKit Column: LogP_RDKit
+PubChem Column: LogP_PubChem
+Function Column for Color Mapping: MW_RDKit
+Data Points Used: 6177
+Mean Absolute Error (MAE): 0.5920
+Root Mean Squared Error (RMSE): 0.8630
+R^2 Value: 0.8570

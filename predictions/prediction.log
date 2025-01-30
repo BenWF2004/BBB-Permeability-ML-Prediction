@@ -1,0 +1,163 @@
+2025-01-30 18:59:22,107 - INFO - Started prediction script
+2025-01-30 19:08:39,881 - INFO - Started prediction script
+2025-01-30 19:08:39,932 - INFO - Data loaded from 'published_model/validation_data_original.json', total records: 1562
+2025-01-30 19:08:39,994 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-01-30 19:08:40,020 - INFO - Loaded vectorizers and kept_tokens for BRICs, RINGS, SIDE_CHAINS.
+2025-01-30 19:08:40,126 - INFO - Loading model assets from: published_model/balanced_accuracy
+2025-01-30 19:08:40,177 - INFO - Loaded XGBoost model from published_model/balanced_accuracy/final_model.json
+2025-01-30 19:08:40,179 - INFO - Loaded 987 feature names from published_model/balanced_accuracy/feature_names.joblib
+2025-01-30 19:08:40,179 - INFO - Loaded best threshold: 0.49 from published_model/balanced_accuracy/best_threshold.txt
+2025-01-30 19:08:40,326 - INFO - Loading model assets from: published_model/accuracy
+2025-01-30 19:08:40,368 - INFO - Loaded XGBoost model from published_model/accuracy/final_model.json
+2025-01-30 19:08:40,370 - INFO - Loaded 987 feature names from published_model/accuracy/feature_names.joblib
+2025-01-30 19:08:40,370 - INFO - Loaded best threshold: 0.46 from published_model/accuracy/best_threshold.txt
+2025-01-30 19:08:40,471 - INFO - Loading model assets from: published_model/recall
+2025-01-30 19:08:40,526 - INFO - Loaded XGBoost model from published_model/recall/final_model.json
+2025-01-30 19:08:40,528 - INFO - Loaded 987 feature names from published_model/recall/feature_names.joblib
+2025-01-30 19:08:40,529 - INFO - Loaded best threshold: 0.35 from published_model/recall/best_threshold.txt
+2025-01-30 19:08:40,656 - INFO - Loading model assets from: published_model/auc
+2025-01-30 19:08:40,676 - INFO - Loaded XGBoost model from published_model/auc/final_model.json
+2025-01-30 19:08:40,677 - INFO - Loaded 987 feature names from published_model/auc/feature_names.joblib
+2025-01-30 19:08:40,677 - INFO - Loaded best threshold: 0.35 from published_model/auc/best_threshold.txt
+2025-01-30 19:08:40,776 - INFO - Loading model assets from: published_model/precision
+2025-01-30 19:08:40,830 - INFO - Loaded XGBoost model from published_model/precision/final_model.json
+2025-01-30 19:08:40,834 - INFO - Loaded 987 feature names from published_model/precision/feature_names.joblib
+2025-01-30 19:08:40,834 - INFO - Loaded best threshold: 0.65 from published_model/precision/best_threshold.txt
+2025-01-30 19:08:40,943 - INFO - Loading model assets from: published_model/f1
+2025-01-30 19:08:41,014 - INFO - Loaded XGBoost model from published_model/f1/final_model.json
+2025-01-30 19:08:41,015 - INFO - Loaded 987 feature names from published_model/f1/feature_names.joblib
+2025-01-30 19:08:41,016 - INFO - Loaded best threshold: 0.53 from published_model/f1/best_threshold.txt
+2025-01-30 19:08:41,161 - INFO - Predictions saved at: predictions/pm_validation_data_noknn.csv
+2025-01-30 19:08:41,161 - INFO - Prediction script completed successfully.
+2025-01-30 19:09:07,870 - INFO - Started prediction script
+2025-01-30 19:09:07,917 - INFO - Data loaded from 'published_model/validation_data_original.json', total records: 1562
+2025-01-30 19:09:07,961 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-01-30 19:09:07,978 - INFO - Loaded vectorizers and kept_tokens for BRICs, RINGS, SIDE_CHAINS.
+2025-01-30 19:09:08,266 - INFO - Loaded processed training features from published_model/processed_train_features.csv, shape: (7928, 987)
+2025-01-30 19:09:08,279 - INFO - Combined training and prediction data for KNN imputation, shape: (9490, 989)
+2025-01-30 19:10:16,615 - INFO - KNN imputation complete, imputed data shape: (9490, 989)
+2025-01-30 19:10:16,623 - INFO - Separated imputed data: training shape (7928, 989), prediction shape (1562, 989)
+2025-01-30 19:10:16,625 - INFO - Loading model assets from: published_model/balanced_accuracy
+2025-01-30 19:10:16,674 - INFO - Loaded XGBoost model from published_model/balanced_accuracy/final_model.json
+2025-01-30 19:10:16,676 - INFO - Loaded 987 feature names from published_model/balanced_accuracy/feature_names.joblib
+2025-01-30 19:10:16,676 - INFO - Loaded best threshold: 0.49 from published_model/balanced_accuracy/best_threshold.txt
+2025-01-30 19:10:16,766 - INFO - Loading model assets from: published_model/accuracy
+2025-01-30 19:10:16,809 - INFO - Loaded XGBoost model from published_model/accuracy/final_model.json
+2025-01-30 19:10:16,811 - INFO - Loaded 987 feature names from published_model/accuracy/feature_names.joblib
+2025-01-30 19:10:16,811 - INFO - Loaded best threshold: 0.46 from published_model/accuracy/best_threshold.txt
+2025-01-30 19:10:16,923 - INFO - Loading model assets from: published_model/recall
+2025-01-30 19:10:16,979 - INFO - Loaded XGBoost model from published_model/recall/final_model.json
+2025-01-30 19:10:16,980 - INFO - Loaded 987 feature names from published_model/recall/feature_names.joblib
+2025-01-30 19:10:16,981 - INFO - Loaded best threshold: 0.35 from published_model/recall/best_threshold.txt
+2025-01-30 19:10:17,068 - INFO - Loading model assets from: published_model/auc
+2025-01-30 19:10:17,088 - INFO - Loaded XGBoost model from published_model/auc/final_model.json
+2025-01-30 19:10:17,089 - INFO - Loaded 987 feature names from published_model/auc/feature_names.joblib
+2025-01-30 19:10:17,090 - INFO - Loaded best threshold: 0.35 from published_model/auc/best_threshold.txt
+2025-01-30 19:10:17,172 - INFO - Loading model assets from: published_model/precision
+2025-01-30 19:10:17,229 - INFO - Loaded XGBoost model from published_model/precision/final_model.json
+2025-01-30 19:10:17,232 - INFO - Loaded 987 feature names from published_model/precision/feature_names.joblib
+2025-01-30 19:10:17,233 - INFO - Loaded best threshold: 0.65 from published_model/precision/best_threshold.txt
+2025-01-30 19:10:17,321 - INFO - Loading model assets from: published_model/f1
+2025-01-30 19:10:17,392 - INFO - Loaded XGBoost model from published_model/f1/final_model.json
+2025-01-30 19:10:17,394 - INFO - Loaded 987 feature names from published_model/f1/feature_names.joblib
+2025-01-30 19:10:17,394 - INFO - Loaded best threshold: 0.53 from published_model/f1/best_threshold.txt
+2025-01-30 19:10:17,521 - INFO - Predictions saved at: predictions/pm_validation_data_knn.csv
+2025-01-30 19:10:17,521 - INFO - Prediction script completed successfully.
+2025-01-30 19:13:08,330 - INFO - Started prediction script
+2025-01-30 19:13:08,377 - INFO - Data loaded from 'published_model/validation_data_original.json', total records: 1562
+2025-01-30 19:13:08,423 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-01-30 19:13:08,441 - INFO - Loaded vectorizers and kept_tokens for BRICs, RINGS, SIDE_CHAINS.
+2025-01-30 19:13:08,543 - INFO - Loading model assets from: published_model/balanced_accuracy
+2025-01-30 19:13:08,591 - INFO - Loaded XGBoost model from published_model/balanced_accuracy/final_model.json
+2025-01-30 19:13:08,592 - INFO - Loaded 987 feature names from published_model/balanced_accuracy/feature_names.joblib
+2025-01-30 19:13:08,593 - INFO - Loaded best threshold: 0.49 from published_model/balanced_accuracy/best_threshold.txt
+2025-01-30 19:13:08,725 - INFO - Loading model assets from: published_model/accuracy
+2025-01-30 19:13:08,766 - INFO - Loaded XGBoost model from published_model/accuracy/final_model.json
+2025-01-30 19:13:08,768 - INFO - Loaded 987 feature names from published_model/accuracy/feature_names.joblib
+2025-01-30 19:13:08,768 - INFO - Loaded best threshold: 0.46 from published_model/accuracy/best_threshold.txt
+2025-01-30 19:13:08,868 - INFO - Loading model assets from: published_model/recall
+2025-01-30 19:13:08,922 - INFO - Loaded XGBoost model from published_model/recall/final_model.json
+2025-01-30 19:13:08,926 - INFO - Loaded 987 feature names from published_model/recall/feature_names.joblib
+2025-01-30 19:13:08,926 - INFO - Loaded best threshold: 0.35 from published_model/recall/best_threshold.txt
+2025-01-30 19:13:09,050 - INFO - Loading model assets from: published_model/auc
+2025-01-30 19:13:09,071 - INFO - Loaded XGBoost model from published_model/auc/final_model.json
+2025-01-30 19:13:09,072 - INFO - Loaded 987 feature names from published_model/auc/feature_names.joblib
+2025-01-30 19:13:09,072 - INFO - Loaded best threshold: 0.35 from published_model/auc/best_threshold.txt
+2025-01-30 19:13:09,170 - INFO - Loading model assets from: published_model/precision
+2025-01-30 19:13:09,225 - INFO - Loaded XGBoost model from published_model/precision/final_model.json
+2025-01-30 19:13:09,226 - INFO - Loaded 987 feature names from published_model/precision/feature_names.joblib
+2025-01-30 19:13:09,227 - INFO - Loaded best threshold: 0.65 from published_model/precision/best_threshold.txt
+2025-01-30 19:13:09,330 - INFO - Loading model assets from: published_model/f1
+2025-01-30 19:13:09,401 - INFO - Loaded XGBoost model from published_model/f1/final_model.json
+2025-01-30 19:13:09,403 - INFO - Loaded 987 feature names from published_model/f1/feature_names.joblib
+2025-01-30 19:13:09,403 - INFO - Loaded best threshold: 0.53 from published_model/f1/best_threshold.txt
+2025-01-30 19:13:09,542 - INFO - Predictions saved at: predictions/pm_validation_data_noknn.csv
+2025-01-30 19:13:09,542 - INFO - Prediction script completed successfully.
+2025-01-30 19:17:57,131 - INFO - Started prediction script
+2025-01-30 19:17:57,172 - INFO - Data loaded from 'published_model/validation_data_original.json', total records: 1562
+2025-01-30 19:17:57,224 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-01-30 19:17:57,244 - INFO - Loaded vectorizers and kept_tokens for BRICs, RINGS, SIDE_CHAINS.
+2025-01-30 19:17:57,542 - INFO - Loaded processed training features from published_model/processed_train_features.csv, shape: (7928, 987)
+2025-01-30 19:17:57,556 - INFO - Combined training and prediction data for KNN imputation, shape: (9490, 989)
+2025-01-30 19:19:04,789 - INFO - KNN imputation complete, imputed data shape: (9490, 989)
+2025-01-30 19:19:04,803 - INFO - Separated imputed data: training shape (7928, 989), prediction shape (1562, 989)
+2025-01-30 19:19:04,807 - INFO - Loading model assets from: published_model/balanced_accuracy
+2025-01-30 19:19:04,942 - INFO - Loaded XGBoost model from published_model/balanced_accuracy/final_model.json
+2025-01-30 19:19:04,944 - INFO - Loaded 987 feature names from published_model/balanced_accuracy/feature_names.joblib
+2025-01-30 19:19:04,944 - INFO - Loaded best threshold: 0.49 from published_model/balanced_accuracy/best_threshold.txt
+2025-01-30 19:19:05,039 - INFO - Loading model assets from: published_model/accuracy
+2025-01-30 19:19:05,081 - INFO - Loaded XGBoost model from published_model/accuracy/final_model.json
+2025-01-30 19:19:05,083 - INFO - Loaded 987 feature names from published_model/accuracy/feature_names.joblib
+2025-01-30 19:19:05,083 - INFO - Loaded best threshold: 0.46 from published_model/accuracy/best_threshold.txt
+2025-01-30 19:19:05,208 - INFO - Loading model assets from: published_model/recall
+2025-01-30 19:19:05,264 - INFO - Loaded XGBoost model from published_model/recall/final_model.json
+2025-01-30 19:19:05,265 - INFO - Loaded 987 feature names from published_model/recall/feature_names.joblib
+2025-01-30 19:19:05,266 - INFO - Loaded best threshold: 0.35 from published_model/recall/best_threshold.txt
+2025-01-30 19:19:05,354 - INFO - Loading model assets from: published_model/auc
+2025-01-30 19:19:05,373 - INFO - Loaded XGBoost model from published_model/auc/final_model.json
+2025-01-30 19:19:05,374 - INFO - Loaded 987 feature names from published_model/auc/feature_names.joblib
+2025-01-30 19:19:05,375 - INFO - Loaded best threshold: 0.35 from published_model/auc/best_threshold.txt
+2025-01-30 19:19:05,458 - INFO - Loading model assets from: published_model/precision
+2025-01-30 19:19:05,513 - INFO - Loaded XGBoost model from published_model/precision/final_model.json
+2025-01-30 19:19:05,514 - INFO - Loaded 987 feature names from published_model/precision/feature_names.joblib
+2025-01-30 19:19:05,515 - INFO - Loaded best threshold: 0.65 from published_model/precision/best_threshold.txt
+2025-01-30 19:19:05,603 - INFO - Loading model assets from: published_model/f1
+2025-01-30 19:19:05,673 - INFO - Loaded XGBoost model from published_model/f1/final_model.json
+2025-01-30 19:19:05,675 - INFO - Loaded 987 feature names from published_model/f1/feature_names.joblib
+2025-01-30 19:19:05,675 - INFO - Loaded best threshold: 0.53 from published_model/f1/best_threshold.txt
+2025-01-30 19:19:05,801 - INFO - Predictions saved at: predictions/pm_validation_data_knn_cm.csv
+2025-01-30 19:19:05,802 - INFO - Prediction script completed successfully.
+2025-01-30 19:20:08,051 - INFO - Started prediction script
+2025-01-30 19:20:08,096 - INFO - Data loaded from 'published_model/validation_data_original.json', total records: 1562
+2025-01-30 19:20:08,141 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-01-30 19:20:08,160 - INFO - Loaded vectorizers and kept_tokens for BRICs, RINGS, SIDE_CHAINS.
+2025-01-30 19:20:08,462 - INFO - Loaded processed training features from published_model/processed_train_features.csv, shape: (7928, 987)
+2025-01-30 19:20:08,473 - INFO - Combined training and prediction data for KNN imputation, shape: (9490, 989)
+2025-01-30 19:21:15,423 - INFO - KNN imputation complete, imputed data shape: (9490, 989)
+2025-01-30 19:21:15,437 - INFO - Separated imputed data: training shape (7928, 989), prediction shape (1562, 989)
+2025-01-30 19:21:15,438 - INFO - Loading model assets from: published_model/balanced_accuracy
+2025-01-30 19:21:15,481 - INFO - Loaded XGBoost model from published_model/balanced_accuracy/final_model.json
+2025-01-30 19:21:15,483 - INFO - Loaded 987 feature names from published_model/balanced_accuracy/feature_names.joblib
+2025-01-30 19:21:15,483 - INFO - Loaded best threshold: 0.49 from published_model/balanced_accuracy/best_threshold.txt
+2025-01-30 19:21:15,573 - INFO - Loading model assets from: published_model/accuracy
+2025-01-30 19:21:15,615 - INFO - Loaded XGBoost model from published_model/accuracy/final_model.json
+2025-01-30 19:21:15,616 - INFO - Loaded 987 feature names from published_model/accuracy/feature_names.joblib
+2025-01-30 19:21:15,617 - INFO - Loaded best threshold: 0.46 from published_model/accuracy/best_threshold.txt
+2025-01-30 19:21:15,736 - INFO - Loading model assets from: published_model/recall
+2025-01-30 19:21:15,792 - INFO - Loaded XGBoost model from published_model/recall/final_model.json
+2025-01-30 19:21:15,794 - INFO - Loaded 987 feature names from published_model/recall/feature_names.joblib
+2025-01-30 19:21:15,795 - INFO - Loaded best threshold: 0.35 from published_model/recall/best_threshold.txt
+2025-01-30 19:21:15,882 - INFO - Loading model assets from: published_model/auc
+2025-01-30 19:21:15,902 - INFO - Loaded XGBoost model from published_model/auc/final_model.json
+2025-01-30 19:21:15,904 - INFO - Loaded 987 feature names from published_model/auc/feature_names.joblib
+2025-01-30 19:21:15,904 - INFO - Loaded best threshold: 0.35 from published_model/auc/best_threshold.txt
+2025-01-30 19:21:15,987 - INFO - Loading model assets from: published_model/precision
+2025-01-30 19:21:16,042 - INFO - Loaded XGBoost model from published_model/precision/final_model.json
+2025-01-30 19:21:16,044 - INFO - Loaded 987 feature names from published_model/precision/feature_names.joblib
+2025-01-30 19:21:16,044 - INFO - Loaded best threshold: 0.65 from published_model/precision/best_threshold.txt
+2025-01-30 19:21:16,132 - INFO - Loading model assets from: published_model/f1
+2025-01-30 19:21:16,203 - INFO - Loaded XGBoost model from published_model/f1/final_model.json
+2025-01-30 19:21:16,205 - INFO - Loaded 987 feature names from published_model/f1/feature_names.joblib
+2025-01-30 19:21:16,205 - INFO - Loaded best threshold: 0.53 from published_model/f1/best_threshold.txt
+2025-01-30 19:21:16,330 - INFO - Predictions saved at: predictions/pm_validation_data_knn.csv
+2025-01-30 19:21:16,330 - INFO - Prediction script completed successfully.

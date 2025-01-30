@@ -1,0 +1,10 @@
+Descriptor Analysis Information
+--------------------------------
+Descriptor: HBD
+RDKit Column: HBD_RDKit
+PubChem Column: HBD_PubChem
+Function Column for Color Mapping: MW_RDKit
+Data Points Used: 6192
+Mean Absolute Error (MAE): 0.0019
+Root Mean Squared Error (RMSE): 0.0623
+R^2 Value: 0.9990

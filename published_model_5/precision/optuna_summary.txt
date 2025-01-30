@@ -1,0 +1,12 @@
+Best trial for precision: 0.9199522697954743
+Best params:
+num_boost_round: 724
+early_stopping_rounds: 398
+max_depth: 12
+learning_rate: 0.007426523490083665
+subsample: 0.9216891610996895
+colsample_bytree: 0.6547350429248737
+min_child_weight: 2
+gamma: 4.936241834674105
+reg_alpha: 3.7966729955281004
+reg_lambda: 1.1019605891761093

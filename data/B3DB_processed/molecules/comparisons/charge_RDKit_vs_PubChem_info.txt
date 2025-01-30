@@ -1,0 +1,10 @@
+Descriptor Analysis Information
+--------------------------------
+Descriptor: Charge
+RDKit Column: Charge_RDKit
+PubChem Column: Charge_PubChem
+Function Column for Color Mapping: MW_RDKit
+Data Points Used: 7792
+Mean Absolute Error (MAE): 0.0032
+Root Mean Squared Error (RMSE): 0.0707
+R^2 Value: 0.7821

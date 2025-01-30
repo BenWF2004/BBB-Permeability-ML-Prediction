@@ -1,0 +1,10 @@
+Descriptor Analysis Information
+--------------------------------
+Descriptor: TPSA
+RDKit Column: TPSA_RDKit
+PubChem Column: TPSA_PubChem
+Function Column for Color Mapping: MW_RDKit
+Data Points Used: 6190
+Mean Absolute Error (MAE): 7.2390
+Root Mean Squared Error (RMSE): 17.1539
+R^2 Value: 0.9495

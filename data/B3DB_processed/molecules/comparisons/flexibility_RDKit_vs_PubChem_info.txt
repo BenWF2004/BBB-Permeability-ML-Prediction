@@ -1,0 +1,10 @@
+Descriptor Analysis Information
+--------------------------------
+Descriptor: Flexibility
+RDKit Column: Flexibility_RDKit
+PubChem Column: Flexibility_PubChem
+Function Column for Color Mapping: MW_RDKit
+Data Points Used: 6190
+Mean Absolute Error (MAE): 2.6557
+Root Mean Squared Error (RMSE): 3.8145
+R^2 Value: 0.7301
