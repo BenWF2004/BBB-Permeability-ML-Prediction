@@ -1,9 +1,9 @@
-# **BBB-Permeability-ML-Prediction**
+# **BBB Permeability ML Prediction**
 
-**BBB-Permeability-ML-Prediction** is a machine learning-based model designed to predict blood-brain barrier permeability (BBB), yielding a binary **BBB+** or **BBB-** classification.  
+**BBB Permeability ML Prediction** is a machine learning-based model designed to predict blood-brain barrier permeability (BBB), yielding a binary **BBB+** or **BBB-** classification.  
 This repository provides tools for **data preprocessing, model training, and generating predictions.**  
 
-**Author:** Ben Franey, 2024  
+**Author:** Ben Franey, 2024
 
 ---
 
@@ -120,22 +120,29 @@ BBB-Permeability-ML-Prediction/
 ## **Script Overview**
 
 ### **1. analysis.py**
-Performs **data analysis and visualization**, including **comparisons of RDKit vs. PubChem descriptors** and property-based histograms.
+Performs **data analysis and visualization**, including **comparisons of RDKit vs. PubChem descriptors**, statistical summaries, and property-based histograms.
 
-### **2. json_cut.py**
-Processes JSON files by **removing unnecessary properties** from **BRICs, RINGS, and SIDE_CHAINS** sections while retaining relevant information.
+### **2. decomposition_visualizer.py**
+Decomposes **SMILES strings into molecular fragments** (BRICS, RINGS, SIDECHAINS) and saves them as **SVG images** for visualization.
 
-### **3. molecule_visualizer.py**
+### **3. json_cut.py**
+Processes JSON files by **removing unnecessary properties** from **BRICs, RINGS, and SIDE_CHAINS** sections while retaining molecular descriptor information.
+
+### **4. molecule_visualizer.py**
 Converts **SMILES strings to 2D molecular structures** and saves them as **SVG images** for visualization.
 
-### **4. predict.py**
-Loads a **trained model** to predict **BBB permeability** from input molecular data and outputs results as a CSV file.
+### **5. predict.py**
+Loads a **trained machine learning model** to predict **BBB permeability** from molecular input data and outputs results in a CSV file.
 
-### **5. predictions_check.py**
-Compares multiple prediction outputs, **validates results**, and ensures consistency across different trained models.
+### **6. predictions_check.py**
+Compares multiple **prediction outputs**, ensuring consistency across different trained models by analyzing key performance metrics.
 
-### **6. train.py**
-Handles **model training**, supporting both **manual parameter tuning** and **Optuna-based hyperparameter optimization**.
+### **7. preprocess.py**
+Preprocesses molecular data from a CSV file, computing **molecular descriptors and fragment-based properties**, and saves output as JSON and CSV files.
+
+### **8. train.py**
+Completes **machine learning model training**, supporting both **manual parameters** and **Optuna-based hyperparameter optimization** for improved model performance.
+
 
 ---
 
