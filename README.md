@@ -44,7 +44,8 @@ To **make predictions** or **train your own model**, first preprocess the data:
 The inpuput CSV must have the rows: 'NO.', 'SMILES', 'BBB+/BBB-', and 'group'. Rows 'NO.' and 'SMILES' must be valid, but 'BBB+/BBB-' and 'group' can be empty.
 
 ```bash
-python3 src/preprocessing.py --input_csv data/B3DB_full.csv --output_json data/B3DB_full_model_ready.json
+python3 src/preprocessing.py --input_csv data/B3DB_full.csv --output_json data/B3DB_processed/model_ready.json
+python3 src/preprocessing.py --input_csv data/example_prediction.csv --output_json data/example_prediction/model_ready.json
 ```
 A **pretrained model (optimized through 75 trials)** is provided in the `published-model/` directory to run predictions on..
 

@@ -1,0 +1,4 @@
+NO.,compound_name,SMILES,BBB+/BBB-,group
+1,Acetaminophen,CC(=O)NC1=CC=C(C=C1)O,,
+2,Aspirin,CC(=O)OC1=CC=CC=C1C(=O)O,,
+3,,C1CNCC(C2=CC=CC=C21)C3=CC=CC=C3,,smiles_only
