@@ -1,0 +1,12 @@
+Best trial for auc: 0.974644613899728
+Best params:
+num_boost_round: 801
+early_stopping_rounds: 207
+max_depth: 29
+learning_rate: 0.0173088350398512
+subsample: 0.8673662295307548
+colsample_bytree: 0.5765640113847105
+min_child_weight: 2
+gamma: 0.0330424338588855
+reg_alpha: 0.6969329875035424
+reg_lambda: 3.3407480047550404

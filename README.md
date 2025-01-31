@@ -40,12 +40,13 @@ rdkit==2024.9.4 --> rdkit
 ## **Usage**
 
 ### **1. Data Preprocessing**
-A **pretrained model (optimized through 5 trials)** is provided in the `published-model/` directory.  
-To train your own model, first preprocess the data:
+To **make predictions** or **train your own model**, first preprocess the data:
+The inpuput CSV must have the rows: 'NO.', 'SMILES', 'BBB+/BBB-', and 'group'. Rows 'NO.' and 'SMILES' must be valid, but 'BBB+/BBB-' and 'group' can be empty.
 
 ```bash
 python3 src/preprocessing.py --input_csv data/B3DB_full.csv --output_json data/B3DB_full_model_ready.json
 ```
+A **pretrained model (optimized through 75 trials)** is provided in the `published-model/` directory to run predictions on..
 
 ### **1.2 Preprocessing Analysis**
 Analyze the dataset through **graph generation, RDKit vs PubChem comparisons, and property distributions**:
@@ -91,7 +92,8 @@ python3 src/train.py \
 ---
 
 ### **3. Prediction**
-Use a **trained model** to generate predictions:
+Use a **trained model** to generate predictions.
+Run the **Data Preprocessing** script on the prediction data to generate the input JSON.
 
 ```bash
 python3 src/predict.py \

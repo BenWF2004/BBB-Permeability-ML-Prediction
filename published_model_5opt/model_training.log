@@ -1,0 +1,108 @@
+2025-01-30 17:44:13,362 - INFO - Started model training pipeline
+2025-01-30 17:44:13,505 - INFO - Data loaded from data/B3DB_processed/processed.cut.json
+2025-01-30 17:44:13,644 - INFO - Preprocessed DataFrame shape: (7807, 53)
+2025-01-30 17:44:13,659 - INFO - Class distribution after cleaning:
+BBB
+BBB+    4956
+BBB-    2851
+Name: count, dtype: int64
+2025-01-30 17:44:13,660 - INFO - Labels encoded successfully.
+2025-01-30 17:44:16,324 - INFO - KNN imputation on 987 numeric columns in training set.
+2025-01-30 17:44:17,185 - INFO - All missing values imputed successfully.
+2025-01-30 17:44:20,313 - INFO - Processed training features saved at o/pub5/processed_train_features.csv
+2025-01-30 17:44:20,349 - INFO - Starting XGBoost training.
+2025-01-30 17:44:24,628 - INFO - XGBoost training complete.
+2025-01-30 17:44:24,630 - INFO - Evaluating model.
+2025-01-30 17:44:24,721 - INFO - Model evaluation complete.
+2025-01-30 17:44:24,786 - INFO - Starting XGBoost training.
+2025-01-30 17:44:29,073 - INFO - XGBoost training complete.
+2025-01-30 17:44:29,080 - INFO - Evaluating model.
+2025-01-30 17:44:29,273 - INFO - Model evaluation complete.
+2025-01-30 17:44:29,341 - INFO - Starting XGBoost training.
+2025-01-30 17:44:33,545 - INFO - XGBoost training complete.
+2025-01-30 17:44:33,549 - INFO - Evaluating model.
+2025-01-30 17:44:33,648 - INFO - Model evaluation complete.
+2025-01-30 17:44:33,726 - INFO - Starting XGBoost training.
+2025-01-30 17:44:38,084 - INFO - XGBoost training complete.
+2025-01-30 17:44:38,090 - INFO - Evaluating model.
+2025-01-30 17:44:38,178 - INFO - Model evaluation complete.
+2025-01-30 17:44:38,266 - INFO - Starting XGBoost training.
+2025-01-30 17:44:42,893 - INFO - XGBoost training complete.
+2025-01-30 17:44:42,902 - INFO - Evaluating model.
+2025-01-30 17:44:42,992 - INFO - Model evaluation complete.
+2025-01-30 17:44:43,088 - INFO - Starting XGBoost training.
+2025-01-30 17:44:44,102 - INFO - XGBoost training complete.
+2025-01-30 17:44:44,104 - INFO - Evaluating model.
+2025-01-30 17:44:44,184 - INFO - Model evaluation complete.
+2025-01-30 17:44:44,218 - INFO - Starting XGBoost training.
+2025-01-30 17:44:48,460 - INFO - XGBoost training complete.
+2025-01-30 17:44:48,462 - INFO - Evaluating model.
+2025-01-30 17:44:48,548 - INFO - Model evaluation complete.
+2025-01-30 17:44:48,649 - INFO - Starting XGBoost training.
+2025-01-30 17:44:52,483 - INFO - XGBoost training complete.
+2025-01-30 17:44:52,485 - INFO - Evaluating model.
+2025-01-30 17:44:52,568 - INFO - Model evaluation complete.
+2025-01-30 17:44:52,607 - INFO - Starting XGBoost training.
+2025-01-30 17:44:56,672 - INFO - XGBoost training complete.
+2025-01-30 17:44:56,673 - INFO - Evaluating model.
+2025-01-30 17:44:56,753 - INFO - Model evaluation complete.
+2025-01-30 17:44:56,791 - INFO - Starting XGBoost training.
+2025-01-30 17:45:00,959 - INFO - XGBoost training complete.
+2025-01-30 17:45:00,963 - INFO - Evaluating model.
+2025-01-30 17:45:01,051 - INFO - Model evaluation complete.
+2025-01-30 17:45:01,054 - INFO - K-fold cross-validation results saved to: o/pub5/cross_validation_results.csv
+2025-01-30 17:45:01,054 - INFO - Average CV metrics across 10 folds: {'AUC': 0.9692386858046923, 'MCC': 0.8163343576458573, 'F1 Score': 0.9051651798111255, 'TP': 350.5, 'TN': 369.0, 'FP': 27.4, 'FN': 45.9, 'Sensitivity (SN%)': 88.42003154975448, 'Specificity (SP%)': 93.08735974353102, 'fold': 5.5}
+2025-01-30 17:45:01,054 - INFO - Optuna optimization for f1
+2025-01-30 17:53:18,074 - INFO - Starting XGBoost training.
+2025-01-30 17:53:31,905 - INFO - XGBoost training complete.
+2025-01-30 17:53:32,236 - INFO - Evaluating model.
+2025-01-30 17:53:32,346 - INFO - Model evaluation complete.
+2025-01-30 17:53:32,351 - INFO - Confusion matrix saved at o/pub5/f1/validation_confusion_matrix_initial.csv
+2025-01-30 17:53:32,948 - INFO - Starting SHAP analysis.
+2025-01-30 17:53:40,793 - INFO - SHAP analysis complete.
+2025-01-30 17:53:41,063 - INFO - Model saved at o/pub5/f1/final_model.json
+2025-01-30 17:53:41,066 - INFO - Optuna optimization for balanced accuracy
+2025-01-30 18:02:28,400 - INFO - Starting XGBoost training.
+2025-01-30 18:02:38,138 - INFO - XGBoost training complete.
+2025-01-30 18:02:38,360 - INFO - Evaluating model.
+2025-01-30 18:02:38,469 - INFO - Model evaluation complete.
+2025-01-30 18:02:38,473 - INFO - Confusion matrix saved at o/pub5/balanced_accuracy/validation_confusion_matrix_initial.csv
+2025-01-30 18:02:38,711 - INFO - Starting SHAP analysis.
+2025-01-30 18:02:45,795 - INFO - SHAP analysis complete.
+2025-01-30 18:02:46,054 - INFO - Model saved at o/pub5/balanced_accuracy/final_model.json
+2025-01-30 18:02:46,056 - INFO - Optuna optimization for precision
+2025-01-30 18:11:43,996 - INFO - Starting XGBoost training.
+2025-01-30 18:11:55,246 - INFO - XGBoost training complete.
+2025-01-30 18:11:55,575 - INFO - Evaluating model.
+2025-01-30 18:11:55,691 - INFO - Model evaluation complete.
+2025-01-30 18:11:55,694 - INFO - Confusion matrix saved at o/pub5/precision/validation_confusion_matrix_initial.csv
+2025-01-30 18:11:55,951 - INFO - Starting SHAP analysis.
+2025-01-30 18:12:04,572 - INFO - SHAP analysis complete.
+2025-01-30 18:12:04,887 - INFO - Model saved at o/pub5/precision/final_model.json
+2025-01-30 18:12:04,889 - INFO - Optuna optimization for recall
+2025-01-30 18:23:37,484 - INFO - Starting XGBoost training.
+2025-01-30 18:23:53,395 - INFO - XGBoost training complete.
+2025-01-30 18:23:53,781 - INFO - Evaluating model.
+2025-01-30 18:23:53,900 - INFO - Model evaluation complete.
+2025-01-30 18:23:53,904 - INFO - Confusion matrix saved at o/pub5/recall/validation_confusion_matrix_initial.csv
+2025-01-30 18:23:54,171 - INFO - Starting SHAP analysis.
+2025-01-30 18:24:03,068 - INFO - SHAP analysis complete.
+2025-01-30 18:24:03,399 - INFO - Model saved at o/pub5/recall/final_model.json
+2025-01-30 18:24:03,402 - INFO - Optuna optimization for accuracy
+2025-01-30 18:34:05,267 - INFO - Starting XGBoost training.
+2025-01-30 18:34:22,350 - INFO - XGBoost training complete.
+2025-01-30 18:34:22,658 - INFO - Evaluating model.
+2025-01-30 18:34:22,760 - INFO - Model evaluation complete.
+2025-01-30 18:34:22,763 - INFO - Confusion matrix saved at o/pub5/accuracy/validation_confusion_matrix_initial.csv
+2025-01-30 18:34:23,003 - INFO - Starting SHAP analysis.
+2025-01-30 18:34:30,827 - INFO - SHAP analysis complete.
+2025-01-30 18:34:31,154 - INFO - Model saved at o/pub5/accuracy/final_model.json
+2025-01-30 18:34:31,157 - INFO - Optuna optimization for auc
+2025-01-30 18:46:22,668 - INFO - Starting XGBoost training.
+2025-01-30 18:46:25,450 - INFO - XGBoost training complete.
+2025-01-30 18:46:25,785 - INFO - Evaluating model.
+2025-01-30 18:46:25,890 - INFO - Model evaluation complete.
+2025-01-30 18:46:25,893 - INFO - Confusion matrix saved at o/pub5/auc/validation_confusion_matrix_initial.csv
+2025-01-30 18:46:26,212 - INFO - Starting SHAP analysis.
+2025-01-30 18:46:33,689 - INFO - SHAP analysis complete.
+2025-01-30 18:46:33,934 - INFO - Model saved at o/pub5/auc/final_model.json

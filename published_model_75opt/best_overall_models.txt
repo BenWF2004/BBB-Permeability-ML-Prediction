@@ -1,0 +1,134 @@
+Summary of Best Models for Each Metric:
+
+=== Best F1 ===
+  Optuna Best Value: 0.9126735360572289
+  Best Params:
+    max_depth: 25
+    learning_rate: 0.01583828774627412
+    subsample: 0.49474028797470837
+    colsample_bytree: 0.5850130661234048
+    min_child_weight: 1
+    gamma: 0.34280597522894096
+    reg_alpha: 0.4160388243616552
+    reg_lambda: 3.0686297620584266
+  Final Validation Metrics:
+    AUC: 0.9583527872099603
+    MCC: 0.7760961540597614
+    F1 Score: 0.855863921217547
+    TP: 478
+    TN: 923
+    FP: 69
+    FN: 92
+    Sensitivity (SN%): 83.85964912280703
+    Specificity (SP%): 93.04435483870968
+
+=== Best BALANCED ACCURACY ===
+  Optuna Best Value: 0.9147294735770805
+  Best Params:
+    max_depth: 13
+    learning_rate: 0.03579463279566263
+    subsample: 0.7515106491404766
+    colsample_bytree: 0.7023299723209694
+    min_child_weight: 1
+    gamma: 0.22309635807094794
+    reg_alpha: 0.5119578512852926
+    reg_lambda: 4.9131498163058795
+  Final Validation Metrics:
+    AUC: 0.9582378324844368
+    MCC: 0.7913867765974851
+    F1 Score: 0.8655913978494624
+    TP: 483
+    TN: 929
+    FP: 63
+    FN: 87
+    Sensitivity (SN%): 84.73684210526315
+    Specificity (SP%): 93.6491935483871
+
+=== Best PRECISION ===
+  Optuna Best Value: 0.9273288559938424
+  Best Params:
+    max_depth: 28
+    learning_rate: 0.014965961283308737
+    subsample: 0.9058618268184978
+    colsample_bytree: 0.6460522033678774
+    min_child_weight: 1
+    gamma: 0.9891454024285261
+    reg_alpha: 0.3742979727180227
+    reg_lambda: 1.423935089660665
+  Final Validation Metrics:
+    AUC: 0.9556212860780985
+    MCC: 0.7228362381953425
+    F1 Score: 0.8058536585365854
+    TP: 413
+    TN: 950
+    FP: 42
+    FN: 157
+    Sensitivity (SN%): 72.45614035087719
+    Specificity (SP%): 95.76612903225806
+
+=== Best RECALL ===
+  Optuna Best Value: 0.9023624150828182
+  Best Params:
+    max_depth: 20
+    learning_rate: 0.058742510441436684
+    subsample: 0.8379839394678441
+    colsample_bytree: 0.7331461487775053
+    min_child_weight: 2
+    gamma: 0.035068931753270374
+    reg_alpha: 0.5092207844056299
+    reg_lambda: 4.0751626208877205
+  Final Validation Metrics:
+    AUC: 0.9587507074136954
+    MCC: 0.7817735621725974
+    F1 Score: 0.8623376623376623
+    TP: 498
+    TN: 905
+    FP: 87
+    FN: 72
+    Sensitivity (SN%): 87.36842105263159
+    Specificity (SP%): 91.22983870967742
+
+=== Best ACCURACY ===
+  Optuna Best Value: 0.914984491828754
+  Best Params:
+    max_depth: 17
+    learning_rate: 0.017531224232539954
+    subsample: 0.6188701512740835
+    colsample_bytree: 0.5734494379752769
+    min_child_weight: 2
+    gamma: 0.0231945357231642
+    reg_alpha: 0.24938255875059698
+    reg_lambda: 1.6867094081087948
+  Final Validation Metrics:
+    AUC: 0.9600293576683646
+    MCC: 0.7812763447284811
+    F1 Score: 0.8581752484191508
+    TP: 475
+    TN: 930
+    FP: 62
+    FN: 95
+    Sensitivity (SN%): 83.33333333333334
+    Specificity (SP%): 93.75
+
+=== Best AUC ===
+  Optuna Best Value: 0.974644613899728
+  Best Params:
+    max_depth: 29
+    learning_rate: 0.0173088350398512
+    subsample: 0.8673662295307548
+    colsample_bytree: 0.5765640113847105
+    min_child_weight: 2
+    gamma: 0.0330424338588855
+    reg_alpha: 0.6969329875035424
+    reg_lambda: 3.3407480047550404
+  Final Validation Metrics:
+    AUC: 0.9588568194680248
+    MCC: 0.7826423659664498
+    F1 Score: 0.8632846087704213
+    TP: 502
+    TN: 901
+    FP: 91
+    FN: 68
+    Sensitivity (SN%): 88.0701754385965
+    Specificity (SP%): 90.82661290322581
+

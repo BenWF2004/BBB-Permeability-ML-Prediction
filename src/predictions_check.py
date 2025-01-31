@@ -139,7 +139,7 @@ def generate_comparative_table(directory_path, files):
 
 if __name__ == "__main__":
     # List of CSV files to process (modify as needed)
-    files = ["pm_validation_data_noknn.csv"]
+    files = ["prediced_model_75opt-noknn.csv"]
 
     # Directory where CSV files are located
     dir_path = "predictions"  
@@ -151,6 +151,6 @@ if __name__ == "__main__":
     print(comparison_df)
 
     # Save the table to a CSV file
-    output_path = os.path.join(dir_path, "pm_validation_data_noknn_cm.csv")
+    output_path = os.path.join(dir_path, "prediced_model_75opt-noknn_cm.csv")
     comparison_df.to_csv(output_path, index=False)
     print(f"\nComparative metrics saved to {output_path}")
