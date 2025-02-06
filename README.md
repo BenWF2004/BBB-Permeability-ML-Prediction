@@ -154,7 +154,7 @@ BBB-Permeability-ML-Prediction/
 |-- published-model/*          # Trained models and related files
 |-- predictions/               # Generated predictions
 |-- requirements.txt           # List of required Python packages
-|-- LICENSE                    # Licence documentation (MIT License)
+|-- LICENSE                    # Licence documentation (Apache 2.0 License)
 |-- README.md                  # Project documentation (this file)
 ```
 
