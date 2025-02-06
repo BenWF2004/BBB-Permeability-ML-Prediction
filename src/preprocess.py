@@ -1172,14 +1172,17 @@ def compute_summary_stats(df: pd.DataFrame, data_type: str) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def generate_json_from_csv(input_csv: str, output_json: str, use_pubchem=False):
+def generate_json_from_csv(input_csv: str, output_json: str, use_pubchem=False, calc_frag_props=False):
     """
-    Parses the input CSV, computes molecular and fragment descriptors, 
+    Parses the input CSV, computes molecular and (optionally) fragment descriptors, 
     generates JSON output, produces CSV outputs, and creates summary statistics.
 
     - Reads the input CSV and validates required columns.
     - Computes descriptors for each molecule using RDKit and optionally PubChem.
-    - Identifies BRIC, RING, and SIDE_CHAIN fragments and computes their descriptors.
+    - Always extracts BRIC, RING, and SIDE_CHAIN fragments; however, if 
+      calc_frag_props is False, fragment properties (e.g. MW, LogP, TPSA, etc.) are not calculated.
+      In either case, usage counts are updated in the fragment store for CSV output, but these
+      usage count keys are not added to the JSON.
     - Stores descriptor data in JSON and CSV formats.
     - Generates summary statistics and checks for missing data.
     - Saves log files and summary reports.
@@ -1188,11 +1191,13 @@ def generate_json_from_csv(input_csv: str, output_json: str, use_pubchem=False):
         input_csv (str): Path to the input CSV file.
         output_json (str): Path to the output JSON file.
         use_pubchem (bool): Whether to retrieve additional descriptors from PubChem.
-
+        calc_frag_props (bool): Whether to calculate full fragment properties (e.g. MW, LogP, TPSA).  
+                                If False, only usage counts are updated (but not output to JSON).
+    
     Returns:
         None: Saves processed data as JSON and CSV files.
     """
-    
+
     # Check if input file exists
     if not os.path.exists(input_csv):
         print(f"Input file '{input_csv}' does not exist.")
@@ -1254,7 +1259,7 @@ def generate_json_from_csv(input_csv: str, output_json: str, use_pubchem=False):
 
         pbar.set_postfix({"Index": idx})
 
-        # Attempt 3D coordinate generation
+        # Attempt 3D coordinate generation and descriptor calculation for the molecule
         try:
             mol_h = Chem.AddHs(mol)
             params = AllChem.ETKDGv3()
@@ -1271,16 +1276,14 @@ def generate_json_from_csv(input_csv: str, output_json: str, use_pubchem=False):
             rd_descriptors = compute_2d_descriptors_rdkit(mol_h)
             rd3_descriptors = compute_3d_descriptors_rdkit(mol_h)
             rd_all = {**rd_descriptors, **rd3_descriptors}
-            
+
             # Compute PubChem descriptors if enabled
             if use_pubchem:
                 smi = Chem.MolToSmiles(mol_h, isomericSmiles=True)
                 pc_descriptors = compute_descriptors_pubchem(smi)
                 final_desc = merge_rdkit_and_pubchem_descriptors(rd_all, pc_descriptors)
             else:
-                blank = {}
-                final_desc = merge_rdkit_and_pubchem_descriptors(rd_all, blank)
-            
+                final_desc = merge_rdkit_and_pubchem_descriptors(rd_all, {})
         except Exception as e:
             log_debug(f"[Row {idx+1}] Skipping molecule due to descriptor error: {e}")
             continue
@@ -1296,81 +1299,129 @@ def generate_json_from_csv(input_csv: str, output_json: str, use_pubchem=False):
                 bric_sm = Chem.MolToSmiles(bric_m)
                 if bric_sm not in used_brics:
                     used_brics.add(bric_sm)
-                    try:
-                        bric_info = bric_store.add_fragment(
-                            bric_sm, 
-                            is_bbb_plus=is_bbb_plus,
-                            remove_brics_placeholder=True  # remove [N*] placeholders for BRICS
-                        )
-                        bric_entry = {
-                            "BRIC": bric_sm,
-                            "ID": bric_info["ID"]
-                        }
-                        # Include RDKit descriptors, no PubChem for fragments for brevity
-                        for k, v in bric_info.items():
-                            if k not in ("SMILES","ID","Total_count","BBB+_count","BBB-_count",
-                                         "BBB+_normalised","BBB-_normalised","ratio"):
-                                bric_entry[k] = v
-                        bric_fragments.append(bric_entry)
-                        bric_id_list.add(bric_info["ID"])
-                    except Exception as e:
-                        log_debug(f"[Row {idx+1}] Skipping BRIC '{bric_sm}' => error: {e}")
+                    if calc_frag_props:
+                        try:
+                            # Full property calculation for the fragment
+                            bric_info = bric_store.add_fragment(bric_sm, is_bbb_plus=is_bbb_plus, remove_brics_placeholder=True)
+                            # Build the JSON entry copying all keys except SMILES and usage counts
+                            bric_entry = {"BRIC": bric_sm, "ID": bric_info["ID"]}
+                            for k, v in bric_info.items():
+                                if k not in ("SMILES", "Total_count", "BBB+_count", "BBB-_count"):
+                                    bric_entry[k] = v
+                        except Exception as e:
+                            log_debug(f"[Row {idx+1}] Skipping BRIC '{bric_sm}' => error: {e}")
+                            bric_entry = {"BRIC": bric_sm, "ID": ""}
+                    else:
+                        # Minimal update: update usage counts in the store without including them in JSON
+                        if bric_sm not in bric_store.data:
+                            frag_id = f"{bric_store.prefix}{bric_store.counter:04d}"
+                            bric_store.data[bric_sm] = {
+                                "ID": frag_id,
+                                "SMILES": bric_sm,
+                                "Total_count": 0,
+                                "BBB+_count": 0,
+                                "BBB-_count": 0
+                            }
+                            bric_store.counter += 1
+                        if is_bbb_plus:
+                            bric_store.data[bric_sm]["BBB+_count"] += 1
+                        else:
+                            bric_store.data[bric_sm]["BBB-_count"] += 1
+                        bric_store.data[bric_sm]["Total_count"] += 1
+                        bric_info = bric_store.data[bric_sm]
+                        # Build JSON entry with only SMILES and ID
+                        bric_entry = {"BRIC": bric_sm, "ID": bric_info["ID"]}
+                    bric_fragments.append(bric_entry)
+                    bric_id_list.add(bric_entry["ID"])
         except Exception as e:
             bric_fragments = []
             log_debug(f"[Row {idx+1}] Error in BRICS: {e}")
 
-        # Extract rings and side chains
-        ring_list, side_list = process_ring_side_chains(smiles)
-
+        # Ring fragments
         ring_entries = []
         ring_id_list = set()
-        used_rings = set()
-        for ring_sm in ring_list:
-            if ring_sm not in used_rings:
-                used_rings.add(ring_sm)
-                try:
-                    ring_info = ring_store.add_fragment(
-                        ring_sm, 
-                        is_bbb_plus=is_bbb_plus, 
-                        remove_brics_placeholder=True
-                    )
-                    ring_entry = {
-                        "RING": ring_sm,
-                        "ID": ring_info["ID"]
-                    }
-                    for k, v in ring_info.items():
-                        if k not in ("SMILES","ID","Total_count","BBB+_count","BBB-_count",
-                                     "BBB+_normalised","BBB-_normalised","ratio"):
-                            ring_entry[k] = v
+        try:
+            ring_list, _ = process_ring_side_chains(smiles)  # returns (ring_list, side_list)
+            used_rings = set()
+            for ring_sm in ring_list:
+                if ring_sm not in used_rings:
+                    used_rings.add(ring_sm)
+                    if calc_frag_props:
+                        try:
+                            ring_info = ring_store.add_fragment(ring_sm, is_bbb_plus=is_bbb_plus, remove_brics_placeholder=True)
+                            ring_entry = {"RING": ring_sm, "ID": ring_info["ID"]}
+                            for k, v in ring_info.items():
+                                if k not in ("SMILES", "Total_count", "BBB+_count", "BBB-_count"):
+                                    ring_entry[k] = v
+                        except Exception as e:
+                            log_debug(f"[Row {idx+1}] Skipping RING '{ring_sm}' => error: {e}")
+                            ring_entry = {"RING": ring_sm, "ID": ""}
+                    else:
+                        if ring_sm not in ring_store.data:
+                            frag_id = f"{ring_store.prefix}{ring_store.counter:04d}"
+                            ring_store.data[ring_sm] = {
+                                "ID": frag_id,
+                                "SMILES": ring_sm,
+                                "Total_count": 0,
+                                "BBB+_count": 0,
+                                "BBB-_count": 0
+                            }
+                            ring_store.counter += 1
+                        if is_bbb_plus:
+                            ring_store.data[ring_sm]["BBB+_count"] += 1
+                        else:
+                            ring_store.data[ring_sm]["BBB-_count"] += 1
+                        ring_store.data[ring_sm]["Total_count"] += 1
+                        ring_info = ring_store.data[ring_sm]
+                        ring_entry = {"RING": ring_sm, "ID": ring_info["ID"]}
                     ring_entries.append(ring_entry)
-                    ring_id_list.add(ring_info["ID"])
-                except Exception as e:
-                    log_debug(f"[Row {idx+1}] Skipping RING '{ring_sm}' => error: {e}")
+                    ring_id_list.add(ring_entry["ID"])
+        except Exception as e:
+            ring_entries = []
+            log_debug(f"[Row {idx+1}] Error extracting rings: {e}")
 
+        # Side-chain fragments
         side_chain_entries = []
         sidechain_id_list = set()
-        used_sidechains = set()
-        for sc_sm in side_list:
-            if sc_sm not in used_sidechains:
-                used_sidechains.add(sc_sm)
-                try:
-                    sc_info = sidechain_store.add_fragment(
-                        sc_sm, 
-                        is_bbb_plus=is_bbb_plus, 
-                        remove_brics_placeholder=True
-                    )
-                    sc_entry = {
-                        "SIDE_CHAIN": sc_sm,
-                        "ID": sc_info["ID"]
-                    }
-                    for k, v in sc_info.items():
-                        if k not in ("SMILES","ID","Total_count","BBB+_count","BBB-_count",
-                                     "BBB+_normalised","BBB-_normalised","ratio"):
-                            sc_entry[k] = v
+        try:
+            _, side_list = process_ring_side_chains(smiles)
+            used_sidechains = set()
+            for sc_sm in side_list:
+                if sc_sm not in used_sidechains:
+                    used_sidechains.add(sc_sm)
+                    if calc_frag_props:
+                        try:
+                            sc_info = sidechain_store.add_fragment(sc_sm, is_bbb_plus=is_bbb_plus, remove_brics_placeholder=True)
+                            sc_entry = {"SIDE_CHAIN": sc_sm, "ID": sc_info["ID"]}
+                            for k, v in sc_info.items():
+                                if k not in ("SMILES", "Total_count", "BBB+_count", "BBB-_count"):
+                                    sc_entry[k] = v
+                        except Exception as e:
+                            log_debug(f"[Row {idx+1}] Skipping SIDE_CHAIN '{sc_sm}' => error: {e}")
+                            sc_entry = {"SIDE_CHAIN": sc_sm, "ID": ""}
+                    else:
+                        if sc_sm not in sidechain_store.data:
+                            frag_id = f"{sidechain_store.prefix}{sidechain_store.counter:04d}"
+                            sidechain_store.data[sc_sm] = {
+                                "ID": frag_id,
+                                "SMILES": sc_sm,
+                                "Total_count": 0,
+                                "BBB+_count": 0,
+                                "BBB-_count": 0
+                            }
+                            sidechain_store.counter += 1
+                        if is_bbb_plus:
+                            sidechain_store.data[sc_sm]["BBB+_count"] += 1
+                        else:
+                            sidechain_store.data[sc_sm]["BBB-_count"] += 1
+                        sidechain_store.data[sc_sm]["Total_count"] += 1
+                        sc_info = sidechain_store.data[sc_sm]
+                        sc_entry = {"SIDE_CHAIN": sc_sm, "ID": sc_info["ID"]}
                     side_chain_entries.append(sc_entry)
-                    sidechain_id_list.add(sc_info["ID"])
-                except Exception as e:
-                    log_debug(f"[Row {idx+1}] Skipping SIDE_CHAIN '{sc_sm}' => error: {e}")
+                    sidechain_id_list.add(sc_entry["ID"])
+        except Exception as e:
+            side_chain_entries = []
+            log_debug(f"[Row {idx+1}] Error extracting side chains: {e}")
 
         # Build the JSON entry for the molecule
         mol_entry = {
@@ -1385,15 +1436,14 @@ def generate_json_from_csv(input_csv: str, output_json: str, use_pubchem=False):
             "RING_IDs": "; ".join(sorted(list(ring_id_list))),
             "SIDECHAIN_IDs": "; ".join(sorted(list(sidechain_id_list)))
         }
-        
-        # Add final descriptors
-        for k,v in final_desc.items():
+        # Add molecule-level descriptors
+        for k, v in final_desc.items():
             mol_entry[k] = v
 
         json_data.append(mol_entry)
         molecule_dicts.append(mol_entry)
 
-    # Finalize usage counts
+    # Finalize usage counts in fragment stores
     bric_store.finalize_counts()
     ring_store.finalize_counts()
     sidechain_store.finalize_counts()
@@ -1415,8 +1465,6 @@ def generate_json_from_csv(input_csv: str, output_json: str, use_pubchem=False):
 
     # Generate molecule-level CSV excluding large list columns
     df_molecules = pd.DataFrame(molecule_dicts)
-    
-    # Remove the columns that contain large lists of dicts
     for col_to_drop in ("BRICs", "RINGS", "SIDE_CHAINS"):
         if col_to_drop in df_molecules.columns:
             df_molecules.drop(columns=[col_to_drop], inplace=True)
@@ -1425,25 +1473,22 @@ def generate_json_from_csv(input_csv: str, output_json: str, use_pubchem=False):
     df_molecules.to_csv(molecules_csv, index=False)
     print(f"Molecule-level CSV saved to '{molecules_csv}'.")
 
-    # BRICS
+    # Save fragment-level CSV files
     df_brics = bric_store.all_rows_df()
     brics_csv = f"{base}_brics.csv"
     df_brics.to_csv(brics_csv, index=False)
     print(f"BRIC-level CSV saved to '{brics_csv}'.")
 
-    # RINGS
     df_rings = ring_store.all_rows_df()
     rings_csv = f"{base}_rings.csv"
     df_rings.to_csv(rings_csv, index=False)
     print(f"Ring-level CSV saved to '{rings_csv}'.")
 
-    # SIDECHAINS
     df_sidechains = sidechain_store.all_rows_df()
     sidechains_csv = f"{base}_sidechains.csv"
     df_sidechains.to_csv(sidechains_csv, index=False)
     print(f"Side-chain-level CSV saved to '{sidechains_csv}'.")
 
-    
     # Generate summary statistics
     summary_frames = []
     if not df_molecules.empty:
@@ -1457,7 +1502,7 @@ def generate_json_from_csv(input_csv: str, output_json: str, use_pubchem=False):
     if summary_frames:
         combined_summary = pd.concat(summary_frames, ignore_index=True)
     else:
-        combined_summary = pd.DataFrame(columns=["Type","Metric","Mean","SD"])
+        combined_summary = pd.DataFrame(columns=["Type", "Metric", "Mean", "SD"])
 
     summary_csv = f"{base}_summary.csv"
     combined_summary.to_csv(summary_csv, index=False)
@@ -1522,24 +1567,30 @@ if __name__ == "__main__":
     - Ensures the output directory exists before processing.
     - Calls 'generate_json_from_csv()' with the provided parameters.
     """
-    
     # Initialize argument parser
     parser = argparse.ArgumentParser(description="Generate JSON from CSV with descriptors.")
     
     # Define command-line arguments
     parser.add_argument("--input_csv", help="Path to input CSV.")
     parser.add_argument("--output_json", help="Path to output JSON.")
-    parser.add_argument("--use_pubchem", help="Use PubChem y/n.")
+    parser.add_argument("--use_pubchem", choices=["y", "n"], default="n", help="Use PubChem y/n.")
+    parser.add_argument(
+        "--calculate_fragment_properties",
+        choices=["y", "n"],
+        default="n",
+        help="Calculate fragment properties? (y/n, default: n)"
+    )
     
     # Parse command-line arguments
     args = parser.parse_args()
     
-    # Check if required arguments are provided
+    # Check if required arguments are provided via command line
     if args.input_csv and args.output_json:
-        use_pubchem = args.use_pubchem == "y" if args.use_pubchem else False
-        generate_json_from_csv(args.input_csv, args.output_json, use_pubchem)
+        use_pubchem = args.use_pubchem == "y"
+        calc_frag_props = args.calculate_fragment_properties == "y"
+        generate_json_from_csv(args.input_csv, args.output_json, use_pubchem, calc_frag_props)
     
-    # Prompt user for input CSV file path
+    # Otherwise, prompt the user for input with defaults.
     else:
         input_csv = input("Enter input CSV path (or press Enter for default 'data/B3DB_full.csv'): ")
         if not input_csv.strip():
@@ -1549,18 +1600,20 @@ if __name__ == "__main__":
         if not output_json.strip():
             output_json = "data/B3DB_processed/processed.json"
         
+        # Ensure the output directory exists
         output_dir = os.path.dirname(output_json)
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
             print(f"Created directories: {output_dir}")
 
         use_pubchem = input("Search PubChem? (y/n, default n.): ").strip().lower()
-        
         if not use_pubchem:
             use_pubchem = "n"
-            print("Using PubChem.")
-        else:
-            print("Not using PubChem.")
-
         use_pubchem = use_pubchem == "y"
-        generate_json_from_csv(input_csv, output_json, use_pubchem)
+        
+        calc_frag_props = input("Calculate fragment properties? (y/n, default n.): ").strip().lower()
+        if not calc_frag_props:
+            calc_frag_props = "n"
+        calc_frag_props = calc_frag_props == "y"
+        
+        generate_json_from_csv(input_csv, output_json, use_pubchem, calc_frag_props)
