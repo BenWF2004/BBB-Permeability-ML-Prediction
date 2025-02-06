@@ -120,6 +120,7 @@ def get_source_from_column(column_name: str) -> str:
         return 'PubChem'
     return 'Unknown'
 
+
 def plot_histograms(descriptor_key: str, df: pd.DataFrame, bbb_column: str, grouping_dir: str):
     """
     Generates histograms and boxplots for a given molecular descriptor 
@@ -223,32 +224,29 @@ def plot_histograms(descriptor_key: str, df: pd.DataFrame, bbb_column: str, grou
             (data_bbb_neg, GRAPH_COLOR_MAPPING['BBB-'], 'BBB-'),
             (data_bbb_pos, GRAPH_COLOR_MAPPING['BBB+'], 'BBB+')
         ]:
-            if len(class_data) > 1:
-                mean_ = class_data.mean()
-                std_  = class_data.std()
-                if std_ > 1e-9:
-                    x_   = np.linspace(class_data.min(), class_data.max(), 1000)
-                    pdf_ = norm.pdf(x_, mean_, std_)
-                    ax.plot(
-                        x_, pdf_, color=color, linestyle='solid',
-                        label=f"{label_str} Normal Distribution", linewidth=4
-                    )
-
+            if not np.all(class_data == class_data.astype(int)): 
+                if len(class_data) > 1:
+                    mean_ = class_data.mean()
+                    std_  = class_data.std()
+                    if std_ > 1e-9:
+                        x_   = np.linspace(class_data.min(), class_data.max(), 1000)
+                        pdf_ = norm.pdf(x_, mean_, std_)
+                        ax.plot(
+                            x_, pdf_, color=color, linestyle='solid',
+                            label=f"{label_str} Normal Distribution", linewidth=4
+                        )
+        
         # Display statistical information on the plot
         combined_text = (
-            f"BBB-\n"
-            f"N: {len(data_bbb_neg)}\n"
-            f"Mean: {data_bbb_neg.mean():.2f}\n"
-            f"SD: {data_bbb_neg.std():.2f}\n\n"
-            f"BBB+\n"
-            f"N: {len(data_bbb_pos)}\n"
-            f"Mean: {data_bbb_pos.mean():.2f}\n"
-            f"SD: {data_bbb_pos.std():.2f}"
+            f"BBB- (N={len(data_bbb_neg)})\n"
+            f"Mean ± SD: {data_bbb_neg.mean():.2f} ± {data_bbb_neg.std():.2f}\n\n"
+            f"BBB+ (N={len(data_bbb_pos)})\n"
+            f"Mean ± SD: {data_bbb_pos.mean():.2f} ± {data_bbb_pos.std():.2f}"
         )
         ax.text(
             0.98, 0.68,
             combined_text,
-            transform=ax.transAxes, fontsize=18, color='black',
+            transform=ax.transAxes, fontsize=22, color='black',
             verticalalignment='top', horizontalalignment='right',
             bbox=dict(facecolor='white', alpha=0.8)
         )
@@ -257,9 +255,9 @@ def plot_histograms(descriptor_key: str, df: pd.DataFrame, bbb_column: str, grou
         ax.grid(True, color=GRAPH_COLOR_MAPPING['grid-lines'], linestyle='--', linewidth=0.5)
         ax.set_ylabel('Density', fontsize=24)
         ax.set_xlabel(f'{desc_prefix} ({source})', fontsize=24)
-        ax.tick_params(axis='both', which='major', labelsize=18)
-        ax_box.tick_params(axis='both', which='major', labelsize=18)
-        ax.legend(loc="upper right", fontsize=24, title="Legend and Metrics", title_fontsize=27)
+        ax.tick_params(axis='both', which='major', labelsize=22)
+        ax_box.tick_params(axis='both', which='major', labelsize=22)
+        ax.legend(loc="upper right", fontsize=24, title="Legend and Metrics", title_fontsize=28)
         ax.set_title(f'Distribution of {desc_prefix} from {source} by BBB Classification', fontsize=30)
 
         # Create boxplot representation
@@ -274,6 +272,16 @@ def plot_histograms(descriptor_key: str, df: pd.DataFrame, bbb_column: str, grou
             # Add shaded confidence interval region
             ax_box.fill_betweenx([i - 0.2, i + 0.2], mean_ - std_, mean_ + std_, color=color, alpha=0.5)
             ax_box.plot([mean_ - ci_95, mean_ + ci_95], [i, i], color='black', linestyle='-', linewidth=1.5)
+            
+            # Ensure the x-axis does not extend below 0 but captures all data
+            global_min = min(data_bbb_neg.min(), data_bbb_pos.min())
+            global_max = max(data_bbb_neg.max(), data_bbb_pos.max())
+
+            if global_min == 0:
+                ax_box.set_xlim(0, global_max * 1.1)  # Keep upper bound dynamic with some padding
+            else:
+                ax_box.set_xlim(global_min * 0.9, global_max * 1.1)  # Allow natural limits
+
             
             # Custom defintion for max-min height and mean plotting
             ymin_vales = [0, 0.05, 0.7]
@@ -298,6 +306,7 @@ def plot_histograms(descriptor_key: str, df: pd.DataFrame, bbb_column: str, grou
         plt.savefig(histogram_filepath)
         plt.close()
         print(f"Histogram saved => {histogram_filepath}")
+
 
 def compare_and_plot_rdkit_vs_pubchem(
     descriptor_key: str,
