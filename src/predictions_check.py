@@ -105,12 +105,11 @@ def calculate_metrics_from_csv(file_path):
 
     return results
 
-def generate_comparative_table(directory_path, files):
+def generate_comparative_table(files):
     """
     Generate a comparative table of metrics for multiple CSV files.
 
     Parameters:
-        directory_path (str): Directory containing the CSV files.
         files (list): List of CSV file names.
 
     Returns:
@@ -119,38 +118,39 @@ def generate_comparative_table(directory_path, files):
     comparison_table = []
 
     for file_name in files:
-        file_path = os.path.join(directory_path, file_name)
-
-        if os.path.exists(file_path):
+        if os.path.exists(file_name):
             try:
-                metrics = calculate_metrics_from_csv(file_path)
+                metrics = calculate_metrics_from_csv(file_name)
                 for model, metric_values in metrics.items():
                     row = {"File": file_name, "Model": model}
                     row.update(metric_values)
                     comparison_table.append(row)
             except Exception as e:
-                print(f"Error processing {file_path}: {e}")
+                print(f"Error processing {file_name}: {e}")
         else:
-            print(f"File not found: {file_path}")
+            print(f"File not found: {file_name}")
 
     # Convert to DataFrame for a tabular format
     comparison_df = pd.DataFrame(comparison_table)
     return comparison_df
 
 if __name__ == "__main__":
-    # List of CSV files to process (modify as needed)
-    files = ["prediced_model_75opt-noknn.csv"]
+    # Ask the user to input CSV filenames, separated by commas
+    file_input = input("Enter CSV filenames (comma-separated): ").strip()
+    file_output = input("Enter CSV filename for saved metrics (default: predictions/comparative_metrics.csv): ").strip()
+    
+    if not file_output:
+        file_output = "predictions/comparative_metrics.csv"
 
-    # Directory where CSV files are located
-    dir_path = "predictions"  
+    # Convert input string to a list, removing any whitespace
+    files = [file.strip() for file in file_input.split(",")]
 
     # Generate the comparative table
-    comparison_df = generate_comparative_table(dir_path, files)
+    comparison_df = generate_comparative_table(files)
 
     # Display the table
     print(comparison_df)
 
     # Save the table to a CSV file
-    output_path = os.path.join(dir_path, "prediced_model_75opt-noknn_cm.csv")
-    comparison_df.to_csv(output_path, index=False)
-    print(f"\nComparative metrics saved to {output_path}")
+    comparison_df.to_csv(file_output, index=False)
+    print(f"\nComparative metrics saved to {file_output}")
