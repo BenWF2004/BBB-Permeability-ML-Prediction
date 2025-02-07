@@ -1,7 +1,7 @@
 """
 Author: Ben Franey
-Version: 11.1.6 - Publish: 1.0
-Last Review Date: 30-01-2025
+Version: 11.2.3 - Publish: 1.1
+Last Review Date: 06-02-2025
 Overview:
 This script implements a complete pipeline for training and optimizing an XGBoost model 
 to classify molecules as BBB+ (blood-brain barrier permeable) or BBB- (non-permeable). 
@@ -15,17 +15,21 @@ Data Preprocessing:
   - Cleans missing values and standardizes classification labels.
 
 Feature Engineering:
-  - Vectorizes molecular fragment information using 'CountVectorizer'.
+  - Splits data into train/validation first, ensuring no data leakage.
+  - Builds fragment dictionaries/frequencies only from the training set.
+  - Applies the same dictionary to transform the validation set (no frequency counting on val).
   - Handles missing values using KNN imputation.
   - Supports multiple data balancing methods (None, SMOTE, SMOTEENN, SMOTETomek).
 
 Training and Optimization:
-  - Trains an XGBoost model with predefined hyperparameters.
-  - Supports Optuna-based hyperparameter optimization with cross-validation.
-  - Allows metric-based optimization (F1, AUC, accuracy, recall, precision, etc.).
+  - Trains an XGBoost model with predefined hyperparameters or via Optuna-based hyperparameter optimization.
+  - Uses cross-validation on the training portion to log metrics (e.g. recall).
+  - Uses the hold-out validation set for final evaluation or Optuna objective.
+  - Preforms optimization to metrics specifically from final hold-out set not CV averge.
+  - Ensures no data leakage between folds or from validation.
 
 Model Evaluation:
-  - Performs cross-validation with key performance metrics.
+  - The hold-out validation set remains the same for all trials (no re-splitting).
   - Generates ROC curves, calibration curves, and confusion matrices.
   - Computes SHAP (SHapley Additive exPlanations) values for feature importance analysis.
   - Produces feature correlation heatmaps and importance rankings.
@@ -33,11 +37,11 @@ Model Evaluation:
 Results and Output:
   - Saves trained models and Optuna optimization logs.
   - Outputs validation set performance metrics.
-  - Stores processed feature data and trained vectorizers for future use.
-
-This script can be run with command-line arguments or interactively by prompting 
-the user for inputs. It supports GPU acceleration for faster training.
+  - For each final model (default or best-Optuna), saves fragment vectorizers,
+    kept-tokens joblibs, CSV matrices, confusion matrix, SHAP plots, etc.
+  - Produces a comparison chart (CV average vs final evaluation) for all trials in Optimize mode.
 """
+
 import os
 import json
 import sys
@@ -47,7 +51,7 @@ import joblib
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
-import argparse 
+import argparse
 import re
 
 from sklearn.model_selection import train_test_split, StratifiedKFold
@@ -72,7 +76,8 @@ import optuna
 
 DEFAULT_N_FOLDS = 10
 DEFAULT_RANDOM_SEED = 42
-MINIMUM_FRAGMENT_FREQUENCY = [5,5,5,5] # default, BRIC, RINGS, SIDECHAINS
+MINIMUM_FRAGMENT_FREQUENCY = [5, 5, 5, 5]  # [default, BRICS, RINGS, SIDECHAINS]
+
 PREDEFINED_PARAMS = {
     'max_depth': 10,
     'learning_rate': 0.016303454,
@@ -84,9 +89,8 @@ PREDEFINED_PARAMS = {
     'lambda': 1.204193852
 }
 
-
-# Clean output
 warnings.filterwarnings("ignore")
+
 
 def setup_logging(log_file_path):
     """
@@ -128,6 +132,7 @@ def sanitize_column_names(df):
     Returns:
         pd.DataFrame: DataFrame with sanitized column names.
     """
+    
     new_cols = []
     # Iterate though each colum
     for c in df.columns:
@@ -157,6 +162,7 @@ def revert_brics_naming(column_name):
     Returns:
         str: Reformatted column name with BRICS notation restored.
     """
+    
     return re.sub(r'_(\d+)\*_', r'[\1*]', column_name)
 
 
@@ -178,6 +184,7 @@ def load_data(data_path):
     Raises:
         SystemExit: If the file cannot be loaded.
     """
+    
     try:
         with open(data_path, 'r') as f:
             data = json.load(f)
@@ -204,31 +211,46 @@ def preprocess_data(data):
     Returns:
         pd.DataFrame: Processed DataFrame containing molecular descriptors and fragment data.
     """
-
+    
     df_list = []
     
     # initialize tqdm bar for each molecule.
     for entry in tqdm(data, desc="Processing entries"):
+        
         # Skip incorrect entries
         if '_preface' in entry:
             continue
         if 'BBB+/BBB-' not in entry:
             continue
-        
+
         # Add row data for each molecule
         row_data = {
             'NO.': entry.get('NO.', np.nan),
             'BBB': entry.get('BBB+/BBB-', np.nan),
             'SMILES': entry.get('SMILES', np.nan),
-            
+
             # Use PubChem only if exist then RDKit if not
-            'LogP': entry.get('LogP_PubChem', np.nan) if not pd.isna(entry.get('LogP_PubChem', np.nan)) else entry.get('LogP_RDKit', np.nan),
-            'Flexibility': entry.get('Flexibility_PubChem', np.nan) if not pd.isna(entry.get('Flexibility_PubChem', np.nan)) else entry.get('Flexibility_RDKit', np.nan),
-            'HBA': entry.get('HBA_PubChem', np.nan) if not pd.isna(entry.get('HBA_PubChem', np.nan)) else entry.get('HBA_RDKit', np.nan),
-            'HBD': entry.get('HBD_PubChem', np.nan) if not pd.isna(entry.get('HBD_PubChem', np.nan)) else entry.get('HBD_RDKit', np.nan),
-            'TPSA': entry.get('TPSA_PubChem', np.nan) if not pd.isna(entry.get('TPSA_PubChem', np.nan)) else entry.get('TPSA_RDKit', np.nan),
-            'Charge': entry.get('Charge_PubChem', np.nan) if not pd.isna(entry.get('Charge_PubChem', np.nan)) else entry.get('Charge_RDKit', np.nan),
-            'Atom_Stereo': entry.get('AtomStereo_PubChem', np.nan) if not pd.isna(entry.get('AtomStereo_PubChem', np.nan)) else entry.get('AtomStereo_RDKit', np.nan),
+            'LogP': entry.get('LogP_PubChem', np.nan) 
+                if not pd.isna(entry.get('LogP_PubChem', np.nan)) 
+                else entry.get('LogP_RDKit', np.nan),
+            'Flexibility': entry.get('Flexibility_PubChem', np.nan) 
+                if not pd.isna(entry.get('Flexibility_PubChem', np.nan)) 
+                else entry.get('Flexibility_RDKit', np.nan),
+            'HBA': entry.get('HBA_PubChem', np.nan) 
+                if not pd.isna(entry.get('HBA_PubChem', np.nan)) 
+                else entry.get('HBA_RDKit', np.nan),
+            'HBD': entry.get('HBD_PubChem', np.nan) 
+                if not pd.isna(entry.get('HBD_PubChem', np.nan)) 
+                else entry.get('HBD_RDKit', np.nan),
+            'TPSA': entry.get('TPSA_PubChem', np.nan) 
+                if not pd.isna(entry.get('TPSA_PubChem', np.nan)) 
+                else entry.get('TPSA_RDKit', np.nan),
+            'Charge': entry.get('Charge_PubChem', np.nan) 
+                if not pd.isna(entry.get('Charge_PubChem', np.nan)) 
+                else entry.get('Charge_RDKit', np.nan),
+            'Atom_Stereo': entry.get('AtomStereo_PubChem', np.nan) 
+                if not pd.isna(entry.get('AtomStereo_PubChem', np.nan)) 
+                else entry.get('AtomStereo_RDKit', np.nan),
 
             # More Descriptors
             'HeavyAtom': entry.get('HeavyAtom_RDKit', np.nan),
@@ -287,13 +309,13 @@ def preprocess_data(data):
         brics = entry.get('BRICs', [])
         bric_smiles_list = [b.get('BRIC', '').strip() for b in brics if b.get('BRIC', '').strip()]
         row_data['BRIC_SMILES'] = ' '.join(bric_smiles_list)
-        
+
         # Collect RINGS
         rings = entry.get('RINGS', [])
         ring_smiles_list = [r.get('RING', '').strip() for r in rings if r.get('RING', '').strip()]
         row_data['RINGS_SMILES'] = ' '.join(ring_smiles_list)
-        
-        # Collect SIDE CHAINS
+
+        # Collect SIDE_CHAINS
         side_chains = entry.get('SIDE_CHAINS', [])
         side_chain_smiles_list = [sc.get('SIDE_CHAIN', '').strip() for sc in side_chains if sc.get('SIDE_CHAIN', '').strip()]
         row_data['SIDE_CHAINS_SMILES'] = ' '.join(side_chain_smiles_list)
@@ -323,15 +345,13 @@ def handle_missing_values(df):
     Raises:
         SystemExit: If the 'BBB' column is missing.
     """
+    
     if 'BBB' not in df.columns:
         logging.error("BBB column missing.")
         sys.exit("Critical error: BBB column missing.")
 
-    # Drop rows where BBB classification is missing
     df = df.dropna(subset=['BBB'])
-    
-    # Fill missing values in fragment-related text columns
-    for col in ['BRIC_SMILES', 'RINGS', 'SIDE_CHAINS']:
+    for col in ['BRIC_SMILES', 'RINGS_SMILES', 'SIDE_CHAINS_SMILES']:
         if col in df.columns:
             df[col] = df[col].fillna('')
     return df
@@ -351,6 +371,7 @@ def clean_labels(df):
     Returns:
         pd.DataFrame: DataFrame with standardized 'BBB' labels.
     """
+    
     df['BBB'] = df['BBB'].astype(str).str.strip().str.upper()
     df['BBB'] = df['BBB'].replace({
         'BBB +': 'BBB+',
@@ -380,6 +401,7 @@ def encode_labels(df):
     Raises:
         SystemExit: If an error occurs during encoding, logs and exits the program.
     """
+    
     try:
         le = LabelEncoder()
         df['BBB_Label'] = le.fit_transform(df['BBB'])
@@ -390,164 +412,71 @@ def encode_labels(df):
         sys.exit(f"Critical error: {e}")
 
 
-def vectorize_text_train(
-    df, 
-    text_col,
-    min_freq=MINIMUM_FRAGMENT_FREQUENCY[0], 
-    prefix=""
-):
+def vectorize_fragments_train_only(df_train):
     """
-    Trains a 'CountVectorizer' on a text column, filtering tokens based on frequency.
+    Trains CountVectorizers for different molecular fragment types (BRICS, RINGS, and SIDE_CHAINS)
+    using training data only.
 
-    - Uses 'CountVectorizer' to tokenize the text column ('text_col').
-    - Retains only tokens appearing at least 'min_freq' times across all rows.
-    - Optionally applies a prefix to column names for clarity.
-    - Returns a DataFrame with token counts, the trained vectorizer, and the kept tokens.
-
-    Parameters:
-        df (pd.DataFrame): Input DataFrame containing the text column.
-        text_col (str): Name of the column containing space-separated text tokens.
-        min_freq (int, optional): Minimum occurrences for a token to be retained (default: MINIMUM_FRAGMENT_FREQUENCY[0]).
-        prefix (str, optional): Prefix to apply to tokenized column names (default: "").
-
-    Returns:
-        tuple:
-            pd.DataFrame: Token frequency matrix with filtered tokens.
-            CountVectorizer: Trained CountVectorizer instance.
-            list: List of retained tokens.
-
-    Raises:
-        SystemExit: If an error occurs, logs the error and exits the program.
-    """
-    try:
-        # Create tokens
-        vectorizer = CountVectorizer(token_pattern=r'[^ ]+', lowercase=False)
-        text_features = vectorizer.fit_transform(df[text_col])
-        feature_names = vectorizer.get_feature_names_out()
-        temp_df = pd.DataFrame(text_features.toarray(), columns=feature_names, index=df.index)
-
-        # Filter tokens based on minimum frequency
-        freq = (temp_df > 0).sum(axis=0)
-        keep_tokens = freq[freq >= min_freq].index.tolist()
-        temp_df = temp_df[keep_tokens].fillna(0)
-
-        # Apply prefix if provided
-        if prefix:
-            temp_df.columns = [f"{prefix}{c}" for c in temp_df.columns]
-
-        return temp_df, vectorizer, keep_tokens
+    For each fragment type, this function:
+      - Tokenizes the SMILES strings based on spaces (without converting to lowercase).
+      - Fits a CountVectorizer to the tokens.
+      - Computes a frequency series that counts the number of rows in which each token appears at least once.
     
-    except Exception as e:
-        logging.error(f"Error in vectorize_text_train: {e}")
-        sys.exit(f"Critical error: {e}")
-
-
-def vectorize_text_apply(
-    df, 
-    text_col, 
-    vectorizer, 
-    keep_tokens, 
-    prefix=""
-):
-    """
-    Applies a trained 'CountVectorizer' to a text column, retaining only specified tokens.
-
-    - Uses a pre-trained 'CountVectorizer' to transform 'df[text_col]' into token frequencies.
-    - Retains only tokens specified in 'keep_tokens' to ensure consistent feature space.
-    - Automatically adds missing columns (if any) with zero values to maintain alignment.
-    - Optionally applies a prefix to the tokenized column names for clarity.
-
     Parameters:
-        df (pd.DataFrame): Input DataFrame containing the text column.
-        text_col (str): Column name containing space-separated text tokens.
-        vectorizer (CountVectorizer): Pre-trained 'CountVectorizer' instance.
-        keep_tokens (list): List of tokens to retain in the output.
-        prefix (str, optional): Prefix to apply to column names (default: "").
+        df_train (pd.DataFrame): Training DataFrame
 
     Returns:
-        pd.DataFrame: Token frequency matrix with aligned columns.
-
-    Raises:
-        SystemExit: If an error occurs, logs the error and exits the program.
+        dict: A dictionary with keys:
+            'BRICS': Tuple containing the CountVectorizer and token frequency Series for BRICS fragments.
+            RINGS': Tuple containing the CountVectorizer and token frequency Series for ring fragments.
+            SIDECHAINS': Tuple containing the CountVectorizer and token frequency Series for side-chain fragments.
     """
-    try:
-        text_features = vectorizer.transform(df[text_col])
-        feature_names = vectorizer.get_feature_names_out()
-        temp_df = pd.DataFrame(text_features.toarray(), columns=feature_names, index=df.index)
-
-        # Add missing columns to ensure alignment with training feature set
-        missing = [tk for tk in keep_tokens if tk not in temp_df.columns]
-        for mc in missing:
-            temp_df[mc] = 0
-
-        # Retain only the desired tokens, ensuring NaNs are replaced with zero
-        temp_df = temp_df[keep_tokens].fillna(0)
-
-        # Apply prefix if provided
-        if prefix:
-            temp_df.columns = [f"{prefix}{c}" for c in temp_df.columns]
-
-        return temp_df
     
-    except Exception as e:
-        logging.error(f"Error in vectorize_text_apply: {e}")
-        sys.exit(f"Critical error: {e}")
+    # Helper function to build a CountVectorizer and calculate token frequencies for a given series of strings.
+    def build_vectorizer_and_freq(series_of_strings):
+        vect = CountVectorizer(token_pattern=r'[^ ]+', lowercase=False)
+        mat = vect.fit_transform(series_of_strings.tolist())
+        feature_names = vect.get_feature_names_out()
+        temp_df = pd.DataFrame(mat.toarray(), columns=feature_names)
+        freq_series = (temp_df > 0).sum(axis=0)
+        return vect, freq_series
+
+    # Train the vectorizer and compute token frequencies
+    brics_vect, brics_freq = build_vectorizer_and_freq(df_train['BRIC_SMILES'])
+    rings_vect, rings_freq = build_vectorizer_and_freq(df_train['RINGS_SMILES'])
+    side_vect, side_freq = build_vectorizer_and_freq(df_train['SIDE_CHAINS_SMILES'])
+
+    # Return a dictionary containing the trained vectorizers and corresponding token frequency Series.
+    return {
+        'BRICS': (brics_vect, brics_freq),
+        'RINGS': (rings_vect, rings_freq),
+        'SIDECHAINS': (side_vect, side_freq)
+    }
 
 
-'''def impute_missing_values(X_train, X_val):
+def apply_fragments(series_of_strings, vectorizer, prefix):
     """
-    Performs KNN-based imputation on missing numeric values in training and validation datasets.
+    Applies a pre-fitted CountVectorizer to a Series, returning a DataFrame with prefixed column names.
 
-    - Aligns 'X_train' and 'X_val' by filling missing columns with zero to ensure compatibility.
-    - Uses 'KNNImputer' to estimate missing values for numeric columns.
-    - Ensures no NaN values remain after imputation.
-    - Logs imputation details for debugging and traceability.
+    For the given series:
+      - Transforms the text using the pre-fitted CountVectorizer.
+      - Converts the resulting sparse matrix into a DataFrame while retaining the original index.
+      - Prepends a specified prefix to each column name for clarity.
 
     Parameters:
-        X_train (pd.DataFrame): Training feature matrix.
-        X_val (pd.DataFrame): Validation feature matrix.
+        series_of_strings (pd.Series): Series of space-separated tokens.
+        vectorizer (CountVectorizer): Pre-fitted CountVectorizer.
+        prefix (str): String prefix to add to each column name.
 
     Returns:
-        tuple:
-            - pd.DataFrame: Imputed training data.
-            - pd.DataFrame: Imputed validation data.
-
-    Raises:
-        SystemExit: If NaNs persist after imputation or an unexpected error occurs.
+        pd.DataFrame: DataFrame with token counts and prefixed column names.
     """
-    try:
-        # Align columns between training and validation sets, filling missing ones with zeros
-        X_train, X_val = X_train.align(X_val, join='outer', axis=1, fill_value=0)
-
-        # Select numeric columns for imputation
-        numeric_cols = list(X_train.select_dtypes(include=[np.number]).columns)
-        combined = pd.concat([X_train, X_val], axis=0, ignore_index=True)
-
-        # Apply KNN imputation if multiple numeric features exist
-        if len(numeric_cols) > 1 and combined.shape[0] > 1:
-            logging.info(f"KNN imputation on {len(numeric_cols)} numeric columns, total rows={combined.shape[0]}")
-            knn_imputer = KNNImputer(n_neighbors=5)
-            combined[numeric_cols] = knn_imputer.fit_transform(combined[numeric_cols])
-
-        # Ensure no NaNs remain
-        combined.fillna(0, inplace=True)
-
-        # Split back into training and validation sets
-        X_train_imputed = combined.iloc[:X_train.shape[0], :].copy()
-        X_val_imputed = combined.iloc[X_train.shape[0]:, :].copy()
-
-        # Final validation check for NaNs
-        if X_train_imputed.isnull().sum().sum() > 0 or X_val_imputed.isnull().sum().sum() > 0:
-            logging.error("NaNs remain after final KNN.")
-            sys.exit("Critical error: NaNs remain after imputation.")
-        else:
-            logging.info("All missing values imputed successfully.")
-
-        return X_train_imputed, X_val_imputed
-
-    except Exception as e:
-        logging.error(f"Error during KNN imputation: {e}")
-        sys.exit(f"Critical error: {e}")'''
+    
+    mat = vectorizer.transform(series_of_strings.tolist())
+    feature_names = vectorizer.get_feature_names_out()
+    df_frag = pd.DataFrame(mat.toarray(), columns=feature_names, index=series_of_strings.index)
+    df_frag.columns = [f"{prefix}{c}" for c in df_frag.columns]
+    return df_frag
 
 
 def impute_missing_values(X_train: pd.DataFrame, X_val: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
@@ -571,6 +500,7 @@ def impute_missing_values(X_train: pd.DataFrame, X_val: pd.DataFrame) -> tuple[p
     Raises:
         SystemExit: If NaNs persist after imputation or an unexpected error occurs.
     """
+    
     try:
         # Align columns: Ensure same features in both datasets (fill missing ones with 0)
         X_train, X_val = X_train.align(X_val, join='outer', axis=1, fill_value=0)
@@ -735,6 +665,7 @@ def evaluate_model(
             - np.array: Predicted probabilities for the positive class.
             - np.array: Binary predictions based on the given threshold.
     """
+    
     logging.info("Evaluating model.")
     
     # Ensure threshold is within the defined safe range
@@ -827,8 +758,8 @@ def plot_calibration_curve_func(y_true, y_probs, output_dir):
     Returns:
         None: Saves the plot to disk.
     """
-    fraction_of_positives, mean_predicted_value = calibration_curve(y_true, y_probs, n_bins=10)
     
+    fraction_of_positives, mean_predicted_value = calibration_curve(y_true, y_probs, n_bins=10)
     plt.figure()
     plt.plot(mean_predicted_value, fraction_of_positives, "s-", label='Model')
     plt.plot([0, 1], [0, 1], "k--", label='Perfectly calibrated')
@@ -836,7 +767,6 @@ def plot_calibration_curve_func(y_true, y_probs, output_dir):
     plt.ylabel('Fraction of positives')
     plt.title('Calibration Curve')
     plt.legend(loc='lower right')
-    
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, 'calibration_curve.png'), dpi=300)
     plt.close()
@@ -858,13 +788,11 @@ def plot_roc_curve(y_val, y_probs, output_dir):
     Returns:
         None: Saves the plot to disk.
     """
+    
     try:
-        # Check if there is more than one unique class in y_val
         if len(np.unique(y_val)) > 1:
-            # Compute ROC curve and AUC score
             fpr, tpr, _ = roc_curve(y_val, y_probs)
             auc_val = roc_auc_score(y_val, y_probs)
-            
             plt.figure()
             plt.plot(fpr, tpr, label=f"AUC = {auc_val:.3f}")
             plt.plot([0,1],[0,1],'k--')
@@ -872,13 +800,11 @@ def plot_roc_curve(y_val, y_probs, output_dir):
             plt.ylabel('True Positive Rate')
             plt.title('ROC Curve')
             plt.legend(loc='lower right')
-            
             plt.tight_layout()
             plt.savefig(os.path.join(output_dir, 'roc_curve.png'), dpi=300)
             plt.close()
         else:
             logging.warning("Single-class data: skipping ROC plot.")
-    
     except Exception as e:
         logging.error(f"Error plotting ROC: {e}")
         sys.exit(f"Critical error: {e}")
@@ -898,6 +824,7 @@ def save_confusion_matrix(cm, output_path):
     Returns:
         None: Saves the confusion matrix to disk.
     """
+    
     cm_df = pd.DataFrame(cm,
                          index=['Actual BBB-', 'Actual BBB+'],
                          columns=['Predicted BBB-', 'Predicted BBB+'])
@@ -922,6 +849,7 @@ def save_model(booster, output_dir, model_name='xgboost_model.json'):
     Returns:
         None: Saves the model to disk.
     """
+    
     try:
         model_path = os.path.join(output_dir, model_name)
         booster.save_model(model_path)
@@ -953,6 +881,7 @@ def perform_shap_analysis(booster, X_train, X_val, y_val, output_dir):
     Returns:
         None: Saves multiple plots and data files to the specified directory.
     """
+    
     try:
         logging.info("Starting SHAP analysis.")
         
@@ -1149,240 +1078,579 @@ def perform_shap_analysis(booster, X_train, X_val, y_val, output_dir):
 
 
 def run_optuna_optimization(
-    X_train,
+    df_train,
     y_train,
+    df_val,
+    dict_of_vectorizers,
     optimize_metric,
     n_trials,
-    random_seed,
     tree_method,
     predictor,
-    scale_pos_weight,
-    output_dir,
-    n_folds=DEFAULT_N_FOLDS
+    base_output_dir,
+    n_folds=DEFAULT_N_FOLDS,
+    balance_method=None,
+    random_seed_main=DEFAULT_RANDOM_SEED
 ):
     """
-    Run Optuna optimization for XGBoost with cross-validation.
-
-    - Performs Bayesian optimization using Optuna to find optimal hyperparameters.
-    - Uses Stratified K-Fold cross-validation for robust model evaluation.
-    - Saves trial-specific models and logs optimization metrics.
-
+    Runs Optuna optimization for an XGBoost pipeline with cross-validation.
+    
+    This function performs Bayesian optimization to tune hyperparameters for an XGBoost model,
+    while also optimizing fragment vectorization frequency thresholds. It uses cross-validation
+    to evaluate the performance (based on a chosen metric) and then re-trains a final model with the best
+    hyperparameters on the full training set and a hold-out validation set.
+    
     Parameters:
-        X_train (pd.DataFrame): Training feature set.
-        y_train (pd.Series): Training labels.
-        optimize_metric (str): Metric to optimize ('AUC', 'F1', etc.).
-        n_trials (int): Number of trials for Optuna optimization.
-        random_seed (int): Random seed for reproducibility.
-        tree_method (str): XGBoost tree-building method ('gpu_hist' or 'hist').
-        predictor (str): XGBoost predictor type ('gpu_predictor' or 'cpu_predictor').
-        scale_pos_weight (float): Weighting for imbalanced classification.
-        output_dir (str): Directory for saving results and models.
-        n_folds (int): Number of Stratified K-Fold splits (default: 'DEFAULT_N_FOLDS').
-
+        df_train (pd.DataFrame): Training DataFrame containing molecular data and fragment SMILES.
+        y_train (pd.Series): Target labels for the training data.
+        df_val (pd.DataFrame): Validation DataFrame, must contain non-null 'BBB_Label' values.
+        dict_of_vectorizers (dict): Dictionary with keys 'BRICS', 'RINGS', and 'SIDECHAINS' containing
+            tuples of (CountVectorizer, frequency Series) for each fragment type.
+        optimize_metric (str): The metric to optimize (e.g., "f1", "auc", etc.).
+        n_trials (int): Number of Optuna trials to perform.
+        tree_method (str): XGBoost tree method (e.g., 'gpu_hist' or 'hist').
+        predictor (str): XGBoost predictor type (e.g., 'gpu_predictor' or 'cpu_predictor').
+        base_output_dir (str): Base directory where output files and logs will be saved.
+        n_folds (int, optional): Number of folds for cross-validation (default is DEFAULT_N_FOLDS).
+        balance_method (str, optional): Data balancing method to apply (e.g., 'smote', 'smoteenn', or 'smotetomek').
+        random_seed_main (int, optional): Random seed for reproducibility (default is DEFAULT_RANDOM_SEED).
+    
     Returns:
-        optuna.Study: Optuna study object containing the optimization results.
+        tuple: (study, final_metrics)
+            study (optuna.Study): The Optuna study object containing all trial results.
+            final_metrics (dict): Final evaluation metrics from the best model on the hold-out validation set.
     """
+    
+    # Drop rows from validation set where the target 'BBB_Label' is missing.
+    df_val = df_val.dropna(subset=['BBB_Label'])
+    if df_val.empty:
+        sys.exit("Critical error: Validation set is empty after dropping NaNs in BBB_Label.")
 
-    # Ensure column names are compatible with XGBoost
-    X_train = sanitize_column_names(X_train.copy())
-    
-    # Create directory for storing models
-    model_subfolder = os.path.join(output_dir, f'all_models_{optimize_metric.replace(" ", "_")}')
-    os.makedirs(model_subfolder, exist_ok=True)
-    
-    # Initialize Optuna study to maximize the selected metric
+    # Extract target labels from validation set.
+    y_val = df_val['BBB_Label']
+    # Create subfolder for the current optimization metric.
+    metric_subfolder = os.path.join(base_output_dir, optimize_metric.replace(" ", "_").lower())
+    os.makedirs(metric_subfolder, exist_ok=True)
+
+    # Set up logging for the current metric subfolder.
+    log_file = os.path.join(metric_subfolder, 'model_training.log')
+    setup_logging(log_file)
+
+    # Retrieve vectorizers and frequency Series for each fragment type.
+    brics_vect, brics_freq = dict_of_vectorizers['BRICS']
+    rings_vect, rings_freq = dict_of_vectorizers['RINGS']
+    side_vect, side_freq = dict_of_vectorizers['SIDECHAINS']
+
+    # Create an Optuna study to maximize the chosen metric.
     study = optuna.create_study(direction='maximize')
-    
-    # Set up Stratified K-Fold cross-validation
-    skf = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=random_seed)
-    
+
     def objective(trial):
-        """
-        Objective function for Optuna to optimize XGBoost hyperparameters.
+        # Use the main random seed for the trial.
+        random_seed_trial = random_seed_main
 
-        - Performs cross-validation with selected hyperparameters.
-        - Evaluates model performance on validation folds.
-        - Stores trained models and metrics for each trial.
+        # Suggest fixed minimum frequency values for each fragment type.
+        brics_min_freq = trial.suggest_int("brics_min_freq", 5, 5)      # Temp 5: ideal (1,10)
+        rings_min_freq = trial.suggest_int("rings_min_freq", 5, 5)      # Temp 5: ideal (1,10)
+        side_min_freq = trial.suggest_int("side_min_freq", 5, 5)        # Temp 5: ideal (1,10)
 
-        Parameters:
-            trial (optuna.Trial): Optuna trial object.
+        # Determine the list of tokens to keep based on the frequency thresholds.
+        brics_keep_list = brics_freq[brics_freq >= brics_min_freq].index.tolist()
+        rings_keep_list = rings_freq[rings_freq >= rings_min_freq].index.tolist()
+        side_keep_list = side_freq[side_freq >= side_min_freq].index.tolist()
 
-        Returns:
-            float: Mean performance metric across folds.
-        """
-        
-        # Define hyperparameter search space
-        num_boost_round = trial.suggest_int('num_boost_round', 100, 3500)
-        early_stopping_r = trial.suggest_int('early_stopping_rounds', 10, 400)
-        max_depth = trial.suggest_int('max_depth', 6, 30)
-        learning_rate = trial.suggest_float('learning_rate', 0.005, 0.1, log=True)
-        subsample = trial.suggest_float('subsample', 0.4, 1.0)
-        colsample_bytree = trial.suggest_float('colsample_bytree', 0.5, 1.0)
-        min_child_weight = trial.suggest_int('min_child_weight', 1, 10)
-        gamma = trial.suggest_float('gamma', 0.0, 5.0)
-        reg_alpha = trial.suggest_float('reg_alpha', 0.0, 5.0)
-        reg_lambda = trial.suggest_float('reg_lambda', 0.0, 5.0)
-        
-        # Define XGBoost parameters
-        params = {
-            'objective': 'binary:logistic',
-            'eval_metric': 'auc',
-            'seed': random_seed,
-            'tree_method': tree_method,
-            'predictor': predictor,
-            'nthread': -1,
-            'scale_pos_weight': scale_pos_weight,
-            'max_depth': max_depth,
-            'learning_rate': learning_rate,
-            'subsample': subsample,
-            'colsample_bytree': colsample_bytree,
-            'min_child_weight': min_child_weight,
-            'gamma': gamma,
-            'alpha': reg_alpha,
-            'lambda': reg_lambda
-        }
-        
-        # Store performance metrics for each fold
-        metrics_list = []
-        
-        # Perform Stratified K-Fold cross-validation
-        for fold, (train_idx, valid_idx) in enumerate(skf.split(X_train, y_train), 1):
-            X_tr, X_val_fold = X_train.iloc[train_idx], X_train.iloc[valid_idx]
-            y_tr, y_val_fold = y_train.iloc[train_idx], y_train.iloc[valid_idx]
-            
-            # Create XGBoost DMatrix objects
-            dtrain = xgb.DMatrix(X_tr, label=y_tr)
-            dval = xgb.DMatrix(X_val_fold, label=y_val_fold)
-            watchlist = [(dtrain, 'train'), (dval, 'eval')]
-            
-            # Train model with trial hyperparameters
-            booster = xgb.train(
-                params=params,
-                dtrain=dtrain,
-                num_boost_round=num_boost_round,
-                evals=watchlist,
-                early_stopping_rounds=early_stopping_r,
-                verbose_eval=False
-            )
-            
-            # Make predictions
-            y_probs = booster.predict(dval)
-            y_pred = (y_probs >= 0.5).astype(int)  # threshold can be adjusted later
-            
-            # Evaluate based on selected optimization metric
-            if optimize_metric.lower() == 'f1':
-                metric = f1_score(y_val_fold, y_pred)
-            elif optimize_metric.lower() == 'balanced accuracy':
-                metric = balanced_accuracy_score(y_val_fold, y_pred)
-            elif optimize_metric.lower() == 'precision':
-                metric = precision_score(y_val_fold, y_pred, zero_division=0)
-            elif optimize_metric.lower() == 'recall':
-                metric = recall_score(y_val_fold, y_pred, zero_division=0)
-            elif optimize_metric.lower() == 'accuracy':
-                metric = accuracy_score(y_val_fold, y_pred)
-            elif optimize_metric.lower() == 'auc':
-                if len(np.unique(y_val_fold)) > 1:
-                    metric = roc_auc_score(y_val_fold, y_probs)
+        # Apply the pre-fitted vectorizers to the SMILES strings from the training data.
+        brics_df_train = apply_fragments(df_train['BRIC_SMILES'], brics_vect, 'BRICS_')
+        # Filter columns to retain only tokens that meet the frequency threshold.
+        brics_df_train = brics_df_train[[c for c in brics_df_train.columns if c.replace("BRICS_", "") in brics_keep_list]]
+        rings_df_train = apply_fragments(df_train['RINGS_SMILES'], rings_vect, 'RINGS_')
+        rings_df_train = rings_df_train[[c for c in rings_df_train.columns if c.replace("RINGS_", "") in rings_keep_list]]
+        side_df_train = apply_fragments(df_train['SIDE_CHAINS_SMILES'], side_vect, 'SIDECHAINS_')
+        side_df_train = side_df_train[[c for c in side_df_train.columns if c.replace("SIDECHAINS_", "") in side_keep_list]]
+
+        # Prepare the numeric features from the training data by dropping non-numeric columns.
+        numeric_train = df_train.drop(columns=[
+            'NO.', 'BBB', 'LogBB', 'Group', 'BBB_Label',
+            'BRIC_SMILES', 'RINGS_SMILES', 'SIDE_CHAINS_SMILES', 'SMILES'
+        ], errors='ignore')
+        # Concatenate numeric features with the fragment features.
+        X_train_total = pd.concat([numeric_train, brics_df_train, rings_df_train, side_df_train], axis=1)
+        # Remove duplicate columns and convert all data to numeric.
+        X_train_total = X_train_total.loc[:, ~X_train_total.columns.duplicated()].copy()
+        X_train_total = X_train_total.apply(pd.to_numeric, errors='coerce')
+
+        # Suggest hyperparameters for XGBoost.
+        num_boost_round = trial.suggest_int('num_boost_round', 100, 2000)  # Number of boosting rounds
+        early_stopping_r = trial.suggest_int('early_stopping_rounds', 10, 300)  # Early stopping rounds
+        max_depth = trial.suggest_int('max_depth', 3, 30)  # Maximum tree depth
+        learning_rate = trial.suggest_float('learning_rate', 0.001, 0.3, log=True)  # Learning rate
+        subsample = trial.suggest_float('subsample', 0.4, 1.0)  # Subsample ratio of the training instance
+        colsample_bytree = trial.suggest_float('colsample_bytree', 0.4, 1.0)  # Subsample ratio of columns when constructing each tree
+        min_child_weight = trial.suggest_int('min_child_weight', 1, 15)  # Minimum sum of instance weight needed in a child
+        gamma = trial.suggest_float('gamma', 0.0, 5.0)  # Minimum loss reduction required to make a further partition
+        reg_alpha = trial.suggest_float('reg_alpha', 0.0, 5.0)  # L1 regularization term
+        reg_lambda = trial.suggest_float('reg_lambda', 0.0, 5.0)  # L2 regularization term
+
+        # Set up Stratified K-Fold cross-validation.
+        skf = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=random_seed_trial)
+        cv_recalls = []
+        # Loop through each fold for cross-validation.
+        for fold_train_idx, fold_test_idx in skf.split(X_train_total, y_train):
+            # Split the data into training and testing folds.
+            X_tr_fold = X_train_total.iloc[fold_train_idx].copy()
+            y_tr_fold = y_train.iloc[fold_train_idx]
+            X_te_fold = X_train_total.iloc[fold_test_idx].copy()
+            y_te_fold = y_train.iloc[fold_test_idx]
+
+            # Impute missing values for the current fold.
+            X_tr_fold_imp, X_te_fold_imp = impute_missing_values(X_tr_fold, X_te_fold)
+            # Sanitize column names for XGBoost compatibility.
+            X_tr_fold_imp = sanitize_column_names(X_tr_fold_imp)
+            X_te_fold_imp = sanitize_column_names(X_te_fold_imp)
+
+            # Apply data balancing if specified.
+            if balance_method is not None:
+                if balance_method.lower() == 'smote':
+                    sampler = SMOTE(random_state=random_seed_trial)
+                elif balance_method.lower() == 'smoteenn':
+                    sampler = SMOTEENN(random_state=random_seed_trial)
+                elif balance_method.lower() == 'smotetomek':
+                    sampler = SMOTETomek(random_state=random_seed_trial)
                 else:
-                    metric = 0.5  # default value when only one class is present
+                    sampler = None
             else:
-                raise ValueError(f"Unknown optimization metric '{optimize_metric}'")
-            
-            metrics_list.append(metric)
-        # Compute mean performance metric across folds
-        avg_metric = np.mean(metrics_list)
-        
-        # Store fold-wise metrics in Optuna trial attributes
-        trial.set_user_attr("fold_metrics", metrics_list)
-        # Store fold-wise metrics in Optuna trial attributes
-        booster_filename = f"model_trial_{trial.number}.json"
-        booster.save_model(os.path.join(model_subfolder, booster_filename))
-        
-        return avg_metric
-    
-    # Run Optuna optimization process
+                sampler = None
+
+            if sampler is not None:
+                X_tr_bal, y_tr_bal = sampler.fit_resample(X_tr_fold_imp, y_tr_fold)
+            else:
+                X_tr_bal, y_tr_bal = X_tr_fold_imp, y_tr_fold
+
+            # Calculate scale_pos_weight for balancing classes.
+            pos_count_fold = (y_tr_bal == 1).sum()
+            neg_count_fold = (y_tr_bal == 0).sum()
+            scale_pos_weight_fold = neg_count_fold / pos_count_fold if pos_count_fold > 0 else 1.0
+
+            # Train an XGBoost model on the balanced fold data using the suggested hyperparameters.
+            booster_cv, _ = train_model(
+                X_tr_bal, y_tr_bal,
+                X_te_fold_imp, y_te_fold,
+                random_seed=random_seed_trial,
+                tree_method=tree_method,
+                predictor=predictor,
+                scale_pos_weight=scale_pos_weight_fold,
+                num_boost_round=num_boost_round,
+                early_stopping_rounds=early_stopping_r,
+                max_depth=max_depth,
+                learning_rate=learning_rate,
+                subsample=subsample,
+                colsample_bytree=colsample_bytree,
+                min_child_weight=min_child_weight,
+                gamma=gamma,
+                alpha=reg_alpha,
+                lambda_=reg_lambda
+            )
+            # Predict on the test fold.
+            d_fold_test = xgb.DMatrix(X_te_fold_imp)
+            y_probs_cv = booster_cv.predict(d_fold_test)
+            y_pred_cv = (y_probs_cv >= 0.5).astype(int)
+            # Compute recall for the current fold and store it.
+            recall_cv = recall_score(y_te_fold, y_pred_cv, zero_division=0)
+            cv_recalls.append(recall_cv)
+
+        # Calculate average cross-validation recall.
+        avg_cv_recall = float(np.mean(cv_recalls))
+
+        # Evaluate final performance on the hold-out validation set.
+        brics_df_val = apply_fragments(df_val['BRIC_SMILES'], brics_vect, 'BRICS_')
+        brics_df_val = brics_df_val[[c for c in brics_df_val.columns if c.replace("BRICS_", "") in brics_keep_list]]
+        rings_df_val = apply_fragments(df_val['RINGS_SMILES'], rings_vect, 'RINGS_')
+        rings_df_val = rings_df_val[[c for c in rings_df_val.columns if c.replace("RINGS_", "") in rings_keep_list]]
+        side_df_val = apply_fragments(df_val['SIDE_CHAINS_SMILES'], side_vect, 'SIDECHAINS_')
+        side_df_val = side_df_val[[c for c in side_df_val.columns if c.replace("SIDECHAINS_", "") in side_keep_list]]
+
+        # Prepare numeric features from the validation set.
+        numeric_val = df_val.drop(columns=[
+            'NO.', 'BBB', 'LogBB', 'Group', 'BBB_Label',
+            'BRIC_SMILES', 'RINGS_SMILES', 'SIDE_CHAINS_SMILES', 'SMILES'
+        ], errors='ignore')
+        # Concatenate numeric and fragment features for the full validation set.
+        X_val_full = pd.concat([numeric_val, brics_df_val, rings_df_val, side_df_val], axis=1)
+        X_val_full = X_val_full.loc[:, ~X_val_full.columns.duplicated()].copy()
+        X_val_full = X_val_full.apply(pd.to_numeric, errors='coerce')
+
+        # Impute missing values in both training and validation sets.
+        X_train_total_imp, X_val_imp = impute_missing_values(X_train_total, X_val_full)
+        # Sanitize column names.
+        X_train_total_imp = sanitize_column_names(X_train_total_imp)
+        X_val_imp = sanitize_column_names(X_val_imp)
+
+        # Apply balancing to the full training set if specified.
+        if balance_method is not None:
+            if balance_method.lower() == 'smote':
+                sampler = SMOTE(random_state=random_seed_trial)
+            elif balance_method.lower() == 'smoteenn':
+                sampler = SMOTEENN(random_state=random_seed_trial)
+            elif balance_method.lower() == 'smotetomek':
+                sampler = SMOTETomek(random_state=random_seed_trial)
+            else:
+                sampler = None
+        else:
+            sampler = None
+
+        if sampler is not None:
+            # Summarize class counts before balancing.
+            pos_before = (y_train == 1).sum()
+            neg_before = (y_train == 0).sum()
+
+            X_train_final, y_train_final = sampler.fit_resample(X_train_total_imp, y_train)
+
+            pos_after = (y_train_final == 1).sum()
+            neg_after = (y_train_final == 0).sum()
+        else:
+            X_train_final, y_train_final = X_train_total_imp, y_train
+
+        # Calculate final scale_pos_weight.
+        pos_count_final = (y_train_final == 1).sum()
+        neg_count_final = (y_train_final == 0).sum()
+        spw_final = neg_count_final / pos_count_final if pos_count_final > 0 else 1.0
+
+        # Train the final model on the full training set with the current trial's hyperparameters.
+        booster_final, _ = train_model(
+            X_train_final,
+            y_train_final,
+            X_val_imp,
+            y_val,
+            random_seed=random_seed_trial,
+            tree_method=tree_method,
+            predictor=predictor,
+            scale_pos_weight=spw_final,
+            num_boost_round=num_boost_round,
+            early_stopping_rounds=early_stopping_r,
+            max_depth=max_depth,
+            learning_rate=learning_rate,
+            subsample=subsample,
+            colsample_bytree=colsample_bytree,
+            min_child_weight=min_child_weight,
+            gamma=gamma,
+            alpha=reg_alpha,
+            lambda_=reg_lambda
+        )
+        # Predict on the full validation set.
+        d_val_final = xgb.DMatrix(X_val_imp)
+        y_probs_val = booster_final.predict(d_val_final)
+        y_pred_val = (y_probs_val >= 0.5).astype(int)
+
+        # Compute the chosen evaluation metric on the validation set.
+        if len(np.unique(y_val)) > 1:
+            if optimize_metric.lower() == 'f1':
+                metric_val = f1_score(y_val, y_pred_val)
+            elif optimize_metric.lower() == 'balanced accuracy':
+                metric_val = balanced_accuracy_score(y_val, y_pred_val)
+            elif optimize_metric.lower() == 'precision':
+                metric_val = precision_score(y_val, y_pred_val, zero_division=0)
+            elif optimize_metric.lower() == 'recall':
+                metric_val = recall_score(y_val, y_pred_val, zero_division=0)
+            elif optimize_metric.lower() == 'accuracy':
+                metric_val = accuracy_score(y_val, y_pred_val)
+            elif optimize_metric.lower() == 'auc':
+                metric_val = roc_auc_score(y_val, y_probs_val)
+            else:
+                metric_val = f1_score(y_val, y_pred_val)
+        else:
+            metric_val = 0.5
+
+        # Store cross-validation recall and final validation metric in trial user attributes.
+        trial.set_user_attr("cv_recall", avg_cv_recall)
+        trial.set_user_attr("val_metric", metric_val)
+        return metric_val
+
+    # Optimize the objective function for the specified number of trials.
     study.optimize(objective, n_trials=n_trials, show_progress_bar=True)
-    
-    # Store results of all trials
-    trial_metrics = []
+
+    # Re-train final model with best hyperparameters
+    best_trial = study.best_trial
+    best_val_metric = study.best_value
+    best_params = best_trial.params
+
+    # Collect user attributes from all completed trials for comparison.
+    all_data = []
     for t in study.trials:
-        if t.state.name != "COMPLETE":
-            continue
-        d = {
-            "trial_number": t.number,
-            "value_for_optimization": t.value,
-            "fold_metrics": t.user_attrs.get("fold_metrics", [])
-        }
-        trial_metrics.append(d)
+        if t.state == optuna.trial.TrialState.COMPLETE and t.value is not None:
+            cv_recall_ = t.user_attrs.get("cv_recall", None)
+            val_metric_ = t.user_attrs.get("val_metric", None)
+            all_data.append({
+                "trial_number": t.number,
+                "cv_recall": cv_recall_,
+                "val_metric": val_metric_,
+                "hyperparams": t.params
+            })
+
+    df_comparison = pd.DataFrame(all_data)
     
-    # Save trial metrics to CSV file
-    df_all_metrics = pd.DataFrame(trial_metrics)
-    csv_name = f'all_trials_metrics_{optimize_metric.replace(" ", "_")}.csv'
-    df_all_metrics.to_csv(os.path.join(output_dir, csv_name), index=False)
+    # Plot a comparison chart: CV recall (x-axis) vs. final validation metric (y-axis).        
+    if not df_comparison.empty and "cv_recall" in df_comparison.columns and "val_metric" in df_comparison.columns:
+        # Compute the difference between test and validation metrics
+        df_comparison["diff_metric"] = df_comparison["cv_recall"] - df_comparison["val_metric"]
+        
+        plt.figure(figsize=(7, 5))
+        
+        # Scatter plot: x-axis is the validation metric; y-axis is the difference (Test - Validation)
+        plt.scatter(df_comparison["val_metric"], df_comparison["diff_metric"],
+                    c='blue', alpha=0.7, label='All Trials')
+        
+        # Identify and highlight the trial(s) with the highest validation metric
+        best_val = df_comparison["val_metric"].max()
+        best_rows = df_comparison[df_comparison["val_metric"] == best_val]
+        plt.scatter(best_rows["val_metric"], best_rows["diff_metric"],
+                    c='red', s=100, label='Best')
+        
+        plt.xlabel(f"Validation {optimize_metric.capitalize()}")
+        plt.ylabel("Test - Validation Difference")
+        plt.title("Comparison Chart: Validation Metric vs. Test-Validation Difference")
+        plt.legend()
+        plt.tight_layout()
+        
+        chart_path = os.path.join(metric_subfolder, "comparison_evaluation_chart2.png")
+        plt.savefig(chart_path, dpi=300)
+        plt.close()
+
+    # Re-build the final training set using the best trial's frequency thresholds.
+    best_brics_min = best_params.get("brics_min_freq", 1)
+    best_rings_min = best_params.get("rings_min_freq", 1)
+    best_side_min = best_params.get("side_min_freq", 1)
+
+    brics_keep_list = brics_freq[brics_freq >= best_brics_min].index.tolist()
+    rings_keep_list = rings_freq[rings_freq >= best_rings_min].index.tolist()
+    side_keep_list = side_freq[side_freq >= best_side_min].index.tolist()
+
+    # Save the best frequency thresholds and vectorizers for future use.
+    joblib.dump(brics_keep_list, os.path.join(metric_subfolder, "kept_tokens_brics.joblib"))
+    joblib.dump(rings_keep_list, os.path.join(metric_subfolder, "kept_tokens_rings.joblib"))
+    joblib.dump(side_keep_list, os.path.join(metric_subfolder, "kept_tokens_sidechains.joblib"))
+    joblib.dump(brics_vect, os.path.join(metric_subfolder, "vectorizer_brics.joblib"))
+    joblib.dump(rings_vect, os.path.join(metric_subfolder, "vectorizer_rings.joblib"))
+    joblib.dump(side_vect, os.path.join(metric_subfolder, "vectorizer_sidechains.joblib"))
+
+    # Build the final training data with the selected fragment features.
+    brics_df_train = apply_fragments(df_train['BRIC_SMILES'], brics_vect, 'BRICS_')
+    brics_df_train = brics_df_train[[c for c in brics_df_train.columns if c.replace("BRICS_", "") in brics_keep_list]]
+    rings_df_train = apply_fragments(df_train['RINGS_SMILES'], rings_vect, 'RINGS_')
+    rings_df_train = rings_df_train[[c for c in rings_df_train.columns if c.replace("RINGS_", "") in rings_keep_list]]
+    side_df_train = apply_fragments(df_train['SIDE_CHAINS_SMILES'], side_vect, 'SIDECHAINS_')
+    side_df_train = side_df_train[[c for c in side_df_train.columns if c.replace("SIDECHAINS_", "") in side_keep_list]]
+
+    numeric_train = df_train.drop(columns=[
+        'NO.', 'BBB', 'LogBB', 'Group', 'BBB_Label',
+        'BRIC_SMILES', 'RINGS_SMILES', 'SIDE_CHAINS_SMILES', 'SMILES'
+    ], errors='ignore')
+    X_train_total = pd.concat([numeric_train, brics_df_train, rings_df_train, side_df_train], axis=1)
+    X_train_total = X_train_total.loc[:, ~X_train_total.columns.duplicated()].copy()
+    X_train_total = X_train_total.apply(pd.to_numeric, errors='coerce')
+    y_train_series = df_train['BBB_Label']
+
+    # Clean the validation set.
+    df_val_clean = df_val.dropna(subset=['BBB_Label'])
+    y_val_clean = df_val_clean['BBB_Label']
+
+    brics_df_val = apply_fragments(df_val_clean['BRIC_SMILES'], brics_vect, 'BRICS_')
+    brics_df_val = brics_df_val[[c for c in brics_df_val.columns if c.replace("BRICS_", "") in brics_keep_list]]
+    rings_df_val = apply_fragments(df_val_clean['RINGS_SMILES'], rings_vect, 'RINGS_')
+    rings_df_val = rings_df_val[[c for c in rings_df_val.columns if c.replace("RINGS_", "") in rings_keep_list]]
+    side_df_val = apply_fragments(df_val_clean['SIDE_CHAINS_SMILES'], side_vect, 'SIDECHAINS_')
+    side_df_val = side_df_val[[c for c in side_df_val.columns if c.replace("SIDECHAINS_", "") in side_keep_list]]
+
+    numeric_val = df_val_clean.drop(columns=[
+        'NO.', 'BBB', 'LogBB', 'Group', 'BBB_Label',
+        'BRIC_SMILES', 'RINGS_SMILES', 'SIDE_CHAINS_SMILES', 'SMILES'
+    ], errors='ignore')
+    X_val_total = pd.concat([numeric_val, brics_df_val, rings_df_val, side_df_val], axis=1)
+    X_val_total = X_val_total.loc[:, ~X_val_total.columns.duplicated()].copy()
+    X_val_total = X_val_total.apply(pd.to_numeric, errors='coerce')
+
+    # Save the training and validation matrices for record keeping.
+    train_matrix_csv = os.path.join(metric_subfolder, "train_matrix.csv")
+    X_train_total.to_csv(train_matrix_csv, index=True)
+    val_matrix_csv = os.path.join(metric_subfolder, "val_matrix.csv")
+    X_val_total.to_csv(val_matrix_csv, index=True)
+
+    # Impute missing values and sanitize column names.
+    X_train_imp, X_val_imp = impute_missing_values(X_train_total, X_val_total)
+    X_train_imp = sanitize_column_names(X_train_imp)
+    X_val_imp = sanitize_column_names(X_val_imp)
+
+    # Apply balancing to the final training set if specified.
+    if balance_method is not None:
+        if balance_method.lower() == 'smote':
+            sampler = SMOTE(random_state=DEFAULT_RANDOM_SEED)
+        elif balance_method.lower() == 'smoteenn':
+            sampler = SMOTEENN(random_state=DEFAULT_RANDOM_SEED)
+        elif balance_method.lower() == 'smotetomek':
+            sampler = SMOTETomek(random_state=DEFAULT_RANDOM_SEED)
+        else:
+            sampler = None
+    else:
+        sampler = None
+
+    pos_before = (y_train_series == 1).sum()
+    neg_before = (y_train_series == 0).sum()
+
+    if sampler is not None:
+        X_train_final, y_train_final = sampler.fit_resample(X_train_imp, y_train_series)
+    else:
+        X_train_final, y_train_final = X_train_imp, y_train_series
+
+    pos_count_final = (y_train_final == 1).sum()
+    neg_count_final = (y_train_final == 0).sum()
+    spw_final = neg_count_final / pos_count_final if pos_count_final > 0 else 1.0
+
+    # Extract final best hyperparameters from the best trial.
+    final_num_round = best_params.get('num_boost_round', 1000)
+    final_esr = best_params.get('early_stopping_rounds', 50)
+    final_max_depth = best_params.get('max_depth', 10)
+    final_lr = best_params.get('learning_rate', 0.01)
+    final_subsamp = best_params.get('subsample', 0.8)
+    final_colsample = best_params.get('colsample_bytree', 0.8)
+    final_min_child_weight = best_params.get('min_child_weight', 1)
+    final_gamma = best_params.get('gamma', 0.0)
+    final_alpha = best_params.get('reg_alpha', 0.0)
+    final_lambda = best_params.get('reg_lambda', 1.0)
+
+    # Train the final best model using the final training set and best hyperparameters.
+    booster_best, _ = train_model(
+        X_train_final,
+        y_train_final,
+        X_val_imp,
+        y_val_clean,
+        random_seed=DEFAULT_RANDOM_SEED,
+        tree_method=tree_method,
+        predictor=predictor,
+        scale_pos_weight=spw_final,
+        num_boost_round=final_num_round,
+        early_stopping_rounds=final_esr,
+        max_depth=final_max_depth,
+        learning_rate=final_lr,
+        subsample=final_subsamp,
+        colsample_bytree=final_colsample,
+        min_child_weight=final_min_child_weight,
+        gamma=final_gamma,
+        alpha=final_alpha,
+        lambda_=final_lambda
+    )
+
+    # Determine the best classification threshold based on balanced accuracy on the training set.
+    d_train_b = xgb.DMatrix(X_train_final)
+    train_probs = booster_best.predict(d_train_b)
+    y_train_arr = y_train_final.values.astype(int)
+    best_threshold = 0.5
+    best_score = -1
+    for th in np.linspace(0.01, 0.99, 99):
+        th_clamped = min(max(th, 0.35), 0.65)
+        th_pred = (train_probs >= th_clamped).astype(int)
+        score = balanced_accuracy_score(y_train_arr, th_pred)
+        if score > best_score:
+            best_score = score
+            best_threshold = th_clamped
+
+    # Evaluate the final model on the validation set using the best threshold.
+    final_metrics, y_probs_val, y_pred_val = evaluate_model(booster_best, X_val_imp, y_val_clean, threshold=best_threshold)
+    cm = confusion_matrix(y_val_clean, y_pred_val, labels=[0, 1])
+    cm_path = os.path.join(metric_subfolder, 'validation_confusion_matrix_best.csv')
+    save_confusion_matrix(cm, cm_path)
+    pd.DataFrame([final_metrics]).to_csv(os.path.join(metric_subfolder, 'validation_metrics_best.csv'), index=False)
+
+    # Save the best threshold.
+    with open(os.path.join(metric_subfolder, 'best_threshold.txt'), 'w') as f:
+        f.write(str(best_threshold))
+
+    # Plot ROC and calibration curves, and perform SHAP analysis for feature importance.
+    plot_roc_curve(y_val_clean, y_probs_val, metric_subfolder)
+    plot_calibration_curve_func(y_val_clean, y_probs_val, metric_subfolder)
+    perform_shap_analysis(booster_best, X_train_final, X_val_imp, y_val_clean, metric_subfolder)
+
+    # Plot and save a normalized confusion matrix.
+    cm_norm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+    plt.figure(figsize=(6, 5))
+    sns.heatmap(cm_norm, annot=True, fmt=".3f", cmap='Blues',
+                xticklabels=['Predicted BBB-', 'Predicted BBB+'],
+                yticklabels=['Actual BBB-', 'Actual BBB+'])
+    plt.title('Normalised Confusion Matrix (Best Trial)')
+    plt.tight_layout()
+    plt.savefig(os.path.join(metric_subfolder, 'normalised_confusion_matrix_best.png'), dpi=300)
+    plt.close()
+
+    # Save the final best model.
+    save_model(booster_best, metric_subfolder, model_name='final_model.json')
     
-    return study
+    # Save the feature names used in the final training set.
+    feature_names = X_train_final.columns.tolist()
+    joblib.dump(feature_names, os.path.join(metric_subfolder, "feature_names.joblib"))
+
+    # Return the study object and final evaluation metrics.
+    return study, final_metrics
 
 
 def main():
     """
     Main pipeline function for training and optimizing the XGBoost model.
-
-    - Loads and preprocesses molecular data.
-    - Allows user-defined or command-line arguments for flexible configuration.
-    - Supports both default training and hyperparameter optimization using Optuna.
-    - Handles data balancing, feature extraction, and cross-validation.
-    - Saves model outputs, evaluation metrics, and SHAP feature importance.
-
+    
+    This function:
+      - Loads and preprocesses molecular data.
+      - Accepts user-defined or command-line arguments for flexible configuration.
+      - Supports both default model training and hyperparameter optimization via Optuna.
+      - Handles data balancing, feature extraction (including fragment vectorization), and cross-validation.
+      - Saves model outputs, evaluation metrics, and SHAP-based feature importance plots.
+      
     Parameters:
         None (retrieves values from user input or command-line arguments).
-
+    
     Returns:
-        None (outputs results to the specified directory).
+        None (outputs results and saves files to the specified output directory).
     """
-
-    # Argument Parser
+    
     parser = argparse.ArgumentParser(description="XGBoost BBB+/- Classification Script")
     parser.add_argument('--data_path', type=str, default=None, help='Path to input JSON data file')
     parser.add_argument('--output_dir', type=str, default=None, help='Directory to save outputs')
     parser.add_argument('--n_folds', type=int, default=None, help='Number of cross-validation folds')
     parser.add_argument('--random_seed', type=int, default=None, help='Random seed')
-    parser.add_argument('--train_mode', type=str, default=None, help='Train mode (1: Default, 2: Optimise)')
-    parser.add_argument('--balance_choice', type=str, default=None, help='Balancing method: 1=None,2=SMOTE,3=SMOTEENN,4=SMOTETomek')
-    parser.add_argument('--opt_metric', type=str, default=None, help='Metric to optimise (f1, balanced accuracy, precision, recall, accuracy, auc, all)')
-    parser.add_argument('--opt_trials', type=int, default=None, help='Number of Optuna trials, e.g. 100')
-    parser.add_argument('--use_gpu', type=str, default=None, help='Use GPU config? (y or n)')
-
+    parser.add_argument('--train_mode', type=str, default=None, help='Train mode: 1=Default, 2=Optimize')
+    parser.add_argument('--balance_choice', type=str, default=None, help='Balancing method')
+    parser.add_argument('--opt_metric', type=str, default=None, help='Which metric to optimize')
+    parser.add_argument('--opt_trials', type=int, default=None, help='Number of Optuna trials')
+    parser.add_argument('--use_gpu', type=str, default=None, help='Use GPU? (y/n)')
     args = parser.parse_args()
 
-    # Fallback to user input if not provided via args
+    # Get the data file path
     if not args.data_path:
         data_path = input("Enter the directory and name of training data file (.json): ").strip()
     else:
         data_path = args.data_path
 
+    # Get the output directory
     if not args.output_dir:
         output_dir = input("Enter the directory to save outputs: ").strip()
     else:
         output_dir = args.output_dir
 
+    # Determine number of folds for cross-validation
     if not args.n_folds:
         n_folds_input = input("Enter the number of cross-validation folds (default: 10): ").strip()
         n_folds = int(n_folds_input) if n_folds_input.isdigit() else DEFAULT_N_FOLDS
     else:
         n_folds = args.n_folds
 
+    # Determine random seed for reproducibility
     if not args.random_seed:
         random_seed_input = input("Enter the random seed (default: 42): ").strip()
         random_seed = int(random_seed_input) if random_seed_input.isdigit() else DEFAULT_RANDOM_SEED
     else:
         random_seed = args.random_seed
 
+    # Choose the training mode: default training or optimization
     if not args.train_mode:
         train_mode = input("Choose training mode:\n  (1) Default Model\n  (2) Optimize Model\n(Enter 1 or 2): ").strip()
     else:
         train_mode = args.train_mode
 
-    # Optomisation pathway
+    # If optimization mode, determine the metric and number of trials
     if train_mode == '2':
         if not args.opt_metric:
             optimize_for_input = input(
@@ -1407,7 +1675,6 @@ def main():
             '5': 'accuracy',
             '6': 'auc'
         }
-
         if optimize_for_input.lower() in ['a', 'all']:
             optimize_for_list = ['f1', 'balanced accuracy', 'precision', 'recall', 'accuracy', 'auc']
         elif optimize_for_input in metric_map:
@@ -1424,19 +1691,22 @@ def main():
         optimize_for_list = ['balanced accuracy']
         num_trials = 0
 
+    # Choose the data balancing method
     if not args.balance_choice:
         print("Choose data balancing method:\n  (1) None\n  (2) SMOTE\n  (3) SMOTEENN\n  (4) SMOTETomek")
-        balance_choice = input("Enter 1,2,3,4: ").strip()
+        balance_choice_inp = input("Enter 1,2,3,4: ").strip()
     else:
-        balance_choice = args.balance_choice
+        balance_choice_inp = args.balance_choice
 
-    balance_method = {
+    balance_map = {
         '1': None,
         '2': 'SMOTE',
         '3': 'SMOTEENN',
         '4': 'SMOTETomek'
-    }.get(balance_choice, None)
+    }
+    balance_method = balance_map.get(balance_choice_inp, None)
 
+    # Determine GPU usage for XGBoost configuration
     if not args.use_gpu:
         gpu_choice = input("Use GPU config? (y/n, default: y): ").strip().lower()
     else:
@@ -1449,78 +1719,47 @@ def main():
         tree_method = 'gpu_hist'
         predictor = 'gpu_predictor'
 
+    # Create output directory and set up logging
     os.makedirs(output_dir, exist_ok=True)
     print(f"Output directory: {output_dir}")
     log_file_path = os.path.join(output_dir, 'model_training.log')
     setup_logging(log_file_path)
     logging.info("Started model training pipeline")
 
-    # Load and preprocess
+    # Load and preprocess data
     data = load_data(data_path)
     df = preprocess_data(data)
     df = handle_missing_values(df)
     df = clean_labels(df)
-
     cl_counts = df['BBB'].value_counts()
-    logging.info(f"Class distribution after cleaning:\n{cl_counts}")
+    logging.info(f"Class distribution:\n{cl_counts}")
     if len(cl_counts) < 2:
         logging.error("Only one class remains. Exiting.")
         sys.exit("Critical error: One class remains.")
 
+    # Encode class labels and save the encoder for future use
     df, label_encoder = encode_labels(df)
     joblib.dump(label_encoder, os.path.join(output_dir, 'label_encoder.joblib'))
 
-    # CREATE OR USE EXISTING VAL SPLIT
+    # Create or load validation split
     val_data_path = os.path.join(output_dir, "validation_data.json")
-    vectorizer_brics_path = os.path.join(output_dir, "vectorizer_brics.joblib")
-    keep_tokens_brics_path = os.path.join(output_dir, "kept_tokens_brics.joblib")
-    vectorizer_rings_path = os.path.join(output_dir, "vectorizer_rings.joblib")
-    keep_tokens_rings_path = os.path.join(output_dir, "kept_tokens_rings.joblib")
-    vectorizer_side_path = os.path.join(output_dir, "vectorizer_sidechains.joblib")
-    keep_tokens_side_path = os.path.join(output_dir, "kept_tokens_sidechains.joblib")
-
     if not os.path.exists(val_data_path):
-        # TRAIN VECTORIZERS
-        bric_df, vectorizer_brics, keep_tokens_brics = vectorize_text_train(df, 'BRIC_SMILES', min_freq=MINIMUM_FRAGMENT_FREQUENCY[1], prefix="BRICS_")
-        joblib.dump(vectorizer_brics, vectorizer_brics_path)
-        joblib.dump(keep_tokens_brics, keep_tokens_brics_path)
-
-        rings_df, vectorizer_rings, keep_tokens_rings = vectorize_text_train(df, 'RINGS_SMILES', min_freq=MINIMUM_FRAGMENT_FREQUENCY[2], prefix="RINGS_")
-        joblib.dump(vectorizer_rings, vectorizer_rings_path)
-        joblib.dump(keep_tokens_rings, keep_tokens_rings_path)
-
-        side_df, vectorizer_side, keep_tokens_side = vectorize_text_train(df, 'SIDE_CHAINS_SMILES', min_freq=MINIMUM_FRAGMENT_FREQUENCY[3], prefix="SIDECHAINS_")
-        joblib.dump(vectorizer_side, vectorizer_side_path)
-        joblib.dump(keep_tokens_side, keep_tokens_side_path)
-
-        X_all = pd.concat([
-            df.drop(columns=['NO.', 'BBB', 'BBB_Label', 'LogBB', 'Group', 'BRIC_SMILES', 'RINGS_SMILES', 'SIDE_CHAINS_SMILES', 'SMILES'], errors='ignore'),
-            bric_df,
-            rings_df,
-            side_df
-        ], axis=1)
-
-        X_all = X_all.apply(pd.to_numeric, errors='coerce')
-        X_all = X_all.loc[:, ~X_all.columns.duplicated()].copy()
-
         y_all = df['BBB_Label']
-
-        # Split
-        X_train_full, X_val_full, y_train_full, y_val_full = train_test_split(
-            X_all, y_all, test_size=0.2, random_state=random_seed, stratify=y_all
+        df_indices = df.index
+        X_tr_idx, X_val_idx, _, _ = train_test_split(
+            df_indices, y_all, test_size=0.2, random_state=random_seed, stratify=y_all
         )
-        val_NO = df.loc[X_val_full.index, 'NO.'].values.tolist()
-
+        val_NO_list = df.loc[X_val_idx, 'NO.'].values.tolist()
         validation_data = {
-            "X": X_val_full.to_dict(orient="records"),
-            "y": y_val_full.tolist(),
-            "NO_list": val_NO
+            "train_idx": list(X_tr_idx),
+            "val_idx": list(X_val_idx),
+            "NO_list": val_NO_list
         }
         with open(val_data_path, "w") as f:
-            json.dump(validation_data, f)
+            json.dump(validation_data, f, indent=2)
 
         val_data_original = []
-        set_val_no = set(val_NO)
+        set_val_no = set(val_NO_list)
         for entry in data:
             if '_preface' in entry:
                 continue
@@ -1528,355 +1767,187 @@ def main():
                 val_data_original.append(entry)
         with open(os.path.join(output_dir, "validation_data_original.json"), "w") as f:
             json.dump(val_data_original, f, indent=2)
-
-        df_train = df[~df['NO.'].isin(val_NO)].reset_index(drop=True)
-        val_NO_list = val_NO
     else:
         with open(val_data_path, 'r') as f:
-            val_data = json.load(f)
-        X_val_dicts = val_data["X"]
-        y_val_list = val_data["y"]
-        val_NO_list = val_data.get("NO_list", [])
+            loaded_val = json.load(f)
+        if 'train_idx' not in loaded_val or 'val_idx' not in loaded_val:
+            y_all = df['BBB_Label']
+            df_indices = df.index
+            X_tr_idx, X_val_idx, _, _ = train_test_split(
+                df_indices, y_all, test_size=0.2, random_state=random_seed, stratify=y_all
+            )
+            val_NO_list = df.loc[X_val_idx, 'NO.'].values.tolist()
+            validation_data = {
+                "train_idx": list(X_tr_idx),
+                "val_idx": list(X_val_idx),
+                "NO_list": val_NO_list
+            }
+            with open(val_data_path, "w") as f:
+                json.dump(validation_data, f, indent=2)
+        else:
+            X_tr_idx = loaded_val["train_idx"]
+            X_val_idx = loaded_val["val_idx"]
 
-        vectorizer_brics = joblib.load(vectorizer_brics_path)
-        keep_tokens_brics = joblib.load(keep_tokens_brics_path)
-        vectorizer_rings = joblib.load(vectorizer_rings_path)
-        keep_tokens_rings = joblib.load(keep_tokens_rings_path)
-        vectorizer_side = joblib.load(vectorizer_side_path)
-        keep_tokens_side = joblib.load(keep_tokens_side_path)
+    # Split the data into training and validation sets
+    df_train = df.loc[X_tr_idx].copy()
+    df_val = df.loc[X_val_idx].copy()
+    df_val = df_val.dropna(subset=['BBB_Label'])
+    if df_val.empty:
+        sys.exit("Critical error: Validation set empty after dropping BBB_Label=NaN.")
 
-        X_val_full = pd.DataFrame(X_val_dicts)
-        X_val_full = X_val_full.apply(pd.to_numeric, errors='coerce')
-        X_val_full = X_val_full.loc[:, ~X_val_full.columns.duplicated()].copy()
+    # Vectorize molecular fragments using training data only
+    dict_of_vects = vectorize_fragments_train_only(df_train)
 
-        y_val_full = pd.Series(y_val_list)
-        df_train = df[~df['NO.'].isin(val_NO_list)].reset_index(drop=True)
+    # If running in default training mode
+    if train_mode == '1':
+        # Retrieve vectorizers and frequency information
+        brics_vect, brics_freq = dict_of_vects['BRICS']
+        rings_vect, rings_freq = dict_of_vects['RINGS']
+        side_vect, side_freq = dict_of_vects['SIDECHAINS']
 
-    # VECTORIZING FOR TRAIN/VAL
-    drop_cols_train = ['NO.', 'BBB', 'BBB_Label', 'LogBB', 'Group', 'BRIC_SMILES', 'RINGS_SMILES', 'SIDE_CHAINS_SMILES', 'SMILES']
-    df_train_brics = vectorize_text_apply(df_train, 'BRIC_SMILES', vectorizer_brics, keep_tokens_brics, prefix="BRICS_")
-    df_train_rings = vectorize_text_apply(df_train, 'RINGS_SMILES', vectorizer_rings, keep_tokens_rings, prefix="RINGS_")
-    df_train_side = vectorize_text_apply(df_train, 'SIDE_CHAINS_SMILES', vectorizer_side, keep_tokens_side, prefix="SIDECHAINS_")
+        # Determine tokens to keep based on minimum frequency thresholds
+        brics_keep = brics_freq[brics_freq >= MINIMUM_FRAGMENT_FREQUENCY[1]].index.tolist()
+        rings_keep = rings_freq[rings_freq >= MINIMUM_FRAGMENT_FREQUENCY[2]].index.tolist()
+        side_keep = side_freq[side_freq >= MINIMUM_FRAGMENT_FREQUENCY[3]].index.tolist()
 
-    X_train = pd.concat([
-        df_train.drop(columns=drop_cols_train, errors='ignore'),
-        df_train_brics,
-        df_train_rings,
-        df_train_side
-    ], axis=1)
+        # Build training matrix by applying fragment vectorization and filtering tokens
+        brics_df_tr = apply_fragments(df_train['BRIC_SMILES'], brics_vect, 'BRICS_')
+        brics_df_tr = brics_df_tr[[c for c in brics_df_tr.columns if c.replace("BRICS_", "") in brics_keep]]
+        rings_df_tr = apply_fragments(df_train['RINGS_SMILES'], rings_vect, 'RINGS_')
+        rings_df_tr = rings_df_tr[[c for c in rings_df_tr.columns if c.replace("RINGS_", "") in rings_keep]]
+        side_df_tr = apply_fragments(df_train['SIDE_CHAINS_SMILES'], side_vect, 'SIDECHAINS_')
+        side_df_tr = side_df_tr[[c for c in side_df_tr.columns if c.replace("SIDECHAINS_", "") in side_keep]]
 
-    X_train = X_train.loc[:, ~X_train.columns.duplicated()].copy()
-    X_train = X_train.apply(pd.to_numeric, errors='coerce')
+        # Get numeric features and combine with fragment features for training
+        numeric_tr = df_train.drop(columns=[
+            'NO.', 'BBB', 'LogBB', 'Group', 'BBB_Label',
+            'BRIC_SMILES', 'RINGS_SMILES', 'SIDE_CHAINS_SMILES', 'SMILES'
+        ], errors='ignore')
+        X_train_base = pd.concat([numeric_tr, brics_df_tr, rings_df_tr, side_df_tr], axis=1)
+        X_train_base = X_train_base.loc[:, ~X_train_base.columns.duplicated()].copy()
+        X_train_base = X_train_base.apply(pd.to_numeric, errors='coerce')
+        y_train_base = df_train['BBB_Label']
 
-    y_train = df_train['BBB_Label']
+        # Save the training matrix for record keeping
+        X_train_csv = os.path.join(output_dir, "train_matrix.csv")
+        X_train_base.to_csv(X_train_csv, index=True)
 
-    df_val_subset = df[df['NO.'].isin(val_NO_list)].reset_index(drop=True)
+        # Build validation matrix in similar fashion
+        brics_df_val = apply_fragments(df_val['BRIC_SMILES'], brics_vect, 'BRICS_')
+        brics_df_val = brics_df_val[[c for c in brics_df_val.columns if c.replace("BRICS_", "") in brics_keep]]
+        rings_df_val = apply_fragments(df_val['RINGS_SMILES'], rings_vect, 'RINGS_')
+        rings_df_val = rings_df_val[[c for c in rings_df_val.columns if c.replace("RINGS_", "") in rings_keep]]
+        side_df_val = apply_fragments(df_val['SIDE_CHAINS_SMILES'], side_vect, 'SIDECHAINS_')
+        side_df_val = side_df_val[[c for c in side_df_val.columns if c.replace("SIDECHAINS_", "") in side_keep]]
 
-    df_val_brics = vectorize_text_apply(df_val_subset, 'BRIC_SMILES', vectorizer_brics, keep_tokens_brics, prefix="BRICS_")
-    df_val_rings = vectorize_text_apply(df_val_subset, 'RINGS_SMILES', vectorizer_rings, keep_tokens_rings, prefix="RINGS_")
-    df_val_side = vectorize_text_apply(df_val_subset, 'SIDE_CHAINS_SMILES', vectorizer_side, keep_tokens_side, prefix="SIDECHAINS_")
+        numeric_val = df_val.drop(columns=[
+            'NO.', 'BBB', 'LogBB', 'Group', 'BBB_Label',
+            'BRIC_SMILES', 'RINGS_SMILES', 'SIDE_CHAINS_SMILES', 'SMILES'
+        ], errors='ignore')
+        X_val_base = pd.concat([numeric_val, brics_df_val, rings_df_val, side_df_val], axis=1)
+        X_val_base = X_val_base.loc[:, ~X_val_base.columns.duplicated()].copy()
+        X_val_base = X_val_base.apply(pd.to_numeric, errors='coerce')
+        y_val_base = df_val['BBB_Label']
 
-    X_val = pd.concat([
-        X_val_full.reset_index(drop=True),
-        df_val_brics.reset_index(drop=True),
-        df_val_rings.reset_index(drop=True),
-        df_val_side.reset_index(drop=True)
-    ], axis=1)
+        # Save the validation matrix
+        X_val_csv = os.path.join(output_dir, "val_matrix.csv")
+        X_val_base.to_csv(X_val_csv, index=True)
 
-    X_val = X_val.loc[:, ~X_val.columns.duplicated()].copy()
-    X_val = X_val.apply(pd.to_numeric, errors='coerce')
+        # Impute missing values in training and validation matrices
+        X_train_imp, X_val_imp = impute_missing_values(X_train_base, X_val_base)
 
-    y_val = pd.Series(y_val_full.values, index=X_val.index)
-
-    # IMPUTE
-    X_train_imputed, X_val_imputed = impute_missing_values(X_train, X_val)
-    X_val_imputed.reset_index(drop=True, inplace=True)
-    y_train.reset_index(drop=True, inplace=True)
-    y_val.reset_index(drop=True, inplace=True)
-
-    if not all(pd.api.types.is_numeric_dtype(dtype) for dtype in X_train_imputed.dtypes):
-        logging.error("Non-numeric columns detected in X_train_imputed.")
-        sys.exit("Critical error: Non-numeric columns detected in X_train_imputed.")
-    if not all(pd.api.types.is_numeric_dtype(dtype) for dtype in X_val_imputed.dtypes):
-        logging.error("Non-numeric columns detected in X_val_imputed.")
-        sys.exit("Critical error: Non-numeric columns detected in X_val_imputed.")
-
-    # BALANCING
-    original_counts = y_train.value_counts().to_dict()
-    if balance_method is not None:
-        if balance_method == 'SMOTE':
-            sampler = SMOTE(random_state=random_seed)
-        elif balance_method == 'SMOTEENN':
-            sampler = SMOTEENN(random_state=random_seed)
-        elif balance_method == 'SMOTETomek':
-            sampler = SMOTETomek(random_state=random_seed)
+        # Apply data balancing if specified
+        pos_before = (y_train_base == 1).sum()
+        neg_before = (y_train_base == 0).sum()
+        if balance_method is not None:
+            if balance_method.lower() == 'smote':
+                sampler = SMOTE(random_state=random_seed)
+            elif balance_method.lower() == 'smoteenn':
+                sampler = SMOTEENN(random_state=random_seed)
+            elif balance_method.lower() == 'smotetomek':
+                sampler = SMOTETomek(random_state=random_seed)
+            else:
+                sampler = None
         else:
             sampler = None
 
         if sampler is not None:
-            X_train_balanced, y_train_balanced = sampler.fit_resample(X_train_imputed, y_train)
-            bal_counts = y_train_balanced.value_counts().to_dict()
-            print("\nData Balancing Summary:")
-            print(f"{'Class':<10}{'Before Balancing':<22}{'After Balancing':<22}{'Net Change':<12}")
-            for clsval in original_counts.keys():
-                lab = "BBB+" if clsval == 1 else "BBB-"
-                before_count = original_counts.get(clsval, 0)
-                after_count = bal_counts.get(clsval, 0)
-                net = after_count - before_count 
-                print(f"{lab:<10}{before_count:<22}{after_count:<22}{net:<12}")
-
+            X_train_bal, y_train_bal = sampler.fit_resample(X_train_imp, y_train_base)
+            pos_after = (y_train_bal == 1).sum()
+            neg_after = (y_train_bal == 0).sum()
         else:
-            X_train_balanced, y_train_balanced = X_train_imputed, y_train
-    else:
-        print(f"Number of training samples: {len(y_train)}")
-        X_train_balanced, y_train_balanced = X_train_imputed, y_train
-        
-    # Save the processed training features for KNN imputation in prediction
-    processed_train_features_path = os.path.join(output_dir, 'processed_train_features.csv')
-    X_train_balanced.to_csv(processed_train_features_path, index=False)
-    logging.info(f"Processed training features saved at {processed_train_features_path}")
+            X_train_bal, y_train_bal = X_train_imp, y_train_base
+            pos_after = pos_before
+            neg_after = neg_before
 
-    pos_count = (y_train_balanced == 1).sum()
-    neg_count = (y_train_balanced == 0).sum()
-    scale_pos_weight_value = neg_count / pos_count if pos_count > 0 else 1.0
-    joblib.dump(scale_pos_weight_value, os.path.join(output_dir, 'scale_pos_weight.joblib'))
+        # Print a summary table of data balancing results
+        print("\n=== Data Balancing Summary (Default Model) ===")
+        print(f"{'Class':<10}{'Before':<15}{'After':<15}")
+        print(f"{'BBB-':<10}{neg_before:<15}{neg_after:<15}")
+        print(f"{'BBB+':<10}{pos_before:<15}{pos_after:<15}")
 
-    # CROSS-VALIDATION
-    if n_folds > 1:
-        from sklearn.model_selection import StratifiedKFold
-        print(f"\nPerforming {n_folds}-fold cross-validation on the training set...")
-        skf_cv = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=random_seed)
-        fold_metrics_list = []
-        fold_idx = 1
-        for train_index, val_index in skf_cv.split(X_train_balanced, y_train_balanced):
-            X_tr_fold = X_train_balanced.iloc[train_index]
-            y_tr_fold = y_train_balanced.iloc[train_index]
-            X_val_fold = X_train_balanced.iloc[val_index]
-            y_val_fold = y_train_balanced.iloc[val_index]
+        pos_count = (y_train_bal == 1).sum()
+        neg_count = (y_train_bal == 0).sum()
+        scale_pos_weight_val = neg_count / pos_count if pos_count > 0 else 1.0
 
-            booster_cv, _ = train_model(
-                X_tr_fold,
-                y_tr_fold,
-                X_val_fold,
-                y_val_fold,
-                random_seed=random_seed,
-                tree_method=tree_method,
-                predictor=predictor,
-                scale_pos_weight=scale_pos_weight_value,
-                num_boost_round=300,
-                early_stopping_rounds=20
-            )
+        # Perform cross-validation if number of folds > 1
+        if n_folds > 1:
+            skf_cv = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=random_seed)
+            fold_metrics_list = []
+            fold_idx = 1
+            for train_index_fold, test_index_fold in skf_cv.split(X_train_bal, y_train_bal):
+                X_tr_fold = X_train_bal.iloc[train_index_fold].copy()
+                y_tr_fold = y_train_bal.iloc[train_index_fold]
+                X_te_fold = X_train_bal.iloc[test_index_fold].copy()
+                y_te_fold = y_train_bal.iloc[test_index_fold]
 
-            fold_val_metrics, _, _ = evaluate_model(booster_cv, X_val_fold, y_val_fold, threshold=0.5)
-            fold_val_metrics['fold'] = fold_idx
-            fold_metrics_list.append(fold_val_metrics)
-            
-            metrics_str = ', '.join(f"{key}: {value}" for key, value in fold_val_metrics.items() if key != 'fold')
-            print(f"[Fold {fold_idx}] metrics: {metrics_str}")
-            fold_idx += 1
+                booster_cv, _ = train_model(
+                    X_tr_fold, y_tr_fold,
+                    X_te_fold, y_te_fold,
+                    random_seed=random_seed,
+                    tree_method=tree_method,
+                    predictor=predictor,
+                    scale_pos_weight=scale_pos_weight_val,
+                    num_boost_round=300,
+                    early_stopping_rounds=20
+                )
+                fold_val_metrics, _, _ = evaluate_model(booster_cv, X_te_fold, y_te_fold, threshold=0.5)
+                fold_val_metrics['fold'] = fold_idx
+                fold_metrics_list.append(fold_val_metrics)
+                metrics_str = ', '.join(f"{k}: {v}" for k, v in fold_val_metrics.items() if k != 'fold')
+                print(f"[Fold {fold_idx}] metrics: {metrics_str}")
+                fold_idx += 1
 
-        cv_results_df = pd.DataFrame(fold_metrics_list)
-        cv_results_path = os.path.join(output_dir, 'cross_validation_results.csv')
-        cv_results_df.to_csv(cv_results_path, index=False)
-        mean_metrics = cv_results_df.mean(numeric_only=True).to_dict()
+            cv_results_df = pd.DataFrame(fold_metrics_list)
+            cv_results_path = os.path.join(output_dir, 'cross_validation_results.csv')
+            cv_results_df.to_csv(cv_results_path, index=False)
+            mean_metrics = cv_results_df.mean(numeric_only=True).to_dict()
+            metrics_str = ', '.join(f"{k}: {v}" for k, v in mean_metrics.items() if k != 'fold')
+            print(f"Average CV metrics across {n_folds} folds: {metrics_str}")
+            logging.info(f"K-fold cross-validation saved to {cv_results_path}")
 
-        metrics_str = ', '.join(f"{key}: {value}" for key, value in mean_metrics.items() if key != 'fold')
-
-        print(f"Average CV metrics across {n_folds} folds: {metrics_str}")
-        logging.info(f"K-fold cross-validation results saved to: {cv_results_path}")
-        logging.info(f"Average CV metrics across {n_folds} folds: {mean_metrics}")
-
-    best_models_summary = {}
-
-    # FINAL TRAINING / OPTUNA
-    if train_mode == '2':
-        import optuna
-        for metric in optimize_for_list:
-            metric_dir = metric.replace(' ', '_').lower()
-            metric_output_dir = os.path.join(output_dir, metric_dir)
-            os.makedirs(metric_output_dir, exist_ok=True)
-
-            metric_log_file = os.path.join(metric_output_dir, 'model_training.log')
-            setup_logging(metric_log_file)
-            logging.info(f"Optuna optimization for {metric}")
-
-            print(f"\nRunning Optuna optimization for {metric}...")
-            study = run_optuna_optimization(
-                X_train_balanced,
-                y_train_balanced,
-                optimize_metric=metric,
-                n_trials=num_trials,
-                random_seed=random_seed,
-                tree_method=tree_method,
-                predictor=predictor,
-                scale_pos_weight=scale_pos_weight_value,
-                output_dir=metric_output_dir,
-                n_folds=n_folds
-            )
-
-            best_value_repr = str(study.best_value)
-            best_params = study.best_params
-            print(f"Best trial for {metric}: {best_value_repr}")
-            print("Best parameters:")
-            for k, v in best_params.items():
-                print(f"  {k}: {v}")
-
-            df_trials = study.trials_dataframe(attrs=('number','values','value','params','state'))
-            df_trials.to_csv(os.path.join(metric_output_dir, 'optuna_trials_raw.csv'), index=False)
-
-            with open(os.path.join(metric_output_dir, 'optuna_summary.txt'), 'w') as f:
-                f.write(f"Best trial for {metric}: {best_value_repr}\n")
-                f.write("Best params:\n")
-                for kk, vv in best_params.items():
-                    f.write(f"{kk}: {vv}\n")
-
-            final_num_round = best_params.pop('num_boost_round', 1000)
-            final_esr = best_params.pop('early_stopping_rounds', None)
-
-            booster, evals_result = train_model(
-                X_train_balanced,
-                y_train_balanced,
-                X_val_imputed,
-                y_val,
-                random_seed=random_seed,
-                tree_method=tree_method,
-                predictor=predictor,
-                scale_pos_weight=scale_pos_weight_value,
-                num_boost_round=final_num_round,
-                early_stopping_rounds=final_esr,
-                **best_params
-            )
-
-            # Find best threshold on training set for that metric
-            d_train_b = xgb.DMatrix(sanitize_column_names(X_train_balanced.copy()))
-            train_probs = booster.predict(d_train_b)
-            y_train_array = y_train_balanced.values.astype(int)
-
-            best_threshold = 0.5
-            best_score = -1
-            thresholds = np.linspace(0.01, 0.99, 99)
-            for th in thresholds:
-                th_clamped = min(max(th, 0.35), 0.65)
-                th_pred = (train_probs >= th_clamped).astype(int)
-
-                if metric == 'f1':
-                    score = f1_score(y_train_array, th_pred)
-                elif metric == 'balanced accuracy':
-                    score = balanced_accuracy_score(y_train_array, th_pred)
-                elif metric == 'precision':
-                    score = precision_score(y_train_array, th_pred, zero_division=0)
-                elif metric == 'recall':
-                    score = recall_score(y_train_array, th_pred, zero_division=0)
-                elif metric == 'accuracy':
-                    score = accuracy_score(y_train_array, th_pred)
-                elif metric == 'auc':
-                    score = roc_auc_score(y_train_array, train_probs)
-                else:
-                    score = f1_score(y_train_array, th_pred)
-
-                if score > best_score:
-                    best_score = score
-                    best_threshold = th_clamped
-
-            val_metrics, y_probs_val, y_pred_val = evaluate_model(
-                booster, X_val_imputed, y_val, threshold=best_threshold
-            )
-            pd.DataFrame([val_metrics]).to_csv(os.path.join(metric_output_dir, 'validation_metrics_initial.csv'), index=False)
-            cm = confusion_matrix(y_val, y_pred_val, labels=[0, 1])
-            save_confusion_matrix(cm, os.path.join(metric_output_dir, 'validation_confusion_matrix_initial.csv'))
-
-            with open(os.path.join(metric_output_dir, 'best_threshold.txt'), 'w') as f:
-                f.write(str(best_threshold))
-
-            plot_roc_curve(y_val, y_probs_val, metric_output_dir)
-            plot_calibration_curve_func(y_val, y_probs_val, metric_output_dir)
-            perform_shap_analysis(booster, X_train_balanced, X_val_imputed, y_val, metric_output_dir)
-
-            cm_norm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
-            plt.figure(figsize=(6, 5))
-            sns.heatmap(cm_norm, annot=True, fmt=".3f", cmap='Blues',
-                        xticklabels=['Predicted BBB-', 'Predicted BBB+'],
-                        yticklabels=['Actual BBB-', 'Actual BBB+'])
-            plt.title('Normalised Confusion Matrix')
-            plt.tight_layout()
-            plt.savefig(os.path.join(metric_output_dir, 'normalised_confusion_matrix.png'), dpi=300)
-            plt.close()
-
-            trial_values = [t.value for t in study.trials if t.value is not None and t.state.name == "COMPLETE"]
-            trial_values_sorted = sorted(trial_values, reverse=True)
-            plt.figure(figsize=(10, 6))
-            plt.plot(trial_values_sorted, marker='o')
-            plt.title(f'{metric.capitalize()} Values for All Trials (Sorted)')
-            plt.xlabel('Trial Rank')
-            plt.ylabel(metric.capitalize())
-            plt.tight_layout()
-            plt.savefig(os.path.join(metric_output_dir, 'pareto_chart.png'), dpi=300)
-            plt.close()
-
-            save_model(booster, metric_output_dir, model_name='final_model.json')
-            feature_names = X_train_balanced.columns.tolist()
-            joblib.dump(feature_names, os.path.join(metric_output_dir, 'feature_names.joblib'))
-
-            best_models_summary[metric] = {
-                'best_study_value': best_value_repr,
-                'best_params': best_params,
-                'validation_metrics': val_metrics
-            }
-
-            print("\nFinal Model Training and Evaluation Completed Successfully.")
-            print("Validation Set Performance Metrics:")
-            for kk, vv in val_metrics.items():
-                print(f"  {kk}: {vv}")
-
-        summary_file_path = os.path.join(output_dir, 'best_overall_models.txt')
-        with open(summary_file_path, 'w') as f:
-            f.write("Summary of Best Models for Each Metric:\n\n")
-            for met, info in best_models_summary.items():
-                f.write(f"=== Best {met.upper()} ===\n")
-                f.write(f"  Optuna Best Value: {info['best_study_value']}\n")
-                f.write("  Best Params:\n")
-                for kk, vv in info['best_params'].items():
-                    f.write(f"    {kk}: {vv}\n")
-                f.write("  Final Validation Metrics:\n")
-                for mk, mv in info['validation_metrics'].items():
-                    f.write(f"    {mk}: {mv}\n")
-                f.write("\n")
-        print(f"\nA summary of all best models has been written to: {summary_file_path}")
-
-    else:
-        # Default training
-        if y_val.isnull().any():
-            logging.error("NaNs in y_val. Dropping them.")
-            valid_mask = ~y_val.isnull()
-            X_val_imputed = X_val_imputed[valid_mask]
-            y_val = y_val[valid_mask]
-
-        if y_val.empty:
-            logging.error("Validation set empty after dropping NaNs.")
-            sys.exit("Critical error: Validation empty.")
-
-        booster, evals_result = train_model(
-            X_train_balanced,
-            y_train_balanced,
-            X_val_imputed,
-            y_val,
+        # Final training of the default model using predefined parameters
+        booster, _ = train_model(
+            X_train_bal,
+            y_train_bal,
+            X_val_imp,
+            y_val_base,
             random_seed=random_seed,
             tree_method=tree_method,
             predictor=predictor,
-            scale_pos_weight=scale_pos_weight_value,
+            scale_pos_weight=scale_pos_weight_val,
             num_boost_round=1418,
             early_stopping_rounds=50,
             **PREDEFINED_PARAMS
         )
 
-        d_train_b = xgb.DMatrix(sanitize_column_names(X_train_balanced.copy()))
+        # Determine the best classification threshold based on balanced accuracy
+        d_train_b = xgb.DMatrix(sanitize_column_names(X_train_bal))
         train_probs = booster.predict(d_train_b)
-        y_train_array = y_train_balanced.values.astype(int)
-
+        y_train_array = y_train_bal.values.astype(int)
         best_threshold = 0.5
         best_score = -1
-        thresholds = np.linspace(0.01, 0.99, 99)
-        for th in thresholds:
+        for th in np.linspace(0.01, 0.99, 99):
             th_clamped = min(max(th, 0.35), 0.65)
             th_pred = (train_probs >= th_clamped).astype(int)
             score = balanced_accuracy_score(y_train_array, th_pred)
@@ -1884,17 +1955,18 @@ def main():
                 best_score = score
                 best_threshold = th_clamped
 
-        val_metrics, y_probs_val, y_pred_val = evaluate_model(booster, X_val_imputed, y_val, threshold=best_threshold)
+        # Evaluate the final default model on the validation set
+        val_metrics, y_probs_val, y_pred_val = evaluate_model(booster, X_val_imp, y_val_base, threshold=best_threshold)
         pd.DataFrame([val_metrics]).to_csv(os.path.join(output_dir, 'validation_metrics_initial.csv'), index=False)
-        cm = confusion_matrix(y_val, y_pred_val, labels=[0, 1])
+        cm = confusion_matrix(y_val_base, y_pred_val, labels=[0, 1])
         save_confusion_matrix(cm, os.path.join(output_dir, 'validation_confusion_matrix_initial.csv'))
 
         with open(os.path.join(output_dir, 'best_threshold.txt'), 'w') as f:
             f.write(str(best_threshold))
 
-        plot_roc_curve(y_val, y_probs_val, output_dir)
-        plot_calibration_curve_func(y_val, y_probs_val, output_dir)
-        perform_shap_analysis(booster, X_train_balanced, X_val_imputed, y_val, output_dir)
+        plot_roc_curve(y_val_base, y_probs_val, output_dir)
+        plot_calibration_curve_func(y_val_base, y_probs_val, output_dir)
+        perform_shap_analysis(booster, X_train_bal, X_val_imp, y_val_base, output_dir)
 
         cm_norm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
         plt.figure(figsize=(6, 5))
@@ -1907,15 +1979,89 @@ def main():
         plt.close()
 
         save_model(booster, output_dir, model_name='xgboost_model.json')
-        feature_names = X_train_balanced.columns.tolist()
+        feature_names = X_train_bal.columns.tolist()
         joblib.dump(feature_names, os.path.join(output_dir, 'feature_names.joblib'))
 
-        print("\nFinal Model Training and Evaluation Completed Successfully.")
+        # Save final vectorizers and token lists for reproducibility
+        joblib.dump(dict_of_vects['BRICS'][0], os.path.join(output_dir, "vectorizer_brics.joblib"))
+        joblib.dump(dict_of_vects['RINGS'][0], os.path.join(output_dir, "vectorizer_rings.joblib"))
+        joblib.dump(dict_of_vects['SIDECHAINS'][0], os.path.join(output_dir, "vectorizer_sidechains.joblib"))
+
+        joblib.dump(brics_keep, os.path.join(output_dir, "kept_tokens_brics.joblib"))
+        joblib.dump(rings_keep, os.path.join(output_dir, "kept_tokens_rings.joblib"))
+        joblib.dump(side_keep, os.path.join(output_dir, "kept_tokens_sidechains.joblib"))
+
+        print("\nFinal Model (Default) Training Completed Successfully.")
         print("Validation Set Performance Metrics:")
         for k, v in val_metrics.items():
             print(f"  {k}: {v}")
-    
-    print("\nFinal Model Training and Evaluation Completed. Exiting.")
+
+    # If running in optimization mode
+    else:
+        best_models_summary = {}
+        y_train_series = df_train['BBB_Label']
+
+        for metric in optimize_for_list:
+            print(f"\nRunning Optuna optimization for {metric}...")
+            study, final_metrics = run_optuna_optimization(
+                df_train=df_train,
+                y_train=y_train_series,
+                df_val=df_val.copy(),
+                dict_of_vectorizers=dict_of_vects,
+                optimize_metric=metric,
+                n_trials=num_trials,
+                tree_method=tree_method,
+                predictor=predictor,
+                base_output_dir=output_dir,
+                n_folds=n_folds,
+                balance_method=balance_method,
+                random_seed_main=random_seed
+            )
+
+            best_val_repr = f"{study.best_value:.4f}" if study.best_value is not None else "N/A"
+            best_params = study.best_params
+            print(f"Best trial for {metric}: {best_val_repr}")
+            print("Best parameters:")
+            for kk, vv in best_params.items():
+                print(f"  {kk}: {vv}")
+
+            best_dir = os.path.join(output_dir, metric.replace(" ", "_").lower())
+            df_study = study.trials_dataframe(attrs=('number','values','value','params','state','user_attrs'))
+            df_study.to_csv(os.path.join(best_dir, 'optuna_trials_raw.csv'), index=False)
+
+            with open(os.path.join(best_dir, 'optuna_summary.txt'), 'w') as f:
+                f.write(f"Best trial for {metric}: {best_val_repr}\n")
+                f.write("Best params:\n")
+                for p_k, p_v in best_params.items():
+                    f.write(f"{p_k}: {p_v}\n")
+
+            best_models_summary[metric] = {
+                'best_study_value': best_val_repr,
+                'best_params': best_params,
+                'final_validation_metrics': final_metrics  # include all validation metrics
+            }
+            
+            print("\nFinal Model Training and Evaluation Completed Successfully.")
+            print("Validation Set Performance Metrics:")
+            for kk, vv in final_metrics.items():
+                print(f"  {kk}: {vv}")
+
+        summary_file_path = os.path.join(output_dir, 'best_overall_models.txt')
+        with open(summary_file_path, 'w') as f:
+            f.write("Summary of Best Models for Each Metric:\n\n")
+            for met, info in best_models_summary.items():
+                f.write(f"=== Best {met.upper()} ===\n")
+                f.write(f"  Optuna Best Value: {info['best_study_value']}\n")
+                f.write("  Best Params:\n")
+                for kk, vv in info['best_params'].items():
+                    f.write(f"    {kk}: {vv}\n")
+                f.write("  Final Validation Metrics:\n")
+                for mk, mv in info['final_validation_metrics'].items():
+                    f.write(f"    {mk}: {mv}\n")
+                f.write("\n")
+        print(f"\nA summary of all best models has been written to: {summary_file_path}")
+
+    print("\nModel Training Pipeline Completed. Exiting.")
 
 
 if __name__ == "__main__":

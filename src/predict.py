@@ -1,7 +1,7 @@
 """
 Author: Ben Franey
-Version: 11.1.2 - Publish: 1.0
-Last Review Date: 30-01-2025
+Version: 11.2.0 - Publish: 1.1
+Last Review Date: 06-02-2025
 Overview:
     Predict BBB+/- labels for molecules using pre-trained XGBoost models.
     Adjusts mean and median probability calculations based on individual model thresholds.
@@ -74,14 +74,12 @@ def load_data(input_json_path: str) -> list:
         with open(input_json_path, 'r') as f:
             data = json.load(f)
         if not isinstance(data, list):
-            # If not a list of molecules, check for dictionary with 'molecules'
-            if isinstance(data, dict):
-                if 'molecules' in data and isinstance(data['molecules'], list):
-                    data = data['molecules']
-                else:
-                    sys.exit("Critical error: JSON structure not recognised. Expecting a list or { 'molecules': [...] }.")
+            # If not a list, check for dictionary with 'molecules'
+            if isinstance(data, dict) and 'molecules' in data and isinstance(data['molecules'], list):
+                data = data['molecules']
             else:
-                sys.exit("Critical error: JSON structure not recognised. Expecting a list or { 'molecules': [...] }.")
+                sys.exit("Critical error: JSON structure not recognised. "
+                         "Expecting a list or { 'molecules': [...] }.")
         logging.info(f"Data loaded from '{input_json_path}', total records: {len(data)}")
         return data
     except Exception as e:
@@ -108,20 +106,36 @@ def preprocess_data(raw_data: list) -> pd.DataFrame:
 
         smiles = entry.get('SMILES', '')
         if not smiles:
+            # Skip if no SMILES present
             continue
 
         row_data = {
             'NO.': entry.get('NO.', np.nan),
             'BBB': entry.get('BBB+/BBB-', np.nan),
             'SMILES': entry.get('SMILES', np.nan),
-            
-            'LogP': entry.get('LogP_PubChem', np.nan) if not pd.isna(entry.get('LogP_PubChem', np.nan)) else entry.get('LogP_RDKit', np.nan),
-            'Flexibility': entry.get('Flexibility_PubChem', np.nan) if not pd.isna(entry.get('Flexibility_PubChem', np.nan)) else entry.get('Flexibility_RDKit', np.nan),
-            'HBA': entry.get('HBA_PubChem', np.nan) if not pd.isna(entry.get('HBA_PubChem', np.nan)) else entry.get('HBA_RDKit', np.nan),
-            'HBD': entry.get('HBD_PubChem', np.nan) if not pd.isna(entry.get('HBD_PubChem', np.nan)) else entry.get('HBD_RDKit', np.nan),
-            'TPSA': entry.get('TPSA_PubChem', np.nan) if not pd.isna(entry.get('TPSA_PubChem', np.nan)) else entry.get('TPSA_RDKit', np.nan),
-            'Charge': entry.get('Charge_PubChem', np.nan) if not pd.isna(entry.get('Charge_PubChem', np.nan)) else entry.get('Charge_RDKit', np.nan),
-            'Atom_Stereo': entry.get('AtomStereo_PubChem', np.nan) if not pd.isna(entry.get('AtomStereo_PubChem', np.nan)) else entry.get('AtomStereo_RDKit', np.nan),
+
+            # Use PubChem is valid, else RDKit
+            'LogP': entry.get('LogP_PubChem', np.nan)
+                if not pd.isna(entry.get('LogP_PubChem', np.nan))
+                else entry.get('LogP_RDKit', np.nan),
+            'Flexibility': entry.get('Flexibility_PubChem', np.nan)
+                if not pd.isna(entry.get('Flexibility_PubChem', np.nan))
+                else entry.get('Flexibility_RDKit', np.nan),
+            'HBA': entry.get('HBA_PubChem', np.nan)
+                if not pd.isna(entry.get('HBA_PubChem', np.nan))
+                else entry.get('HBA_RDKit', np.nan),
+            'HBD': entry.get('HBD_PubChem', np.nan)
+                if not pd.isna(entry.get('HBD_PubChem', np.nan))
+                else entry.get('HBD_RDKit', np.nan),
+            'TPSA': entry.get('TPSA_PubChem', np.nan)
+                if not pd.isna(entry.get('TPSA_PubChem', np.nan))
+                else entry.get('TPSA_RDKit', np.nan),
+            'Charge': entry.get('Charge_PubChem', np.nan)
+                if not pd.isna(entry.get('Charge_PubChem', np.nan))
+                else entry.get('Charge_RDKit', np.nan),
+            'Atom_Stereo': entry.get('AtomStereo_PubChem', np.nan)
+                if not pd.isna(entry.get('AtomStereo_PubChem', np.nan))
+                else entry.get('AtomStereo_RDKit', np.nan),
 
             'HeavyAtom': entry.get('HeavyAtom_RDKit', np.nan),
             'Radius_Of_Gyration': entry.get('RadiusOfGyration_RDKit', np.nan),
@@ -243,7 +257,13 @@ def clean_bbb_labels(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def vectorize_text_apply(df: pd.DataFrame, text_col: str, vectorizer: CountVectorizer, keep_tokens: list, prefix: str = "") -> pd.DataFrame:
+def vectorize_text_apply(
+    df: pd.DataFrame,
+    text_col: str,
+    vectorizer: CountVectorizer,
+    keep_tokens: list,
+    prefix: str = ""
+) -> pd.DataFrame:
     """
     Applies a trained `CountVectorizer` to transform a specified text column into token frequencies.
 
@@ -273,10 +293,12 @@ def vectorize_text_apply(df: pd.DataFrame, text_col: str, vectorizer: CountVecto
         feature_names = vectorizer.get_feature_names_out()
         temp_df = pd.DataFrame(text_features.toarray(), columns=feature_names, index=df.index)
 
+        # Add missing columns
         missing = [tk for tk in keep_tokens if tk not in temp_df.columns]
         for mc in missing:
             temp_df[mc] = 0
 
+        # Retain only kept tokens
         temp_df = temp_df[keep_tokens].fillna(0)
 
         if prefix:
@@ -321,7 +343,24 @@ def sanitize_column_names(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def load_model_assets(model_directory: str) -> dict:
+def map_predictions(pred_array: np.ndarray) -> np.ndarray:
+    """
+    Converts binary predictions (0/1) into human-readable BBB classification labels.
+
+    - Maps `1` to `'BBB-'` (indicating poor BBB permeability).
+    - Maps `0` to `'BBB+'` (indicating good BBB permeability).
+    - Ensures correct label mapping, accounting for any potential inversion.
+
+    Parameters:
+        pred_array (np.ndarray): A NumPy array containing binary classification values (0 or 1).
+
+    Returns:
+        np.ndarray: A NumPy array of corresponding string labels (`'BBB+'` or `'BBB-'`).
+    """
+    return np.where(pred_array == 1, 'BBB+', 'BBB-')
+
+
+def load_subfolder_assets(folder_path: str) -> dict:
     """
     Loads trained model assets from the specified directory.
 
@@ -344,110 +383,117 @@ def load_model_assets(model_directory: str) -> dict:
     """
     
     result = {}
-
+    # Check for model file
     possible_model_files = ['final_model.json', 'xgboost_model.json']
     model_path = None
     for pmf in possible_model_files:
-        path_check = os.path.join(model_directory, pmf)
-        if os.path.exists(path_check):
-            model_path = path_check
+        check_path = os.path.join(folder_path, pmf)
+        if os.path.exists(check_path):
+            model_path = check_path
             break
-
+    
     if not model_path:
-        logging.error(f"No model file found in {model_directory}")
-        sys.exit(f"Critical error: No model file found in {model_directory}")
+        return None  # Not a valid subfolder
 
-    booster = xgb.Booster()
-    try:
-        booster.load_model(model_path)
-        logging.info(f"Loaded XGBoost model from {model_path}")
-        result['booster'] = booster
-    except Exception as e:
-        logging.error(f"Error loading model from {model_path}: {e}")
-        sys.exit(f"Critical error: Error loading model: {e}")
-
-    feature_names_path = os.path.join(model_directory, 'feature_names.joblib')
+    # Check for feature_names
+    feature_names_path = os.path.join(folder_path, 'feature_names.joblib')
     if not os.path.exists(feature_names_path):
-        logging.error(f"Feature names file not found in {model_directory}")
-        sys.exit(f"Critical error: Feature names not found in {model_directory}")
+        return None
 
+    # Check for vectorizers & tokens
+    vb = os.path.join(folder_path, 'vectorizer_brics.joblib')
+    kb = os.path.join(folder_path, 'kept_tokens_brics.joblib')
+    vr = os.path.join(folder_path, 'vectorizer_rings.joblib')
+    kr = os.path.join(folder_path, 'kept_tokens_rings.joblib')
+    vs = os.path.join(folder_path, 'vectorizer_sidechains.joblib')
+    ks = os.path.join(folder_path, 'kept_tokens_sidechains.joblib')
+    vectorizer_files = [vb, kb, vr, kr, vs, ks]
+    for vf in vectorizer_files:
+        if not os.path.exists(vf):
+            return None
+
+    # Attempt to load everything
     try:
+        booster = xgboost_load_model(model_path)
         feature_names = joblib.load(feature_names_path)
-        if not isinstance(feature_names, list):
-            sys.exit(f"Critical error: feature_names in {feature_names_path} is not a list.")
-        logging.info(f"Loaded {len(feature_names)} feature names from {feature_names_path}")
-        result['feature_names'] = feature_names
-    except Exception as e:
-        logging.error(f"Error loading feature names: {e}")
-        sys.exit(f"Critical error: {e}")
 
-    threshold_file = os.path.join(model_directory, 'best_threshold.txt')
-    if os.path.exists(threshold_file):
-        try:
+        vect_brics = joblib.load(vb)
+        keep_brics = joblib.load(kb)
+        vect_rings = joblib.load(vr)
+        keep_rings = joblib.load(kr)
+        vect_side  = joblib.load(vs)
+        keep_side  = joblib.load(ks)
+
+        # Load threshold
+        threshold_file = os.path.join(folder_path, 'best_threshold.txt')
+        if os.path.exists(threshold_file):
             with open(threshold_file, 'r') as f:
                 th_str = f.read().strip()
-            threshold_val = float(th_str)
-            threshold_val = min(max(threshold_val, 0.0), 1.0)
-            result['threshold'] = threshold_val
-            logging.info(f"Loaded best threshold: {threshold_val} from {threshold_file}")
-        except:
-            logging.warning(f"Error reading threshold from {threshold_file}, defaulting to 0.5")
-            result['threshold'] = 0.5
-    else:
-        result['threshold'] = 0.5
-        logging.info("best_threshold.txt not found, defaulting to 0.5")
+            try:
+                threshold_val = float(th_str)
+                threshold_val = min(max(threshold_val, 0.0), 1.0)
+            except:
+                threshold_val = 0.5
+        else:
+            threshold_val = 0.5
 
-    return result
+        result = {
+            'model_path': model_path,
+            'booster': booster,
+            'feature_names': feature_names,
+            'vect_brics': vect_brics,
+            'keep_brics': keep_brics,
+            'vect_rings': vect_rings,
+            'keep_rings': keep_rings,
+            'vect_side': vect_side,
+            'keep_side': keep_side,
+            'threshold': threshold_val
+        }
+        return result
+    except Exception as e:
+        logging.error(f"Error loading assets in {folder_path}: {e}")
+        return None
 
 
-def map_predictions(pred_array: np.ndarray) -> np.ndarray:
+def xgboost_load_model(model_path: str) -> xgb.Booster:
     """
-    Converts binary predictions (0/1) into human-readable BBB classification labels.
+    Loads an XGBoost model from a JSON file.
 
-    - Maps `1` to `'BBB-'` (indicating poor BBB permeability).
-    - Maps `0` to `'BBB+'` (indicating good BBB permeability).
-    - Ensures correct label mapping, accounting for any potential inversion.
+    - Instantiates an empty XGBoost Booster object.
+    - Loads the model parameters and structure from the specified JSON file.
+    - Logs a confirmation message indicating successful model loading.
 
     Parameters:
-        pred_array (np.ndarray): A NumPy array containing binary classification values (0 or 1).
+        model_path (str): Path to the JSON file containing the XGBoost model.
 
     Returns:
-        np.ndarray: A NumPy array of corresponding string labels (`'BBB+'` or `'BBB-'`).
+        xgb.Booster: The loaded XGBoost model.
     """
-
-    mapped = np.where(pred_array == 1, 'BBB-', 'BBB+')
-    return mapped
+    
+    booster = xgb.Booster()
+    booster.load_model(model_path)
+    logging.info(f"Loaded XGBoost model from {model_path}")
+    return booster
 
 
 def main():
     """
     Main function for predicting BBB+/- classification using pre-trained XGBoost models.
-
-    - Loads and preprocesses molecular data from a JSON file.
-    - Applies trained vectorizers to extract fragment-based features (BRICs, RINGS, SIDE_CHAINS).
-    - Handles missing values using KNN imputation.
-    - Loads trained XGBoost models from a directory (supports multiple subfolders with different models).
-    - Computes predictions and probabilities for each model.
-    - Aggregates predictions using mean and median probability methods.
-    - Saves results as a CSV file.
-
-    Parameters:
-        None (retrieves user input via command-line arguments or interactive prompts).
-
-    Returns:
-        None (outputs a CSV file containing predictions and logs process information).
+    Handles multiple subfolders (one model per subfolder) or a single-model scenario.
+    Aggregates all model predictions by mean/median probability.
     """
     
     parser = argparse.ArgumentParser(description="Predict BBB+/- Using Trained XGBoost Model(s)")
-    parser.add_argument("--model_dir", help="Directory containing trained model assets (may have multiple subfolders).")
+    parser.add_argument("--model_dir", help="Directory containing trained model assets (one or more subfolders).")
     parser.add_argument("--input_json", help="Path to the input JSON file for prediction.")
     parser.add_argument("--output_csv", help="Output CSV file to store predictions.")
-    parser.add_argument("--use_knn", action='store_true', help="Enable KNN imputation on combined training and prediction data.")
-    parser.add_argument("--knn_neighbors", type=int, default=DEFAULT_KNN_NEIGHBOURS, help="Number of neighbors for KNN imputation (default: 5).")
+    parser.add_argument("--use_knn", action='store_true',
+                        help="Enable KNN imputation on combined training and prediction data.")
+    parser.add_argument("--knn_neighbors", type=int, default=DEFAULT_KNN_NEIGHBOURS,
+                        help="Number of neighbors for KNN imputation (default: 5).")
 
     args = parser.parse_args()
 
-    
     if not args.model_dir:
         model_dir = input("Enter the directory containing trained model assets: ").strip()
     else:
@@ -462,22 +508,19 @@ def main():
         output_csv = input("Enter the path to save the prediction CSV: ").strip()
     else:
         output_csv = args.output_csv
-        
+
     if not args.use_knn:
         use_knn_input = input("Use KNN for missing data from Training and Prediction data? (y/n): ").strip().lower()
         use_knn = use_knn_input in ['y', 'yes']
     else:
         use_knn = args.use_knn
 
-
     os.makedirs(os.path.dirname(output_csv), exist_ok=True)
-
-    
     log_file_path = os.path.join(os.path.dirname(output_csv), 'prediction.log')
     setup_logging(log_file_path)
     logging.info("Started prediction script")
 
-    
+    # 1. Load and preprocess data
     raw_data = load_data(input_json)
     df = preprocess_data(raw_data)
     df = handle_missing_bbb_column(df)
@@ -487,160 +530,155 @@ def main():
         logging.error("No 'SMILES' column in data after preprocessing. Exiting.")
         sys.exit("Critical error: 'SMILES' column is missing.")
 
-    
-    vectorizer_brics_path = os.path.join(model_dir, "vectorizer_brics.joblib")
-    keep_tokens_brics_path = os.path.join(model_dir, "kept_tokens_brics.joblib")
-
-    vectorizer_rings_path = os.path.join(model_dir, "vectorizer_rings.joblib")
-    keep_tokens_rings_path = os.path.join(model_dir, "kept_tokens_rings.joblib")
-
-    vectorizer_side_path = os.path.join(model_dir, "vectorizer_sidechains.joblib")
-    keep_tokens_side_path = os.path.join(model_dir, "kept_tokens_sidechains.joblib")
-
-    for path_ in [
-        vectorizer_brics_path, keep_tokens_brics_path,
-        vectorizer_rings_path, keep_tokens_rings_path,
-        vectorizer_side_path, keep_tokens_side_path
-    ]:
-        if not os.path.exists(path_):
-            logging.error(f"Missing required vectorizer or tokens file: {path_}")
-            sys.exit(f"Critical error: Missing {path_}")
-
-    
-    try:
-        vectorizer_brics = joblib.load(vectorizer_brics_path)
-        keep_tokens_brics = joblib.load(keep_tokens_brics_path)
-
-        vectorizer_rings = joblib.load(vectorizer_rings_path)
-        keep_tokens_rings = joblib.load(keep_tokens_rings_path)
-
-        vectorizer_side = joblib.load(vectorizer_side_path)
-        keep_tokens_side = joblib.load(keep_tokens_side_path)
-
-        logging.info("Loaded vectorizers and kept_tokens for BRICs, RINGS, SIDE_CHAINS.")
-    except Exception as e:
-        logging.error(f"Error loading vectorizers or kept tokens: {e}")
-        sys.exit(f"Critical error: {e}")
-
-    
-    drop_cols = ['NO.', 'BBB', 'SMILES', 'BRIC_SMILES', 'RINGS', 'SIDE_CHAINS']
-    df_brics = vectorize_text_apply(df, 'BRIC_SMILES', vectorizer_brics, keep_tokens_brics, prefix="BRICS_")
-    df_rings = vectorize_text_apply(df, 'RINGS_SMILES', vectorizer_rings, keep_tokens_rings, prefix="RINGS_")
-    df_side  = vectorize_text_apply(df, 'SIDE_CHAINS_SMILES', vectorizer_side, keep_tokens_side, prefix="SIDECHAINS_")
-
-    X_numeric = df.drop(columns=drop_cols, errors='ignore').copy()
-    X_numeric = X_numeric.apply(pd.to_numeric, errors='coerce').fillna(0)
-
-    X_full = pd.concat([X_numeric, df_brics, df_rings, df_side], axis=1)
-    X_full = X_full.loc[:, ~X_full.columns.duplicated()].copy()
-
-
-    if use_knn:
-        # Path to the processed training features
-        train_features_path = os.path.join(model_dir, 'processed_train_features.csv')
-        if not os.path.exists(train_features_path):
-            logging.error(f"Processed training features not found at {train_features_path}")
-            sys.exit(f"Critical error: Processed training features not found at {train_features_path}")
-        
-        # Load processed training features
-        X_train_processed = pd.read_csv(train_features_path)
-        logging.info(f"Loaded processed training features from {train_features_path}, shape: {X_train_processed.shape}")
-        
-        # Combine training and prediction data for KNN imputation
-        combined_X = pd.concat([X_train_processed, X_full], axis=0)
-        logging.info(f"Combined training and prediction data for KNN imputation, shape: {combined_X.shape}")
-        
-        # Perform KNN imputation on combined data
-        imputer = KNNImputer(n_neighbors=args.knn_neighbors)
-        imputed_combined = imputer.fit_transform(combined_X)
-        imputed_combined_df = pd.DataFrame(imputed_combined, columns=combined_X.columns)
-        logging.info(f"KNN imputation complete, imputed data shape: {imputed_combined_df.shape}")
-        
-        # Separate back into training and prediction data
-        imputed_train = imputed_combined_df.iloc[:X_train_processed.shape[0], :].copy()
-        imputed_prediction = imputed_combined_df.iloc[X_train_processed.shape[0]:, :].copy()
-        logging.info(f"Separated imputed data: training shape {imputed_train.shape}, prediction shape {imputed_prediction.shape}")
-        
-        # Replace X_full with imputed_prediction
-        X_full = imputed_prediction
-    else:
-        # Existing KNN imputation on prediction data only
-        numeric_cols = list(X_full.select_dtypes(include=[np.number]).columns)
-        if len(numeric_cols) > 1 and X_full.shape[0] > 1:
-            imputer = KNNImputer(n_neighbors=args.knn_neighbors)
-            X_full[numeric_cols] = imputer.fit_transform(X_full[numeric_cols])
-        else:
-            X_full.fillna(0, inplace=True)
-
-    X_full = sanitize_column_names(X_full)
-
-    
-    subfolders = [f.path for f in os.scandir(model_dir) if f.is_dir()]
-    valid_subfolders = []
+    # 2. Find valid subfolders - A valid subfolder has model + feature_names + vectorizers + tokens
+    subfolders = [
+        f.path for f in os.scandir(model_dir)
+        if f.is_dir() and not f.name.startswith('.')
+    ]
+    valid_subfolder_assets = []
     for sf in subfolders:
-        model_file = None
-        for mf in ['final_model.json', 'xgboost_model.json']:
-            if os.path.exists(os.path.join(sf, mf)):
-                model_file = os.path.join(sf, mf)
-                break
-        feature_names_file = os.path.join(sf, 'feature_names.joblib')
-        if model_file and os.path.exists(feature_names_file):
-            valid_subfolders.append(sf)
+        assets = load_subfolder_assets(sf)
+        if assets is not None:
+            valid_subfolder_assets.append((sf, assets))
 
-    if not valid_subfolders:
-        logging.info("No subfolders with valid models found; using single-model scenario in the main directory.")
-        valid_subfolders = [model_dir]
+    # 3. If no valid subfolders, check if the top-level is a single-model scenario
+    top_level_assets = None
+    if not valid_subfolder_assets:
+        logging.info("No valid subfolders found. Checking single-model scenario at top level...")
+        assets = load_subfolder_assets(model_dir)
+        if assets is not None:
+            top_level_assets = assets
 
+    if not valid_subfolder_assets and not top_level_assets:
+        logging.error(f"No valid model(s) found in '{model_dir}'")
+        sys.exit(f"Critical error: No valid model(s) found in '{model_dir}'")
+
+    # Store (model_label -> results) for aggregator
     predictions_dict = {}
     probabilities_dict = {}
-    metric_labels = []
-    thresholds = []
+    thresholds_used = []
+    model_labels = []
 
-    
-    for folder in valid_subfolders:
-        metric_name = os.path.basename(folder).lower()
-        if folder == model_dir:
-            metric_name = "default"
+    # 4. Function to build (and optionally KNN-impute) the feature matrix for a given subfolder’s vectorizers
+    def build_feature_matrix_for_folder(assets_dict) -> pd.DataFrame:
+        """
+        Applies the folder’s vectorizers/tokens to the raw DataFrame, returns X_full
+        possibly after combined KNN with train_matrix.csv in that folder.
+        """
+        # Vectorizers
+        vect_brics = assets_dict['vect_brics']
+        keep_brics = assets_dict['keep_brics']
+        vect_rings = assets_dict['vect_rings']
+        keep_rings = assets_dict['keep_rings']
+        vect_side  = assets_dict['vect_side']
+        keep_side  = assets_dict['keep_side']
 
-        logging.info(f"Loading model assets from: {folder}")
-        assets = load_model_assets(folder)
+        # Build fragment data
+        df_brics = vectorize_text_apply(df, 'BRIC_SMILES', vect_brics, keep_brics, prefix="BRICS_")
+        df_rings = vectorize_text_apply(df, 'RINGS_SMILES', vect_rings, keep_rings, prefix="RINGS_")
+        df_side  = vectorize_text_apply(df, 'SIDE_CHAINS_SMILES', vect_side, keep_side, prefix="SIDECHAINS_")
 
-        feature_names = assets['feature_names']
-        threshold = assets['threshold']
-        thresholds.append(threshold)
+        drop_cols = [
+            'NO.', 'BBB', 'SMILES', 'LogBB', 'Group', 'BBB_Label',
+            'BRIC_SMILES', 'RINGS_SMILES', 'SIDE_CHAINS_SMILES'
+        ]
+        X_numeric = df.drop(columns=drop_cols, errors='ignore').copy()
+        X_numeric = X_numeric.apply(pd.to_numeric, errors='coerce').fillna(0)
 
-        missing_feats = [f for f in feature_names if f not in X_full.columns]
-        extra_feats = [f for f in X_full.columns if f not in feature_names]
+        X_concat = pd.concat([X_numeric, df_brics, df_rings, df_side], axis=1)
+        X_concat = X_concat.loc[:, ~X_concat.columns.duplicated()].copy()
 
-        if missing_feats:
-            for mf in missing_feats:
-                X_full[mf] = 0.0
-        if extra_feats:
-            X_model = X_full.drop(columns=extra_feats)
+        # Combined KNN if requested
+        if use_knn:
+            train_matrix_path = os.path.join(os.path.dirname(assets_dict['model_path']), 'train_matrix.csv')
+            if not os.path.exists(train_matrix_path):
+                logging.error(f"train_matrix.csv not found at {train_matrix_path}, cannot do combined KNN.")
+                sys.exit(f"Critical error: Missing {train_matrix_path} for combined KNN.")
+            try:
+                X_train_processed = pd.read_csv(train_matrix_path)
+                logging.info(f"Loaded training features for KNN from {train_matrix_path}, shape: {X_train_processed.shape}")
+
+                combined_X = pd.concat([X_train_processed, X_concat], axis=0)
+                logging.info(f"Combined train+predict data shape for KNN: {combined_X.shape}")
+
+                imputer = KNNImputer(n_neighbors=args.knn_neighbors)
+                imputed = imputer.fit_transform(combined_X)
+                imputed_df = pd.DataFrame(imputed, columns=combined_X.columns)
+
+                # Slice back out the portion that corresponds to X_concat
+                X_concat_imputed = imputed_df.iloc[X_train_processed.shape[0]:, :].copy()
+                logging.info(f"KNN-imputed new data shape: {X_concat_imputed.shape}")
+
+                return sanitize_column_names(X_concat_imputed)
+            except Exception as e:
+                logging.error(f"Error during combined KNN with {train_matrix_path}: {e}")
+                sys.exit(f"Critical error: {e}")
         else:
-            X_model = X_full.copy()
+            # KNN just on the new data alone (optional):
+            numeric_cols = list(X_concat.select_dtypes(include=[np.number]).columns)
+            if len(numeric_cols) > 1 and X_concat.shape[0] > 1:
+                imputer = KNNImputer(n_neighbors=args.knn_neighbors)
+                X_concat[numeric_cols] = imputer.fit_transform(X_concat[numeric_cols])
+            else:
+                X_concat.fillna(0, inplace=True)
+            return sanitize_column_names(X_concat)
 
+    # 5. Helper to run predictions for a single subfolder
+    def predict_with_subfolder(assets_dict, X_master: pd.DataFrame, label: str):
+        booster = assets_dict['booster']
+        feature_names = assets_dict['feature_names']
+        threshold = assets_dict['threshold']
+
+        # Align columns
+        missing_feats = [f for f in feature_names if f not in X_master.columns]
+        for mf in missing_feats:
+            X_master[mf] = 0.0
+        extra_feats = [f for f in X_master.columns if f not in feature_names]
+        if extra_feats:
+            X_model = X_master.drop(columns=extra_feats)
+        else:
+            X_model = X_master.copy()
+
+        # Reorder to exactly match training
         X_model = X_model[feature_names]
-
         dmatrix = xgb.DMatrix(X_model, feature_names=feature_names)
-        y_probs = assets['booster'].predict(dmatrix)
-        threshold = assets['threshold']
+        y_probs = booster.predict(dmatrix)
 
+        # Convert to array
         if isinstance(y_probs, float):
             y_probs = np.full(shape=(X_model.shape[0],), fill_value=y_probs)
         elif isinstance(y_probs, list):
             y_probs = np.array(y_probs)
-        elif isinstance(y_probs, np.ndarray):
-            pass
-        else:
+        elif not isinstance(y_probs, np.ndarray):
             y_probs = np.array(y_probs)
 
         y_pred = (y_probs >= threshold).astype(int)
-        metric_labels.append(metric_name)
-        predictions_dict[metric_name] = y_pred
-        probabilities_dict[metric_name] = y_probs
 
-    
+        model_labels.append(label)
+        predictions_dict[label] = y_pred
+        probabilities_dict[label] = y_probs
+        thresholds_used.append(threshold)
+
+    # 6. If we have multiple valid subfolders, run each
+    if valid_subfolder_assets:
+        for (sf_path, sf_assets) in valid_subfolder_assets:
+            metric_name = os.path.basename(sf_path).lower()
+            if not metric_name:
+                # In case subfolder name is blank
+                metric_name = "model_subfolder"
+
+            logging.info(f"Building features for subfolder: {sf_path}")
+            X_subfolder = build_feature_matrix_for_folder(sf_assets)
+            predict_with_subfolder(sf_assets, X_subfolder, metric_name)
+
+    # 7. If we have a top-level single-model
+    if top_level_assets:
+        label = "default"
+        logging.info(f"Building features for single-model scenario: {model_dir}")
+        X_single = build_feature_matrix_for_folder(top_level_assets)
+        predict_with_subfolder(top_level_assets, X_single, label)
+
+    # 8. Aggregate results
     output_df = pd.DataFrame()
     output_df['SMILES'] = df['SMILES']
 
@@ -650,26 +688,39 @@ def main():
     if 'BBB' in df.columns:
         output_df['True_BBB'] = df['BBB']
 
-    for metric_name in metric_labels:
-        pred_col = f"Pred_{metric_name}"
-        prob_col = f"Prob_{metric_name}"
-        output_df[prob_col] = probabilities_dict[metric_name]
-        mapped_pred = map_predictions(predictions_dict[metric_name])
-        output_df[pred_col] = mapped_pred
+    # For each model's predictions
+    for m_label in model_labels:
+        prob_col = f"Prob_{m_label}"
+        pred_col = f"Pred_{m_label}"
+        output_df[prob_col] = probabilities_dict[m_label]
+        output_df[pred_col] = map_predictions(predictions_dict[m_label])
 
-    if metric_labels:
-        prob_cols = [f"Prob_{mn}" for mn in metric_labels]
-        average_threshold = np.mean(thresholds)
+    # If multiple models, compute aggregator columns
+    if model_labels:
+        prob_cols = [f"Prob_{lbl}" for lbl in model_labels]
+        # Average threshold across all loaded models
+        avg_threshold = np.mean(thresholds_used)
+
+        # Mean Probability approach
         output_df['Mean Probability'] = output_df[prob_cols].mean(axis=1)
-        output_df['Mean BBB+/-'] = np.where(output_df['Mean Probability'] <= average_threshold, 'BBB+', 'BBB-')
+        # Classification (since 1 => 'BBB+', we use >= threshold => 'BBB+')
+        output_df['Mean BBB+/-'] = np.where(
+            output_df['Mean Probability'] >= avg_threshold, 'BBB+', 'BBB-'
+        )
+
+        # Median Probability approach
         output_df['Median Probability'] = output_df[prob_cols].median(axis=1)
-        output_df['Median BBB+/-'] = np.where(output_df['Median Probability'] <= average_threshold, 'BBB+', 'BBB-')
+        output_df['Median BBB+/-'] = np.where(
+            output_df['Median Probability'] >= avg_threshold, 'BBB+', 'BBB-'
+        )
     else:
+        # Should not happen unless no valid models
         output_df['Mean Probability'] = np.nan
         output_df['Mean BBB+/-'] = np.nan
         output_df['Median Probability'] = np.nan
         output_df['Median BBB+/-'] = np.nan
 
+    # 9. Save results
     try:
         output_df.to_csv(output_csv, index=False)
         logging.info(f"Predictions saved at: {output_csv}")
