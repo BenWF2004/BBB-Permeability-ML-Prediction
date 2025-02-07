@@ -1,6 +1,6 @@
 all_models_*
-non-publish
 *test*
+*old*
 venv
 o
 predictions
