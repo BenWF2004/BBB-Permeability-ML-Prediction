@@ -6,6 +6,17 @@ Overview:
     Predict BBB+/- labels for molecules using pre-trained XGBoost models.
     Adjusts mean and median probability calculations based on individual model thresholds.
     Outputs all model prediction probabilities and labels alongside aggregated binary labels.
+    
+Usage example:  
+python3 src/predict.py \
+  --model_path o/output1/best_model.pth \
+  --input_json data/example_prediction/model_ready.json \
+  --output_csv results/predictions.csv
+  
+Available Arguments (argparse)
+--model_path: Path to the trained model file.
+--input_json: Path to the preprocessed input data in JSON format.
+--output_csv: Path to save the predictions.
 """
 
 DEFAULT_KNN_NEIGHBOURS = 5  # For KNNImputer, originally 5

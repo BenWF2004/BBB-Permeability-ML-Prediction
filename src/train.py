@@ -40,6 +40,30 @@ Results and Output:
   - For each final model (default or best-Optuna), saves fragment vectorizers,
     kept-tokens joblibs, CSV matrices, confusion matrix, SHAP plots, etc.
   - Produces a comparison chart (CV average vs final evaluation) for all trials in Optimize mode.
+  
+Usage example:
+python3 src/train.py \
+  --data_path data/B3DB_full_model_ready.min.json \
+  --output_dir o/output1-opt10 \
+  --n_folds 10 \
+  --random_seed 42 \
+  --train_mode 2 \
+  --balance_choice 2 \
+  --use_gpu n \
+  --opt_metric all \
+  --opt_trials 10
+  
+Available Arguments (argparse)
+--data_path: Path to the preprocessed JSON dataset.
+--output_dir: Directory where model outputs will be saved.
+--n_folds: Number of cross-validation folds.
+--random_seed: Random seed for reproducibility.
+--balance_choice: Data balancing strategy (1 for none, 2 for SMOTE, etc.).
+--use_gpu: Use GPU if available (y for yes, n for no).
+--train_mode: Set to 1 for manual training or 2 to enable Optuna optimization.
+--opt_metric: Metric to optimize (auc, mcc, f1, etc, or all).
+--opt_trials: Number of optimization trials to run.
+
 """
 
 import os

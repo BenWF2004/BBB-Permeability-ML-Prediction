@@ -21,11 +21,17 @@ Key Features:
   - Error logs highlighting missing data.
 - Supports CLI execution or interactive input if no arguments are provided.
 
-Usage:
-    python src/preprocess.py \
-        --input_csv input.csv \
-        --output_json output.json \
-        --use_pubchem y/n
+Usage example:
+python src/preprocess.py \
+    --input_csv input.csv \
+    --output_json output.json \
+    --use_pubchem n \
+    --calculate_fragment_properties n
+        
+--input_csv: Path to the input CSV file.
+--output_json: Path to save the processed JSON file.
+--use_pubchem: Whether to retrieve PubChem properties (y for yes, n for no, default: n).
+--calculate_fragment_properties: Whether to calculate fragment properties (y for yes, n for no, default: n
 """
 
 import os
