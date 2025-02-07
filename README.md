@@ -1,7 +1,7 @@
 # **BBB Permeability ML Prediction**
 
 **BBB Permeability ML Prediction** is a machine learning-based model designed to predict blood-brain barrier permeability (BBB), yielding a binary **BBB+** or **BBB-** classification.  
-This repository provides tools for **data preprocessing, model training, and generating predictions.**  
+This repository provides tools for **data preprocessing**, **model training**, and **generating predictions**.
 For **original data**, **preprocessed data** and **data analysis** see the data/B3DB_Processed/ folder.
 
 **Author:** Ben Franey, 2024
