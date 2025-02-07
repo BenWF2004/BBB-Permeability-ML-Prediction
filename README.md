@@ -2,7 +2,7 @@
 
 **BBB Permeability ML Prediction** is a machine learning-based model designed to predict blood-brain barrier permeability (BBB), yielding a binary **BBB+** or **BBB-** classification.  
 This repository provides tools for **data preprocessing**, **model training**, and **generating predictions**.
-For **original data**, **preprocessed data** and **data analysis** see the data/B3DB_Processed/ folder.
+For **preprocessed data** and **data analysis** of the B3DB Database see the data/B3DB_Processed/ folder.
 
 **Author:** Ben Franey, 2024
 
@@ -196,8 +196,10 @@ This project is open-source under the Apache License, Version 2.0. See `LICENSE`
 ---
 
 ## **Notes**
+- This repository utilises the **[B3DB](https://github.com/theochem/B3DB) for BBB data**.
 - Ensure all required dependencies are installed **before running any scripts.**
 - If using **GPU acceleration**, make sure CUDA drivers and libraries are correctly installed.
 - Ensure all paths are correctly set before running any script.
 - For debugging or testing, reduce dataset size or Optuna trial count to speed up execution.
+- For further details on B3DB, please refer to the paper: [Nature article](https://www.nature.com/articles/s41597-021-01069-5).
 ---
