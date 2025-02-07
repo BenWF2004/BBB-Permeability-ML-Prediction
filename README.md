@@ -63,7 +63,8 @@ python3 src/preprocessing.py --input_csv data/example_prediction.csv --output_js
 #### **Available Arguments (`argparse`)**
 - `--input_csv`: Path to the input CSV file.
 - `--output_json`: Path to save the processed JSON file.
-- `--use_pubchem`: Whether to retrieve PubChem properties (`y` for yes, `n` for no).
+- `--use_pubchem`: Whether to retrieve PubChem properties (`y` for yes, `n` for no, default: `n`).
+- `--calculate_fragment_properties`: Whether to calculate fragment properties (`y` for yes, `n` for no, default: `n`).
 
 ---
 
