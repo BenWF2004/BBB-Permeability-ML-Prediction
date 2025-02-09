@@ -100,7 +100,7 @@ import optuna
 
 DEFAULT_N_FOLDS = 10
 DEFAULT_RANDOM_SEED = 42
-MINIMUM_FRAGMENT_FREQUENCY = [5, 5, 5, 5]  # [default, BRICS, RINGS, SIDECHAINS]
+MINIMUM_FRAGMENT_FREQUENCY = [3, 3, 3, 5]  # [default, BRICS, RINGS, SIDECHAINS]
 
 PREDEFINED_PARAMS = {
     'max_depth': 10,
@@ -1172,9 +1172,9 @@ def run_optuna_optimization(
         random_seed_trial = random_seed_main
 
         # Suggest fixed minimum frequency values for each fragment type.
-        brics_min_freq = trial.suggest_int("brics_min_freq", 5, 5)      # Temp 5: ideal (1,10)
-        rings_min_freq = trial.suggest_int("rings_min_freq", 5, 5)      # Temp 5: ideal (1,10)
-        side_min_freq = trial.suggest_int("side_min_freq", 5, 5)        # Temp 5: ideal (1,10)
+        brics_min_freq = trial.suggest_int("brics_min_freq", 3, 3)      # Temp 5: ideal (1,6)
+        rings_min_freq = trial.suggest_int("rings_min_freq", 3, 3)      # Temp 5: ideal (1,6)
+        side_min_freq = trial.suggest_int("side_min_freq", 5, 5)        # Temp 5: ideal (2,10)
 
         # Determine the list of tokens to keep based on the frequency thresholds.
         brics_keep_list = brics_freq[brics_freq >= brics_min_freq].index.tolist()
