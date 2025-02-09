@@ -1,0 +1,15 @@
+Best trial for f1: 0.8666
+Best params:
+brics_min_freq: 3
+rings_min_freq: 3
+side_min_freq: 5
+num_boost_round: 1023
+early_stopping_rounds: 300
+max_depth: 16
+learning_rate: 0.007894046668901467
+subsample: 0.8919744930060662
+colsample_bytree: 0.5924280467861548
+min_child_weight: 1
+gamma: 0.3503608939760918
+reg_alpha: 1.2557737697922675
+reg_lambda: 0.8467478562969131

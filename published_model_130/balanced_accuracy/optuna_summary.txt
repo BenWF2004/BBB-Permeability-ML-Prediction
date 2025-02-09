@@ -1,0 +1,15 @@
+Best trial for balanced accuracy: 0.8907
+Best params:
+brics_min_freq: 3
+rings_min_freq: 3
+side_min_freq: 5
+num_boost_round: 1410
+early_stopping_rounds: 258
+max_depth: 14
+learning_rate: 0.013944970674532087
+subsample: 0.694682054421739
+colsample_bytree: 0.6655489664879989
+min_child_weight: 1
+gamma: 0.09502980042984095
+reg_alpha: 0.5407643172388582
+reg_lambda: 2.4702445682807155

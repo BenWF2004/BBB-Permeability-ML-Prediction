@@ -1,0 +1,164 @@
+Summary of Best Models for Each Metric:
+
+=== Best F1 ===
+  Optuna Best Value: 0.8666
+  Best Params:
+    brics_min_freq: 3
+    rings_min_freq: 3
+    side_min_freq: 5
+    num_boost_round: 1023
+    early_stopping_rounds: 300
+    max_depth: 16
+    learning_rate: 0.007894046668901467
+    subsample: 0.8919744930060662
+    colsample_bytree: 0.5924280467861548
+    min_child_weight: 1
+    gamma: 0.3503608939760918
+    reg_alpha: 1.2557737697922675
+    reg_lambda: 0.8467478562969131
+  Final Validation Metrics:
+    AUC: 0.9580079230333899
+    MCC: 0.7915649754871995
+    F1 Score: 0.8660714285714286
+    TP: 485
+    TN: 927
+    FP: 65
+    FN: 85
+    Sensitivity (SN%): 85.08771929824562
+    Specificity (SP%): 93.44758064516128
+
+=== Best BALANCED ACCURACY ===
+  Optuna Best Value: 0.8907
+  Best Params:
+    brics_min_freq: 3
+    rings_min_freq: 3
+    side_min_freq: 5
+    num_boost_round: 1410
+    early_stopping_rounds: 258
+    max_depth: 14
+    learning_rate: 0.013944970674532087
+    subsample: 0.694682054421739
+    colsample_bytree: 0.6655489664879989
+    min_child_weight: 1
+    gamma: 0.09502980042984095
+    reg_alpha: 0.5407643172388582
+    reg_lambda: 2.4702445682807155
+  Final Validation Metrics:
+    AUC: 0.9592370543293717
+    MCC: 0.7945472087759519
+    F1 Score: 0.8683274021352313
+    TP: 488
+    TN: 926
+    FP: 66
+    FN: 82
+    Sensitivity (SN%): 85.6140350877193
+    Specificity (SP%): 93.34677419354838
+
+=== Best PRECISION ===
+  Optuna Best Value: 0.8998
+  Best Params:
+    brics_min_freq: 3
+    rings_min_freq: 3
+    side_min_freq: 5
+    num_boost_round: 460
+    early_stopping_rounds: 110
+    max_depth: 26
+    learning_rate: 0.002190267168850105
+    subsample: 0.6942830300902654
+    colsample_bytree: 0.40095790524077973
+    min_child_weight: 1
+    gamma: 1.000013943006494
+    reg_alpha: 0.23299940483172388
+    reg_lambda: 3.674238774451079
+  Final Validation Metrics:
+    AUC: 0.9551897637238257
+    MCC: 0.784218765089753
+    F1 Score: 0.8626760563380281
+    TP: 490
+    TN: 916
+    FP: 76
+    FN: 80
+    Sensitivity (SN%): 85.96491228070175
+    Specificity (SP%): 92.33870967741935
+
+=== Best RECALL ===
+  Optuna Best Value: 0.8491
+  Best Params:
+    brics_min_freq: 3
+    rings_min_freq: 3
+    side_min_freq: 5
+    num_boost_round: 1622
+    early_stopping_rounds: 223
+    max_depth: 20
+    learning_rate: 0.12937950341957286
+    subsample: 0.9169262406085015
+    colsample_bytree: 0.6637349064409268
+    min_child_weight: 2
+    gamma: 0.3829249774293411
+    reg_alpha: 2.707584884854665
+    reg_lambda: 3.1278905815005684
+  Final Validation Metrics:
+    AUC: 0.9568919779286928
+    MCC: 0.7863228089690634
+    F1 Score: 0.8632326820603907
+    TP: 486
+    TN: 922
+    FP: 70
+    FN: 84
+    Sensitivity (SN%): 85.26315789473684
+    Specificity (SP%): 92.94354838709677
+
+=== Best ACCURACY ===
+  Optuna Best Value: 0.9027
+  Best Params:
+    brics_min_freq: 3
+    rings_min_freq: 3
+    side_min_freq: 5
+    num_boost_round: 1427
+    early_stopping_rounds: 219
+    max_depth: 28
+    learning_rate: 0.022726947564877597
+    subsample: 0.9526681824788557
+    colsample_bytree: 0.8062253859214091
+    min_child_weight: 2
+    gamma: 0.15827216212905887
+    reg_alpha: 0.8552516577499536
+    reg_lambda: 0.5798888820930411
+  Final Validation Metrics:
+    AUC: 0.9585331777023203
+    MCC: 0.7898729419551908
+    F1 Score: 0.8643306379155435
+    TP: 481
+    TN: 930
+    FP: 62
+    FN: 89
+    Sensitivity (SN%): 84.3859649122807
+    Specificity (SP%): 93.75
+
+=== Best AUC ===
+  Optuna Best Value: 0.9591
+  Best Params:
+    brics_min_freq: 3
+    rings_min_freq: 3
+    side_min_freq: 5
+    num_boost_round: 1808
+    early_stopping_rounds: 145
+    max_depth: 23
+    learning_rate: 0.016025608054874164
+    subsample: 0.7859188556493615
+    colsample_bytree: 0.5737802637669349
+    min_child_weight: 2
+    gamma: 0.21568662892983648
+    reg_alpha: 0.6110231423523012
+    reg_lambda: 3.2208769142326696
+  Final Validation Metrics:
+    AUC: 0.9590831918505942
+    MCC: 0.7873399488642636
+    F1 Score: 0.8632707774798928
+    TP: 483
+    TN: 926
+    FP: 66
+    FN: 87
+    Sensitivity (SN%): 84.73684210526315
+    Specificity (SP%): 93.34677419354838
+

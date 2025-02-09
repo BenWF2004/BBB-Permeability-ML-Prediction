@@ -1,0 +1,15 @@
+Best trial for recall: 0.8491
+Best params:
+brics_min_freq: 3
+rings_min_freq: 3
+side_min_freq: 5
+num_boost_round: 1622
+early_stopping_rounds: 223
+max_depth: 20
+learning_rate: 0.12937950341957286
+subsample: 0.9169262406085015
+colsample_bytree: 0.6637349064409268
+min_child_weight: 2
+gamma: 0.3829249774293411
+reg_alpha: 2.707584884854665
+reg_lambda: 3.1278905815005684
