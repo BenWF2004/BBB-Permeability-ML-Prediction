@@ -11,12 +11,15 @@ Usage example:
 python3 src/predict.py \
   --model_path o/output1/best_model.pth \
   --input_json data/example_prediction/model_ready.json \
-  --output_csv results/predictions.csv
+  --output_csv results/predictions.csv \
+  --use_knn y
   
 Available Arguments (argparse)
 --model_path: Path to the trained model file.
 --input_json: Path to the preprocessed input data in JSON format.
 --output_csv: Path to save the predictions.
+--use_knn: y/n for use of KNN.
+--knn_neighbors: Number of neighbors for KNN imputation (default: 5).
 """
 
 DEFAULT_KNN_NEIGHBOURS = 5  # For KNNImputer, originally 5
@@ -368,7 +371,7 @@ def map_predictions(pred_array: np.ndarray) -> np.ndarray:
     Returns:
         np.ndarray: A NumPy array of corresponding string labels (`'BBB+'` or `'BBB-'`).
     """
-    return np.where(pred_array == 1, 'BBB+', 'BBB-')
+    return np.where(pred_array == 0, 'BBB+', 'BBB-')
 
 
 def load_subfolder_assets(folder_path: str) -> dict:
@@ -498,8 +501,8 @@ def main():
     parser.add_argument("--model_dir", help="Directory containing trained model assets (one or more subfolders).")
     parser.add_argument("--input_json", help="Path to the input JSON file for prediction.")
     parser.add_argument("--output_csv", help="Output CSV file to store predictions.")
-    parser.add_argument("--use_knn", action='store_true',
-                        help="Enable KNN imputation on combined training and prediction data.")
+    parser.add_argument("--use_knn", type=str, choices=['y', 'n'],
+                    help="Enable ('y') or disable ('n') KNN imputation.")
     parser.add_argument("--knn_neighbors", type=int, default=DEFAULT_KNN_NEIGHBOURS,
                         help="Number of neighbors for KNN imputation (default: 5).")
 
@@ -522,7 +525,7 @@ def main():
 
     if not args.use_knn:
         use_knn_input = input("Use KNN for missing data from Training and Prediction data? (y/n): ").strip().lower()
-        use_knn = use_knn_input in ['y', 'yes']
+        use_knn = use_knn_input in ['y']
     else:
         use_knn = args.use_knn
 
@@ -600,7 +603,7 @@ def main():
         X_concat = X_concat.loc[:, ~X_concat.columns.duplicated()].copy()
 
         # Combined KNN if requested
-        if use_knn:
+        if use_knn == 'y': 
             train_matrix_path = os.path.join(os.path.dirname(assets_dict['model_path']), 'train_matrix.csv')
             if not os.path.exists(train_matrix_path):
                 logging.error(f"train_matrix.csv not found at {train_matrix_path}, cannot do combined KNN.")
@@ -713,23 +716,24 @@ def main():
         avg_threshold = np.mean(thresholds_used)
 
         # Mean Probability approach
-        output_df['Mean Probability'] = output_df[prob_cols].mean(axis=1)
-        # Classification (since 1 => 'BBB+', we use >= threshold => 'BBB+')
-        output_df['Mean BBB+/-'] = np.where(
-            output_df['Mean Probability'] >= avg_threshold, 'BBB+', 'BBB-'
+        output_df['Prob_Mean'] = output_df[prob_cols].mean(axis=1)
+        # Classify as 'BBB+' if the mean probability is below or equal to the threshold, else 'BBB-'
+        output_df['Pred_Mean'] = np.where(
+            output_df['Prob_Mean'] <= avg_threshold, 'BBB+', 'BBB-'
         )
 
         # Median Probability approach
-        output_df['Median Probability'] = output_df[prob_cols].median(axis=1)
-        output_df['Median BBB+/-'] = np.where(
-            output_df['Median Probability'] >= avg_threshold, 'BBB+', 'BBB-'
+        output_df['Prob_Median'] = output_df[prob_cols].median(axis=1)
+        # Classify as 'BBB+' if the mean probability is below or equal to the threshold, else 'BBB-'
+        output_df['Pred_Median'] = np.where(
+            output_df['Prob_Median'] <= avg_threshold, 'BBB+', 'BBB-'
         )
     else:
         # Should not happen unless no valid models
-        output_df['Mean Probability'] = np.nan
-        output_df['Mean BBB+/-'] = np.nan
-        output_df['Median Probability'] = np.nan
-        output_df['Median BBB+/-'] = np.nan
+        output_df['Prob_Mean'] = np.nan
+        output_df['Pred_Mean'] = np.nan
+        output_df['Prob_Median'] = np.nan
+        output_df['Pred_Median'] = np.nan
 
     # 9. Save results
     try:
