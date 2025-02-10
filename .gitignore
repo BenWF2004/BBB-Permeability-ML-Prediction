@@ -6,3 +6,5 @@ o
 predictions
 
 .DS_Store
+
+!best_threshold.txt
