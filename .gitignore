@@ -2,8 +2,8 @@ all_models_*
 *test*
 *old*
 venv
-o
-predictions
+/o
+/predictions
 
 .DS_Store
 

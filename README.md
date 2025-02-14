@@ -48,7 +48,7 @@ Before making predictions or training a new model, you must preprocess the data.
   - **'BBB+/BBB-'**: Binary classification for blood-brain barrier permeability (optional, can be empty).
   - **'group'**: Custom grouping information (optional, can be empty).
 - Additional columns will be ignored in the final JSON output.
-- **PubChemPy runs slowly** due to server restrictions—consider this when enabling PubChem property retrieval - use of PubChem data over RDKit **improves accuracy** in results.
+- **PubChemPy runs slowly** due to server restrictions—consider this when enabling PubChem property retrieval.
 
 #### **Preprocessing Example Commands**
 The following commands preprocess data and output JSON files:
@@ -58,7 +58,7 @@ The following commands preprocess data and output JSON files:
 python3 src/preprocessing.py --input_csv data/B3DB_full.csv --output_json data/B3DB_processed/model_ready.json --use_pubchem y
 
 # Preprocess the example dataset for predictions
-python3 src/preprocessing.py --input_csv data/example_prediction.csv --output_json data/example_prediction/model_ready.json --use_pubchem y
+python3 src/preprocessing.py --input_csv data/example_prediction.csv --output_json data/example_prediction/model_ready.json --use_pubchem n
 ```
 
 #### **Available Arguments (`argparse`)**
@@ -152,8 +152,9 @@ python3 src/predict.py \
 BBB-Permeability-ML-Prediction/
 |-- data/                      # Input datasets and preprocessed files
 |-- data/B3DB_processed/*      # All processed B3DB files, including ananlysis
+|-- model_evaluation/*         # Model Evaluation for differing data sources and balancing
 |-- src/                       # Source code for preprocessing, training, and prediction
-|-- published-model/*          # Trained models and related files
+|-- published_model/*          # Trained models and related files
 |-- predictions/               # Generated predictions
 |-- requirements.txt           # List of required Python packages
 |-- LICENSE                    # Licence documentation (Apache 2.0 License)
