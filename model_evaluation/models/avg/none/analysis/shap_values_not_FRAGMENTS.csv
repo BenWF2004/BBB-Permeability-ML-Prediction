@@ -1,30 +1,4 @@
-"'LogP': entry.get('LogP_PubChem', np.nan) 
-                if not pd.isna(entry.get('LogP_PubChem', np.nan)) 
-                else entry.get('LogP_RDKit', np.nan),
-            'Flexibility': entry.get('Flexibility_PubChem', np.nan) 
-                if not pd.isna(entry.get('Flexibility_PubChem', np.nan)) 
-                else entry.get('Flexibility_RDKit', np.nan),
-            'HBA': entry.get('HBA_PubChem', np.nan) 
-                if not pd.isna(entry.get('HBA_PubChem', np.nan)) 
-                else entry.get('HBA_RDKit', np.nan),
-            'HBD': entry.get('HBD_PubChem', np.nan) 
-                if not pd.isna(entry.get('HBD_PubChem', np.nan)) 
-                else entry.get('HBD_RDKit', np.nan),
-            'TPSA': entry.get('TPSA_PubChem', np.nan) 
-                if not pd.isna(entry.get('TPSA_PubChem', np.nan)) 
-                else entry.get('TPSA_RDKit', np.nan),
-            'Charge': entry.get('Charge_PubChem', np.nan) 
-                if not pd.isna(entry.get('Charge_PubChem', np.nan)) 
-                else entry.get('Charge_RDKit', np.nan),
-            'Atom_Stereo': entry.get('AtomStereo_PubChem', np.nan) 
-                if not pd.isna(entry.get('AtomStereo_PubChem', np.nan)) 
-                else entry.get('AtomStereo_RDKit', np.nan),'LogP': entry.get('LogP_PubChem', np.nan),
-            'Flexibility': entry.get('Flexibility_PubChem', np.nan),
-            'HBA': entry.get('HBA_PubChem', np.nan),
-            'HBD': entry.get('HBD_PubChem', np.nan),
-            'TPSA': entry.get('TPSA_PubChem', np.nan),
-            'Charge': entry.get('Charge_PubChem', np.nan),
-            'Atom_Stereo': entry.get('AtomStereo_PubChem', np.nan),LogP",Flexibility,HBA,HBD,TPSA,Charge,Atom_Stereo,HeavyAtom,Radius_Of_Gyration,Wiener_Index,Eccentric_Connectivity_Index,Atom_Count_C,Atom_Count_H,Atom_Count_O,Atom_Count_N,Atom_Count_S,Atom_Count_F,Atom_Count_Cl,Atom_Count_Br,Atom_Count_I,Atom_Count_P,Atom_Count_B,Atom_Count_Li,Bond_Count_Single,Bond_Count_Double,Bond_Count_Triple,Bond_Count_Aromatic,Total_Chiral_Centers,R_Isomers,S_Isomers,E_Isomers,Z_Isomers,Num_4_Rings_Aromatic,Num_4_Rings_NonAromatic,Num_4_Rings_Total,Num_5_Rings_Aromatic,Num_5_Rings_NonAromatic,Num_5_Rings_Total,Num_6_Rings_Aromatic,Num_6_Rings_NonAromatic,Num_6_Rings_Total,Num_8_Rings_Aromatic,Num_8_Rings_NonAromatic,Num_8_Rings_Total,Num_Aromatic_Rings,Num_NonAromatic_Rings,Num_Total_Rings
+LogP,Flexibility,HBA,HBD,TPSA,Charge,Atom_Stereo,HeavyAtom,Radius_Of_Gyration,Wiener_Index,Eccentric_Connectivity_Index,Atom_Count_C,Atom_Count_H,Atom_Count_O,Atom_Count_N,Atom_Count_S,Atom_Count_F,Atom_Count_Cl,Atom_Count_Br,Atom_Count_I,Atom_Count_P,Atom_Count_B,Atom_Count_Li,Bond_Count_Single,Bond_Count_Double,Bond_Count_Triple,Bond_Count_Aromatic,Total_Chiral_Centers,R_Isomers,S_Isomers,E_Isomers,Z_Isomers,Num_4_Rings_Aromatic,Num_4_Rings_NonAromatic,Num_4_Rings_Total,Num_5_Rings_Aromatic,Num_5_Rings_NonAromatic,Num_5_Rings_Total,Num_6_Rings_Aromatic,Num_6_Rings_NonAromatic,Num_6_Rings_Total,Num_8_Rings_Aromatic,Num_8_Rings_NonAromatic,Num_8_Rings_Total,Num_Aromatic_Rings,Num_NonAromatic_Rings,Num_Total_Rings
 0.027278993,-0.227918,0.024260262,0.2615013,0.58067113,0.047657456,0.12583016,-0.28917128,-0.125332,-0.20804726,0.022132665,-0.09647943,0.0037475647,0.04894412,-0.009475058,0.010164234,-0.022704158,-0.0073042484,0.00045978389,0.0058820825,0.0005922965,-0.0,-0.0,-0.104840495,-0.0070989616,0.006216241,0.0116383135,-0.11935154,-0.04976768,-0.013658235,-0.008015461,0.00056762353,-0.0,0.007051458,0.0018413401,0.012842196,-0.024985733,-0.0066630556,-0.0018998177,-0.050249614,-0.03157252,-0.0,-0.0002320802,-9.272446e-05,0.00912212,-0.117227264,-0.1292588
 0.20863365,-0.043570135,0.12768118,0.38670507,1.5744822,0.07138491,0.10951188,0.101015136,-0.042505916,0.096743934,0.06225916,0.052622125,0.052708488,0.089492016,0.24474347,0.018733637,-0.0256615,0.110365964,-0.01854611,0.0050136526,0.0008971199,-0.0,-0.0,0.070284136,0.019075673,0.011226286,0.05696421,0.37409663,0.26298755,0.041024156,-0.0041245595,0.000554047,-0.0,0.009945045,0.0029426566,0.032583274,-0.022319887,-0.0006937596,0.021661242,-0.060159802,-0.027687483,-0.0,-0.00022408014,-9.561857e-05,0.009434447,-0.1647536,-0.001762015
 0.018168483,-0.14139172,0.10223234,0.18979754,0.2650253,0.037744984,-0.14679618,0.06347403,0.031575702,0.092622116,0.0779039,0.027816968,0.08995552,-0.04331961,-0.16534665,0.016846139,0.28847852,0.08839506,0.00039828828,0.004040573,0.00017125544,-0.0,-0.0,0.094349205,-0.052689068,0.010361374,0.001885959,-0.34221607,-0.12480153,-0.011562065,-0.0037996229,0.0004527454,-0.0,0.009485073,0.004148975,0.012279447,0.12315179,0.02602634,-0.029545143,0.13843039,0.03812877,-0.0,-0.0001946743,-9.1235364e-05,0.01838568,0.18333465,0.010020016

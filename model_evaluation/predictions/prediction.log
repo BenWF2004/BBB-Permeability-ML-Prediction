@@ -1,952 +1,760 @@
-2025-02-14 11:23:14,370 - INFO - Started prediction script
-2025-02-14 11:23:14,391 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/none/validation_data_original.json', total records: 1562
-2025-02-14 11:23:14,425 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:23:14,427 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:23:14,453 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/none/xgboost_model.json
-2025-02-14 11:23:14,467 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/none
-2025-02-14 11:23:14,730 - INFO - Predictions saved at: predictions/evaluation-single/pubchem-else-rdkit_none.csv
-2025-02-14 11:23:14,730 - INFO - Prediction script completed successfully.
-2025-02-14 11:23:15,436 - INFO - Started prediction script
-2025-02-14 11:23:15,457 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smote/validation_data_original.json', total records: 1562
-2025-02-14 11:23:15,490 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:23:15,493 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:23:15,597 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smote/xgboost_model.json
-2025-02-14 11:23:15,610 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smote
-2025-02-14 11:23:15,884 - INFO - Predictions saved at: predictions/evaluation-single/pubchem-else-rdkit_smote.csv
-2025-02-14 11:23:15,884 - INFO - Prediction script completed successfully.
-2025-02-14 11:23:16,597 - INFO - Started prediction script
-2025-02-14 11:23:16,617 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smoteenn/validation_data_original.json', total records: 1562
-2025-02-14 11:23:16,650 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:23:16,653 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:23:16,712 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smoteenn/xgboost_model.json
-2025-02-14 11:23:16,725 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smoteenn
-2025-02-14 11:23:17,056 - INFO - Predictions saved at: predictions/evaluation-single/pubchem-else-rdkit_smoteenn.csv
-2025-02-14 11:23:17,056 - INFO - Prediction script completed successfully.
-2025-02-14 11:23:17,868 - INFO - Started prediction script
-2025-02-14 11:23:17,889 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smotetomek/validation_data_original.json', total records: 1562
-2025-02-14 11:23:17,921 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:23:17,923 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:23:17,994 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smotetomek/xgboost_model.json
-2025-02-14 11:23:18,007 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smotetomek
-2025-02-14 11:23:18,291 - INFO - Predictions saved at: predictions/evaluation-single/pubchem-else-rdkit_smotetomek.csv
-2025-02-14 11:23:18,291 - INFO - Prediction script completed successfully.
-2025-02-14 11:23:19,032 - INFO - Started prediction script
-2025-02-14 11:23:19,052 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/none/validation_data_original.json', total records: 1562
-2025-02-14 11:23:19,085 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:23:19,087 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:23:19,111 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/none/xgboost_model.json
-2025-02-14 11:23:19,122 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/none
-2025-02-14 11:23:19,384 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-else-rdkit/none/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 11:23:19,438 - INFO - Combined train+predict data shape for KNN: (7807, 1326)
-2025-02-14 11:24:24,698 - INFO - KNN-imputed new data shape: (1562, 1326)
-2025-02-14 11:24:24,833 - INFO - Predictions saved at: predictions/evaluation-single/knn_pubchem-else-rdkit_none.csv
-2025-02-14 11:24:24,833 - INFO - Prediction script completed successfully.
-2025-02-14 11:24:25,822 - INFO - Started prediction script
-2025-02-14 11:24:25,843 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smote/validation_data_original.json', total records: 1562
-2025-02-14 11:24:25,875 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:24:25,877 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:24:25,982 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smote/xgboost_model.json
-2025-02-14 11:24:25,995 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smote
-2025-02-14 11:24:26,229 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-else-rdkit/smote/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 11:24:26,276 - INFO - Combined train+predict data shape for KNN: (7807, 1326)
-2025-02-14 11:25:29,070 - INFO - KNN-imputed new data shape: (1562, 1326)
-2025-02-14 11:25:29,217 - INFO - Predictions saved at: predictions/evaluation-single/knn_pubchem-else-rdkit_smote.csv
-2025-02-14 11:25:29,217 - INFO - Prediction script completed successfully.
-2025-02-14 11:25:30,200 - INFO - Started prediction script
-2025-02-14 11:25:30,220 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smoteenn/validation_data_original.json', total records: 1562
-2025-02-14 11:25:30,253 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:25:30,255 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:25:30,313 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smoteenn/xgboost_model.json
-2025-02-14 11:25:30,326 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smoteenn
-2025-02-14 11:25:30,546 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-else-rdkit/smoteenn/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 11:25:30,590 - INFO - Combined train+predict data shape for KNN: (7807, 1326)
-2025-02-14 11:26:33,761 - INFO - KNN-imputed new data shape: (1562, 1326)
-2025-02-14 11:26:33,909 - INFO - Predictions saved at: predictions/evaluation-single/knn_pubchem-else-rdkit_smoteenn.csv
-2025-02-14 11:26:33,909 - INFO - Prediction script completed successfully.
-2025-02-14 11:26:34,944 - INFO - Started prediction script
-2025-02-14 11:26:34,964 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smotetomek/validation_data_original.json', total records: 1562
-2025-02-14 11:26:34,997 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:26:35,000 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:26:35,073 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smotetomek/xgboost_model.json
-2025-02-14 11:26:35,087 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smotetomek
-2025-02-14 11:26:35,318 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-else-rdkit/smotetomek/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 11:26:35,365 - INFO - Combined train+predict data shape for KNN: (7807, 1326)
-2025-02-14 11:27:37,546 - INFO - KNN-imputed new data shape: (1562, 1326)
-2025-02-14 11:27:37,689 - INFO - Predictions saved at: predictions/evaluation-single/knn_pubchem-else-rdkit_smotetomek.csv
-2025-02-14 11:27:37,689 - INFO - Prediction script completed successfully.
-2025-02-14 11:27:55,641 - INFO - Started prediction script
-2025-02-14 11:27:55,661 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/none/validation_data_original.json', total records: 1562
-2025-02-14 11:27:55,692 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:27:55,694 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:27:55,787 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/none/xgboost_model.json
-2025-02-14 11:27:55,800 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/none
-2025-02-14 11:27:56,071 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only_none.csv
-2025-02-14 11:27:56,071 - INFO - Prediction script completed successfully.
-2025-02-14 11:27:56,781 - INFO - Started prediction script
-2025-02-14 11:27:56,802 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smote/validation_data_original.json', total records: 1562
-2025-02-14 11:27:56,832 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:27:56,834 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:27:56,927 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smote/xgboost_model.json
-2025-02-14 11:27:56,940 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smote
-2025-02-14 11:27:57,314 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only_smote.csv
-2025-02-14 11:27:57,314 - INFO - Prediction script completed successfully.
-2025-02-14 11:27:58,051 - INFO - Started prediction script
-2025-02-14 11:27:58,073 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smoteenn/validation_data_original.json', total records: 1562
-2025-02-14 11:27:58,102 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:27:58,104 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:27:58,160 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smoteenn/xgboost_model.json
-2025-02-14 11:27:58,173 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smoteenn
-2025-02-14 11:27:58,449 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only_smoteenn.csv
-2025-02-14 11:27:58,449 - INFO - Prediction script completed successfully.
-2025-02-14 11:27:59,193 - INFO - Started prediction script
-2025-02-14 11:27:59,217 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smotetomek/validation_data_original.json', total records: 1562
-2025-02-14 11:27:59,252 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:27:59,255 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:27:59,357 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smotetomek/xgboost_model.json
-2025-02-14 11:27:59,371 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smotetomek
-2025-02-14 11:27:59,661 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only_smotetomek.csv
-2025-02-14 11:27:59,661 - INFO - Prediction script completed successfully.
-2025-02-14 11:28:00,439 - INFO - Started prediction script
-2025-02-14 11:28:00,458 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/none/validation_data_original.json', total records: 1562
-2025-02-14 11:28:00,489 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:28:00,491 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:28:00,582 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/none/xgboost_model.json
-2025-02-14 11:28:00,593 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/none
-2025-02-14 11:28:00,855 - INFO - Loaded training features for KNN from o/evaluation-single/rdkit-only/none/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 11:28:00,873 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 11:29:04,787 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 11:29:04,963 - INFO - Predictions saved at: predictions/evaluation-single/knn_rdkit-only_none.csv
-2025-02-14 11:29:04,963 - INFO - Prediction script completed successfully.
-2025-02-14 11:29:05,944 - INFO - Started prediction script
-2025-02-14 11:29:05,964 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smote/validation_data_original.json', total records: 1562
-2025-02-14 11:29:05,994 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:29:05,996 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:29:06,087 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smote/xgboost_model.json
-2025-02-14 11:29:06,100 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smote
-2025-02-14 11:29:06,327 - INFO - Loaded training features for KNN from o/evaluation-single/rdkit-only/smote/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 11:29:06,337 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 11:30:08,437 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 11:30:08,614 - INFO - Predictions saved at: predictions/evaluation-single/knn_rdkit-only_smote.csv
-2025-02-14 11:30:08,614 - INFO - Prediction script completed successfully.
-2025-02-14 11:30:09,573 - INFO - Started prediction script
-2025-02-14 11:30:09,594 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smoteenn/validation_data_original.json', total records: 1562
-2025-02-14 11:30:09,623 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:30:09,625 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:30:09,681 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smoteenn/xgboost_model.json
-2025-02-14 11:30:09,694 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smoteenn
-2025-02-14 11:30:09,914 - INFO - Loaded training features for KNN from o/evaluation-single/rdkit-only/smoteenn/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 11:30:09,924 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 11:31:12,070 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 11:31:12,245 - INFO - Predictions saved at: predictions/evaluation-single/knn_rdkit-only_smoteenn.csv
-2025-02-14 11:31:12,246 - INFO - Prediction script completed successfully.
-2025-02-14 11:31:13,222 - INFO - Started prediction script
-2025-02-14 11:31:13,242 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smotetomek/validation_data_original.json', total records: 1562
-2025-02-14 11:31:13,271 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:31:13,273 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:31:13,369 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smotetomek/xgboost_model.json
-2025-02-14 11:31:13,382 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smotetomek
-2025-02-14 11:31:13,605 - INFO - Loaded training features for KNN from o/evaluation-single/rdkit-only/smotetomek/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 11:31:13,616 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 11:32:15,721 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 11:32:15,897 - INFO - Predictions saved at: predictions/evaluation-single/knn_rdkit-only_smotetomek.csv
-2025-02-14 11:32:15,897 - INFO - Prediction script completed successfully.
-2025-02-14 11:33:11,655 - INFO - Started prediction script
-2025-02-14 11:33:11,675 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/none/validation_data_original.json', total records: 1562
-2025-02-14 11:33:11,705 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:33:11,707 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:33:11,808 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/none/xgboost_model.json
-2025-02-14 11:33:11,824 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/none
-2025-02-14 11:33:12,130 - INFO - Predictions saved at: predictions/evaluation-single/pubchem-only_none.csv
-2025-02-14 11:33:12,130 - INFO - Prediction script completed successfully.
-2025-02-14 11:33:12,898 - INFO - Started prediction script
-2025-02-14 11:33:12,919 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smote/validation_data_original.json', total records: 1562
-2025-02-14 11:33:12,949 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:33:12,952 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:33:13,073 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smote/xgboost_model.json
-2025-02-14 11:33:13,086 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smote
-2025-02-14 11:33:13,368 - INFO - Predictions saved at: predictions/evaluation-single/pubchem-only_smote.csv
-2025-02-14 11:33:13,369 - INFO - Prediction script completed successfully.
-2025-02-14 11:33:14,099 - INFO - Started prediction script
-2025-02-14 11:33:14,120 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smoteenn/validation_data_original.json', total records: 1562
-2025-02-14 11:33:14,150 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:33:14,152 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:33:14,203 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smoteenn/xgboost_model.json
-2025-02-14 11:33:14,216 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smoteenn
-2025-02-14 11:33:14,507 - INFO - Predictions saved at: predictions/evaluation-single/pubchem-only_smoteenn.csv
-2025-02-14 11:33:14,507 - INFO - Prediction script completed successfully.
-2025-02-14 11:33:15,238 - INFO - Started prediction script
-2025-02-14 11:33:15,259 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smotetomek/validation_data_original.json', total records: 1562
-2025-02-14 11:33:15,288 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:33:15,290 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:33:15,382 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smotetomek/xgboost_model.json
-2025-02-14 11:33:15,396 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smotetomek
-2025-02-14 11:33:15,686 - INFO - Predictions saved at: predictions/evaluation-single/pubchem-only_smotetomek.csv
-2025-02-14 11:33:15,686 - INFO - Prediction script completed successfully.
-2025-02-14 11:33:16,460 - INFO - Started prediction script
-2025-02-14 11:33:16,480 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/none/validation_data_original.json', total records: 1562
-2025-02-14 11:33:16,510 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:33:16,512 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:33:16,610 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/none/xgboost_model.json
-2025-02-14 11:33:16,621 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/none
-2025-02-14 11:33:16,885 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-only/none/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 11:33:16,903 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 11:34:22,811 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 11:34:22,982 - INFO - Predictions saved at: predictions/evaluation-single/knn_pubchem-only_none.csv
-2025-02-14 11:34:22,982 - INFO - Prediction script completed successfully.
-2025-02-14 11:34:23,972 - INFO - Started prediction script
-2025-02-14 11:34:23,993 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smote/validation_data_original.json', total records: 1562
-2025-02-14 11:34:24,023 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:34:24,025 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:34:24,148 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smote/xgboost_model.json
-2025-02-14 11:34:24,160 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smote
-2025-02-14 11:34:24,381 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-only/smote/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 11:34:24,390 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 11:35:27,662 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 11:35:27,841 - INFO - Predictions saved at: predictions/evaluation-single/knn_pubchem-only_smote.csv
-2025-02-14 11:35:27,841 - INFO - Prediction script completed successfully.
-2025-02-14 11:35:28,818 - INFO - Started prediction script
-2025-02-14 11:35:28,839 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smoteenn/validation_data_original.json', total records: 1562
-2025-02-14 11:35:28,868 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:35:28,870 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:35:28,920 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smoteenn/xgboost_model.json
-2025-02-14 11:35:28,933 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smoteenn
-2025-02-14 11:35:29,161 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-only/smoteenn/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 11:35:29,171 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 11:36:33,451 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 11:36:33,623 - INFO - Predictions saved at: predictions/evaluation-single/knn_pubchem-only_smoteenn.csv
-2025-02-14 11:36:33,623 - INFO - Prediction script completed successfully.
-2025-02-14 11:36:34,599 - INFO - Started prediction script
-2025-02-14 11:36:34,619 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smotetomek/validation_data_original.json', total records: 1562
-2025-02-14 11:36:34,648 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:36:34,650 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:36:34,740 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smotetomek/xgboost_model.json
-2025-02-14 11:36:34,754 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smotetomek
-2025-02-14 11:36:34,984 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-only/smotetomek/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 11:36:34,994 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 11:37:38,112 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 11:37:38,284 - INFO - Predictions saved at: predictions/evaluation-single/knn_pubchem-only_smotetomek.csv
-2025-02-14 11:37:38,284 - INFO - Prediction script completed successfully.
-2025-02-14 11:38:08,548 - INFO - Started prediction script
-2025-02-14 11:38:08,568 - INFO - Data loaded from 'o/evaluation-single/avg/none/validation_data_original.json', total records: 1562
-2025-02-14 11:38:08,598 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:38:08,600 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:38:08,707 - INFO - Loaded XGBoost model from o/evaluation-single/avg/none/xgboost_model.json
-2025-02-14 11:38:08,720 - INFO - Building features for single-model scenario: o/evaluation-single/avg/none
-2025-02-14 11:38:09,004 - INFO - Predictions saved at: predictions/evaluation-single/avg_none.csv
-2025-02-14 11:38:09,004 - INFO - Prediction script completed successfully.
-2025-02-14 11:38:09,725 - INFO - Started prediction script
-2025-02-14 11:38:09,747 - INFO - Data loaded from 'o/evaluation-single/avg/smote/validation_data_original.json', total records: 1562
-2025-02-14 11:38:09,776 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:38:09,781 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:38:09,914 - INFO - Loaded XGBoost model from o/evaluation-single/avg/smote/xgboost_model.json
-2025-02-14 11:38:09,927 - INFO - Building features for single-model scenario: o/evaluation-single/avg/smote
-2025-02-14 11:38:10,204 - INFO - Predictions saved at: predictions/evaluation-single/avg_smote.csv
-2025-02-14 11:38:10,204 - INFO - Prediction script completed successfully.
-2025-02-14 11:38:10,915 - INFO - Started prediction script
-2025-02-14 11:38:10,937 - INFO - Data loaded from 'o/evaluation-single/avg/smoteenn/validation_data_original.json', total records: 1562
-2025-02-14 11:38:10,966 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:38:10,968 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:38:11,017 - INFO - Loaded XGBoost model from o/evaluation-single/avg/smoteenn/xgboost_model.json
-2025-02-14 11:38:11,031 - INFO - Building features for single-model scenario: o/evaluation-single/avg/smoteenn
-2025-02-14 11:38:11,298 - INFO - Predictions saved at: predictions/evaluation-single/avg_smoteenn.csv
-2025-02-14 11:38:11,298 - INFO - Prediction script completed successfully.
-2025-02-14 11:38:12,008 - INFO - Started prediction script
-2025-02-14 11:38:12,029 - INFO - Data loaded from 'o/evaluation-single/avg/smotetomek/validation_data_original.json', total records: 1562
-2025-02-14 11:38:12,059 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:38:12,064 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:38:12,154 - INFO - Loaded XGBoost model from o/evaluation-single/avg/smotetomek/xgboost_model.json
-2025-02-14 11:38:12,168 - INFO - Building features for single-model scenario: o/evaluation-single/avg/smotetomek
-2025-02-14 11:38:12,441 - INFO - Predictions saved at: predictions/evaluation-single/avg_smotetomek.csv
-2025-02-14 11:38:12,441 - INFO - Prediction script completed successfully.
-2025-02-14 11:38:13,157 - INFO - Started prediction script
-2025-02-14 11:38:13,176 - INFO - Data loaded from 'o/evaluation-single/avg/none/validation_data_original.json', total records: 1562
-2025-02-14 11:38:13,207 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:38:13,209 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:38:13,314 - INFO - Loaded XGBoost model from o/evaluation-single/avg/none/xgboost_model.json
-2025-02-14 11:38:13,325 - INFO - Building features for single-model scenario: o/evaluation-single/avg/none
-2025-02-14 11:38:13,582 - INFO - Loaded training features for KNN from o/evaluation-single/avg/none/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 11:38:13,600 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 11:39:18,428 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 11:39:18,603 - INFO - Predictions saved at: predictions/evaluation-single/knn_avg_none.csv
-2025-02-14 11:39:18,603 - INFO - Prediction script completed successfully.
-2025-02-14 11:39:19,581 - INFO - Started prediction script
-2025-02-14 11:39:19,602 - INFO - Data loaded from 'o/evaluation-single/avg/smote/validation_data_original.json', total records: 1562
-2025-02-14 11:39:19,631 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:39:19,633 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:39:19,755 - INFO - Loaded XGBoost model from o/evaluation-single/avg/smote/xgboost_model.json
-2025-02-14 11:39:19,769 - INFO - Building features for single-model scenario: o/evaluation-single/avg/smote
-2025-02-14 11:39:20,002 - INFO - Loaded training features for KNN from o/evaluation-single/avg/smote/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 11:39:20,013 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 11:40:23,504 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 11:40:23,680 - INFO - Predictions saved at: predictions/evaluation-single/knn_avg_smote.csv
-2025-02-14 11:40:23,680 - INFO - Prediction script completed successfully.
-2025-02-14 11:40:24,640 - INFO - Started prediction script
-2025-02-14 11:40:24,660 - INFO - Data loaded from 'o/evaluation-single/avg/smoteenn/validation_data_original.json', total records: 1562
-2025-02-14 11:40:24,689 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:40:24,691 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:40:24,741 - INFO - Loaded XGBoost model from o/evaluation-single/avg/smoteenn/xgboost_model.json
-2025-02-14 11:40:24,754 - INFO - Building features for single-model scenario: o/evaluation-single/avg/smoteenn
-2025-02-14 11:40:24,986 - INFO - Loaded training features for KNN from o/evaluation-single/avg/smoteenn/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 11:40:24,996 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 11:41:30,755 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 11:41:30,946 - INFO - Predictions saved at: predictions/evaluation-single/knn_avg_smoteenn.csv
-2025-02-14 11:41:30,946 - INFO - Prediction script completed successfully.
-2025-02-14 11:41:31,965 - INFO - Started prediction script
-2025-02-14 11:41:31,986 - INFO - Data loaded from 'o/evaluation-single/avg/smotetomek/validation_data_original.json', total records: 1562
-2025-02-14 11:41:32,016 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 11:41:32,018 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:41:32,109 - INFO - Loaded XGBoost model from o/evaluation-single/avg/smotetomek/xgboost_model.json
-2025-02-14 11:41:32,123 - INFO - Building features for single-model scenario: o/evaluation-single/avg/smotetomek
-2025-02-14 11:41:32,357 - INFO - Loaded training features for KNN from o/evaluation-single/avg/smotetomek/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 11:41:32,368 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 11:42:38,262 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 11:42:38,437 - INFO - Predictions saved at: predictions/evaluation-single/knn_avg_smotetomek.csv
-2025-02-14 11:42:38,437 - INFO - Prediction script completed successfully.
-2025-02-14 11:42:44,904 - INFO - Started prediction script
-2025-02-14 11:42:44,924 - INFO - Data loaded from 'o/evaluation-single/both/none/validation_data_original.json', total records: 1562
-2025-02-14 11:42:44,957 - INFO - Preprocessed DataFrame shape: (1562, 60)
-2025-02-14 11:42:44,960 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:42:45,064 - INFO - Loaded XGBoost model from o/evaluation-single/both/none/xgboost_model.json
-2025-02-14 11:42:45,077 - INFO - Building features for single-model scenario: o/evaluation-single/both/none
-2025-02-14 11:42:45,351 - INFO - Predictions saved at: predictions/evaluation-single/both_none.csv
-2025-02-14 11:42:45,351 - INFO - Prediction script completed successfully.
-2025-02-14 11:42:46,064 - INFO - Started prediction script
-2025-02-14 11:42:46,087 - INFO - Data loaded from 'o/evaluation-single/both/smote/validation_data_original.json', total records: 1562
-2025-02-14 11:42:46,117 - INFO - Preprocessed DataFrame shape: (1562, 60)
-2025-02-14 11:42:46,121 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:42:46,222 - INFO - Loaded XGBoost model from o/evaluation-single/both/smote/xgboost_model.json
-2025-02-14 11:42:46,235 - INFO - Building features for single-model scenario: o/evaluation-single/both/smote
-2025-02-14 11:42:46,506 - INFO - Predictions saved at: predictions/evaluation-single/both_smote.csv
-2025-02-14 11:42:46,506 - INFO - Prediction script completed successfully.
-2025-02-14 11:42:47,203 - INFO - Started prediction script
-2025-02-14 11:42:47,224 - INFO - Data loaded from 'o/evaluation-single/both/smoteenn/validation_data_original.json', total records: 1562
-2025-02-14 11:42:47,255 - INFO - Preprocessed DataFrame shape: (1562, 60)
-2025-02-14 11:42:47,259 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:42:47,317 - INFO - Loaded XGBoost model from o/evaluation-single/both/smoteenn/xgboost_model.json
-2025-02-14 11:42:47,329 - INFO - Building features for single-model scenario: o/evaluation-single/both/smoteenn
-2025-02-14 11:42:47,600 - INFO - Predictions saved at: predictions/evaluation-single/both_smoteenn.csv
-2025-02-14 11:42:47,601 - INFO - Prediction script completed successfully.
-2025-02-14 11:42:48,321 - INFO - Started prediction script
-2025-02-14 11:42:48,342 - INFO - Data loaded from 'o/evaluation-single/both/smotetomek/validation_data_original.json', total records: 1562
-2025-02-14 11:42:48,373 - INFO - Preprocessed DataFrame shape: (1562, 60)
-2025-02-14 11:42:48,376 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:42:48,447 - INFO - Loaded XGBoost model from o/evaluation-single/both/smotetomek/xgboost_model.json
-2025-02-14 11:42:48,460 - INFO - Building features for single-model scenario: o/evaluation-single/both/smotetomek
-2025-02-14 11:42:48,730 - INFO - Predictions saved at: predictions/evaluation-single/both_smotetomek.csv
-2025-02-14 11:42:48,730 - INFO - Prediction script completed successfully.
-2025-02-14 11:42:49,440 - INFO - Started prediction script
-2025-02-14 11:42:49,460 - INFO - Data loaded from 'o/evaluation-single/both/none/validation_data_original.json', total records: 1562
-2025-02-14 11:42:49,491 - INFO - Preprocessed DataFrame shape: (1562, 60)
-2025-02-14 11:42:49,493 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:42:49,590 - INFO - Loaded XGBoost model from o/evaluation-single/both/none/xgboost_model.json
-2025-02-14 11:42:49,601 - INFO - Building features for single-model scenario: o/evaluation-single/both/none
-2025-02-14 11:42:49,829 - INFO - Loaded training features for KNN from o/evaluation-single/both/none/train_matrix.csv, shape: (6245, 1332)
-2025-02-14 11:42:49,840 - INFO - Combined train+predict data shape for KNN: (7807, 1333)
-2025-02-14 11:43:53,130 - INFO - KNN-imputed new data shape: (1562, 1333)
-2025-02-14 11:43:53,308 - INFO - Predictions saved at: predictions/evaluation-single/knn_both_none.csv
-2025-02-14 11:43:53,308 - INFO - Prediction script completed successfully.
-2025-02-14 11:43:54,284 - INFO - Started prediction script
-2025-02-14 11:43:54,304 - INFO - Data loaded from 'o/evaluation-single/both/smote/validation_data_original.json', total records: 1562
-2025-02-14 11:43:54,335 - INFO - Preprocessed DataFrame shape: (1562, 60)
-2025-02-14 11:43:54,338 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:43:54,439 - INFO - Loaded XGBoost model from o/evaluation-single/both/smote/xgboost_model.json
-2025-02-14 11:43:54,452 - INFO - Building features for single-model scenario: o/evaluation-single/both/smote
-2025-02-14 11:43:54,693 - INFO - Loaded training features for KNN from o/evaluation-single/both/smote/train_matrix.csv, shape: (6245, 1332)
-2025-02-14 11:43:54,703 - INFO - Combined train+predict data shape for KNN: (7807, 1333)
-2025-02-14 11:44:57,506 - INFO - KNN-imputed new data shape: (1562, 1333)
-2025-02-14 11:44:57,684 - INFO - Predictions saved at: predictions/evaluation-single/knn_both_smote.csv
-2025-02-14 11:44:57,684 - INFO - Prediction script completed successfully.
-2025-02-14 11:44:58,670 - INFO - Started prediction script
-2025-02-14 11:44:58,691 - INFO - Data loaded from 'o/evaluation-single/both/smoteenn/validation_data_original.json', total records: 1562
-2025-02-14 11:44:58,721 - INFO - Preprocessed DataFrame shape: (1562, 60)
-2025-02-14 11:44:58,723 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:44:58,782 - INFO - Loaded XGBoost model from o/evaluation-single/both/smoteenn/xgboost_model.json
-2025-02-14 11:44:58,795 - INFO - Building features for single-model scenario: o/evaluation-single/both/smoteenn
-2025-02-14 11:44:59,023 - INFO - Loaded training features for KNN from o/evaluation-single/both/smoteenn/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 11:44:59,033 - INFO - Combined train+predict data shape for KNN: (7807, 1340)
-2025-02-14 11:46:04,811 - INFO - KNN-imputed new data shape: (1562, 1340)
-2025-02-14 11:46:04,985 - INFO - Predictions saved at: predictions/evaluation-single/knn_both_smoteenn.csv
-2025-02-14 11:46:04,986 - INFO - Prediction script completed successfully.
-2025-02-14 11:46:05,961 - INFO - Started prediction script
-2025-02-14 11:46:05,981 - INFO - Data loaded from 'o/evaluation-single/both/smotetomek/validation_data_original.json', total records: 1562
-2025-02-14 11:46:06,012 - INFO - Preprocessed DataFrame shape: (1562, 60)
-2025-02-14 11:46:06,014 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 11:46:06,085 - INFO - Loaded XGBoost model from o/evaluation-single/both/smotetomek/xgboost_model.json
-2025-02-14 11:46:06,099 - INFO - Building features for single-model scenario: o/evaluation-single/both/smotetomek
-2025-02-14 11:46:06,324 - INFO - Loaded training features for KNN from o/evaluation-single/both/smotetomek/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 11:46:06,331 - INFO - Combined train+predict data shape for KNN: (7807, 1340)
-2025-02-14 11:47:12,345 - INFO - KNN-imputed new data shape: (1562, 1340)
-2025-02-14 11:47:12,516 - INFO - Predictions saved at: predictions/evaluation-single/knn_both_smotetomek.csv
-2025-02-14 11:47:12,516 - INFO - Prediction script completed successfully.
-2025-02-14 13:04:02,374 - INFO - Started prediction script
-2025-02-14 13:04:02,397 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/none/validation_data_original.json', total records: 1562
-2025-02-14 13:04:02,431 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:04:02,436 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:04:02,469 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/none/xgboost_model.json
-2025-02-14 13:04:02,483 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/none
-2025-02-14 13:04:02,783 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_pubchem-else-rdkit_none.csv
-2025-02-14 13:04:02,783 - INFO - Prediction script completed successfully.
-2025-02-14 13:04:03,497 - INFO - Started prediction script
-2025-02-14 13:04:03,553 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smote/validation_data_original.json', total records: 1562
-2025-02-14 13:04:03,585 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:04:03,588 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:04:03,694 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smote/xgboost_model.json
-2025-02-14 13:04:03,707 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smote
-2025-02-14 13:04:03,998 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_pubchem-else-rdkit_smote.csv
-2025-02-14 13:04:03,998 - INFO - Prediction script completed successfully.
-2025-02-14 13:04:04,715 - INFO - Started prediction script
-2025-02-14 13:04:04,736 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smoteenn/validation_data_original.json', total records: 1562
-2025-02-14 13:04:04,766 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:04:04,768 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:04:04,829 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smoteenn/xgboost_model.json
-2025-02-14 13:04:04,843 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smoteenn
-2025-02-14 13:04:05,111 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_pubchem-else-rdkit_smoteenn.csv
-2025-02-14 13:04:05,111 - INFO - Prediction script completed successfully.
-2025-02-14 13:04:05,839 - INFO - Started prediction script
-2025-02-14 13:04:05,861 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smotetomek/validation_data_original.json', total records: 1562
-2025-02-14 13:04:05,891 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:04:05,893 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:04:05,964 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smotetomek/xgboost_model.json
-2025-02-14 13:04:05,978 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smotetomek
-2025-02-14 13:04:06,314 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_pubchem-else-rdkit_smotetomek.csv
-2025-02-14 13:04:06,314 - INFO - Prediction script completed successfully.
-2025-02-14 13:04:07,069 - INFO - Started prediction script
-2025-02-14 13:04:07,089 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/none/validation_data_original.json', total records: 1562
-2025-02-14 13:04:07,121 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:04:07,123 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:04:07,149 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/none/xgboost_model.json
-2025-02-14 13:04:07,161 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/none
-2025-02-14 13:04:07,446 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-else-rdkit/none/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:04:07,466 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 13:05:10,547 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 13:05:10,712 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_pubchem-else-rdkit_none.csv
-2025-02-14 13:05:10,712 - INFO - Prediction script completed successfully.
-2025-02-14 13:05:11,693 - INFO - Started prediction script
-2025-02-14 13:05:11,714 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smote/validation_data_original.json', total records: 1562
-2025-02-14 13:05:11,743 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:05:11,745 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:05:11,850 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smote/xgboost_model.json
-2025-02-14 13:05:11,864 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smote
-2025-02-14 13:05:12,099 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-else-rdkit/smote/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:05:12,109 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 13:06:14,001 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 13:06:14,171 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_pubchem-else-rdkit_smote.csv
-2025-02-14 13:06:14,171 - INFO - Prediction script completed successfully.
-2025-02-14 13:06:15,151 - INFO - Started prediction script
-2025-02-14 13:06:15,172 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smoteenn/validation_data_original.json', total records: 1562
-2025-02-14 13:06:15,201 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:06:15,204 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:06:15,262 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smoteenn/xgboost_model.json
-2025-02-14 13:06:15,276 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smoteenn
-2025-02-14 13:06:15,510 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-else-rdkit/smoteenn/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:06:15,520 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 13:07:17,735 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 13:07:17,908 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_pubchem-else-rdkit_smoteenn.csv
-2025-02-14 13:07:17,908 - INFO - Prediction script completed successfully.
-2025-02-14 13:07:18,884 - INFO - Started prediction script
-2025-02-14 13:07:18,905 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smotetomek/validation_data_original.json', total records: 1562
-2025-02-14 13:07:18,934 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:07:18,937 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:07:19,008 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smotetomek/xgboost_model.json
-2025-02-14 13:07:19,021 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smotetomek
-2025-02-14 13:07:19,258 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-else-rdkit/smotetomek/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:07:19,268 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 13:08:23,346 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 13:08:23,582 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_pubchem-else-rdkit_smotetomek.csv
-2025-02-14 13:08:23,582 - INFO - Prediction script completed successfully.
-2025-02-14 13:08:24,844 - INFO - Started prediction script
-2025-02-14 13:08:24,865 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/none/validation_data_original.json', total records: 1562
-2025-02-14 13:08:24,898 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:08:24,900 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:08:24,993 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/none/xgboost_model.json
-2025-02-14 13:08:25,006 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/none
-2025-02-14 13:08:25,283 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_rdkit-only_none.csv
-2025-02-14 13:08:25,284 - INFO - Prediction script completed successfully.
-2025-02-14 13:08:25,992 - INFO - Started prediction script
-2025-02-14 13:08:26,013 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smote/validation_data_original.json', total records: 1562
-2025-02-14 13:08:26,042 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:08:26,044 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:08:26,135 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smote/xgboost_model.json
-2025-02-14 13:08:26,148 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smote
-2025-02-14 13:08:26,419 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_rdkit-only_smote.csv
-2025-02-14 13:08:26,420 - INFO - Prediction script completed successfully.
-2025-02-14 13:08:27,135 - INFO - Started prediction script
-2025-02-14 13:08:27,156 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smoteenn/validation_data_original.json', total records: 1562
-2025-02-14 13:08:27,186 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:08:27,188 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:08:27,244 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smoteenn/xgboost_model.json
-2025-02-14 13:08:27,257 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smoteenn
-2025-02-14 13:08:27,527 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_rdkit-only_smoteenn.csv
-2025-02-14 13:08:27,527 - INFO - Prediction script completed successfully.
-2025-02-14 13:08:28,238 - INFO - Started prediction script
-2025-02-14 13:08:28,259 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smotetomek/validation_data_original.json', total records: 1562
-2025-02-14 13:08:28,287 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:08:28,289 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:08:28,385 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smotetomek/xgboost_model.json
-2025-02-14 13:08:28,398 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smotetomek
-2025-02-14 13:08:28,671 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_rdkit-only_smotetomek.csv
-2025-02-14 13:08:28,671 - INFO - Prediction script completed successfully.
-2025-02-14 13:08:29,383 - INFO - Started prediction script
-2025-02-14 13:08:29,402 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/none/validation_data_original.json', total records: 1562
-2025-02-14 13:08:29,432 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:08:29,434 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:08:29,525 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/none/xgboost_model.json
-2025-02-14 13:08:29,536 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/none
-2025-02-14 13:08:29,762 - INFO - Loaded training features for KNN from o/evaluation-single/rdkit-only/none/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:08:29,779 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 13:09:32,707 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 13:09:32,880 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_rdkit-only_none.csv
-2025-02-14 13:09:32,880 - INFO - Prediction script completed successfully.
-2025-02-14 13:09:33,796 - INFO - Started prediction script
-2025-02-14 13:09:33,816 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smote/validation_data_original.json', total records: 1562
-2025-02-14 13:09:33,845 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:09:33,847 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:09:33,935 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smote/xgboost_model.json
-2025-02-14 13:09:33,948 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smote
-2025-02-14 13:09:34,170 - INFO - Loaded training features for KNN from o/evaluation-single/rdkit-only/smote/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:09:34,179 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 13:10:38,744 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 13:10:38,916 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_rdkit-only_smote.csv
-2025-02-14 13:10:38,916 - INFO - Prediction script completed successfully.
-2025-02-14 13:10:39,902 - INFO - Started prediction script
-2025-02-14 13:10:39,923 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smoteenn/validation_data_original.json', total records: 1562
-2025-02-14 13:10:39,952 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:10:39,954 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:10:40,010 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smoteenn/xgboost_model.json
-2025-02-14 13:10:40,023 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smoteenn
-2025-02-14 13:10:40,252 - INFO - Loaded training features for KNN from o/evaluation-single/rdkit-only/smoteenn/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:10:40,262 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 13:11:43,979 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 13:11:44,155 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_rdkit-only_smoteenn.csv
-2025-02-14 13:11:44,155 - INFO - Prediction script completed successfully.
-2025-02-14 13:11:45,137 - INFO - Started prediction script
-2025-02-14 13:11:45,157 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smotetomek/validation_data_original.json', total records: 1562
-2025-02-14 13:11:45,187 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:11:45,189 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:11:45,285 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smotetomek/xgboost_model.json
-2025-02-14 13:11:45,298 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smotetomek
-2025-02-14 13:11:45,524 - INFO - Loaded training features for KNN from o/evaluation-single/rdkit-only/smotetomek/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:11:45,534 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 13:12:48,697 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 13:12:48,872 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_rdkit-only_smotetomek.csv
-2025-02-14 13:12:48,872 - INFO - Prediction script completed successfully.
-2025-02-14 13:12:49,923 - INFO - Started prediction script
-2025-02-14 13:12:49,944 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/none/validation_data_original.json', total records: 1562
-2025-02-14 13:12:49,976 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:12:49,978 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:12:50,078 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/none/xgboost_model.json
-2025-02-14 13:12:50,092 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/none
-2025-02-14 13:12:50,368 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_pubchem-only_none.csv
-2025-02-14 13:12:50,369 - INFO - Prediction script completed successfully.
-2025-02-14 13:12:51,092 - INFO - Started prediction script
-2025-02-14 13:12:51,115 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smote/validation_data_original.json', total records: 1562
-2025-02-14 13:12:51,145 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:12:51,147 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:12:51,273 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smote/xgboost_model.json
-2025-02-14 13:12:51,286 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smote
-2025-02-14 13:12:51,559 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_pubchem-only_smote.csv
-2025-02-14 13:12:51,559 - INFO - Prediction script completed successfully.
-2025-02-14 13:12:52,284 - INFO - Started prediction script
-2025-02-14 13:12:52,306 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smoteenn/validation_data_original.json', total records: 1562
-2025-02-14 13:12:52,335 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:12:52,337 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:12:52,386 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smoteenn/xgboost_model.json
-2025-02-14 13:12:52,399 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smoteenn
-2025-02-14 13:12:52,667 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_pubchem-only_smoteenn.csv
-2025-02-14 13:12:52,667 - INFO - Prediction script completed successfully.
-2025-02-14 13:12:53,388 - INFO - Started prediction script
-2025-02-14 13:12:53,410 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smotetomek/validation_data_original.json', total records: 1562
-2025-02-14 13:12:53,439 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:12:53,441 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:12:53,532 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smotetomek/xgboost_model.json
-2025-02-14 13:12:53,545 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smotetomek
-2025-02-14 13:12:53,816 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_pubchem-only_smotetomek.csv
-2025-02-14 13:12:53,816 - INFO - Prediction script completed successfully.
-2025-02-14 13:12:54,543 - INFO - Started prediction script
-2025-02-14 13:12:54,563 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/none/validation_data_original.json', total records: 1562
-2025-02-14 13:12:54,593 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:12:54,595 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:12:54,692 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/none/xgboost_model.json
-2025-02-14 13:12:54,703 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/none
-2025-02-14 13:12:54,930 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-only/none/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:12:54,943 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 13:14:21,264 - INFO - Started prediction script
-2025-02-14 13:14:21,285 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/none/validation_data_original.json', total records: 1562
-2025-02-14 13:14:21,315 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:14:21,317 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:14:21,344 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/none/xgboost_model.json
-2025-02-14 13:14:21,358 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/none
-2025-02-14 13:14:21,642 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_pubchem-else-rdkit_none.csv
-2025-02-14 13:14:21,642 - INFO - Prediction script completed successfully.
-2025-02-14 13:14:22,356 - INFO - Started prediction script
-2025-02-14 13:14:22,378 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smote/validation_data_original.json', total records: 1562
-2025-02-14 13:14:22,407 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:14:22,410 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:14:22,514 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smote/xgboost_model.json
-2025-02-14 13:14:22,528 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smote
-2025-02-14 13:14:22,811 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_pubchem-else-rdkit_smote.csv
-2025-02-14 13:14:22,811 - INFO - Prediction script completed successfully.
-2025-02-14 13:14:23,529 - INFO - Started prediction script
-2025-02-14 13:14:23,550 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smoteenn/validation_data_original.json', total records: 1562
-2025-02-14 13:14:23,580 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:14:23,582 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:14:23,641 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smoteenn/xgboost_model.json
-2025-02-14 13:14:23,654 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smoteenn
-2025-02-14 13:14:23,926 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_pubchem-else-rdkit_smoteenn.csv
-2025-02-14 13:14:23,926 - INFO - Prediction script completed successfully.
-2025-02-14 13:14:24,632 - INFO - Started prediction script
-2025-02-14 13:14:24,654 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smotetomek/validation_data_original.json', total records: 1562
-2025-02-14 13:14:24,683 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:14:24,685 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:14:24,759 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smotetomek/xgboost_model.json
-2025-02-14 13:14:24,773 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smotetomek
-2025-02-14 13:14:25,042 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_pubchem-else-rdkit_smotetomek.csv
-2025-02-14 13:14:25,042 - INFO - Prediction script completed successfully.
-2025-02-14 13:14:25,748 - INFO - Started prediction script
-2025-02-14 13:14:25,767 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/none/validation_data_original.json', total records: 1562
-2025-02-14 13:14:25,796 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:14:25,798 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:14:25,822 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/none/xgboost_model.json
-2025-02-14 13:14:25,833 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/none
-2025-02-14 13:14:26,071 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-else-rdkit/none/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:14:26,091 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 13:15:31,834 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 13:15:32,000 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_pubchem-else-rdkit_none.csv
-2025-02-14 13:15:32,000 - INFO - Prediction script completed successfully.
-2025-02-14 13:15:33,023 - INFO - Started prediction script
-2025-02-14 13:15:33,044 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smote/validation_data_original.json', total records: 1562
-2025-02-14 13:15:33,074 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:15:33,077 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:15:33,185 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smote/xgboost_model.json
-2025-02-14 13:15:33,199 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smote
-2025-02-14 13:15:33,434 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-else-rdkit/smote/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:15:33,445 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 13:16:36,945 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 13:16:37,125 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_pubchem-else-rdkit_smote.csv
-2025-02-14 13:16:37,125 - INFO - Prediction script completed successfully.
-2025-02-14 13:16:38,102 - INFO - Started prediction script
-2025-02-14 13:16:38,123 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smoteenn/validation_data_original.json', total records: 1562
-2025-02-14 13:16:38,153 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:16:38,155 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:16:38,213 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smoteenn/xgboost_model.json
-2025-02-14 13:16:38,227 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smoteenn
-2025-02-14 13:16:38,463 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-else-rdkit/smoteenn/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:16:38,474 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 13:17:40,381 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 13:17:40,558 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_pubchem-else-rdkit_smoteenn.csv
-2025-02-14 13:17:40,558 - INFO - Prediction script completed successfully.
-2025-02-14 13:17:41,478 - INFO - Started prediction script
-2025-02-14 13:17:41,498 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smotetomek/validation_data_original.json', total records: 1562
-2025-02-14 13:17:41,528 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:17:41,530 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:17:41,601 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smotetomek/xgboost_model.json
-2025-02-14 13:17:41,615 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smotetomek
-2025-02-14 13:17:41,848 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-else-rdkit/smotetomek/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:17:41,859 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 13:18:43,976 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 13:18:44,151 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_pubchem-else-rdkit_smotetomek.csv
-2025-02-14 13:18:44,151 - INFO - Prediction script completed successfully.
-2025-02-14 13:18:45,124 - INFO - Started prediction script
-2025-02-14 13:18:45,144 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/none/validation_data_original.json', total records: 1562
-2025-02-14 13:18:45,173 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:18:45,176 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:18:45,268 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/none/xgboost_model.json
-2025-02-14 13:18:45,282 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/none
-2025-02-14 13:18:45,564 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_rdkit-only_none.csv
-2025-02-14 13:18:45,564 - INFO - Prediction script completed successfully.
-2025-02-14 13:18:46,269 - INFO - Started prediction script
-2025-02-14 13:18:46,290 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smote/validation_data_original.json', total records: 1562
-2025-02-14 13:18:46,319 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:18:46,321 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:18:46,411 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smote/xgboost_model.json
-2025-02-14 13:18:46,424 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smote
-2025-02-14 13:18:46,691 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_rdkit-only_smote.csv
-2025-02-14 13:18:46,691 - INFO - Prediction script completed successfully.
-2025-02-14 13:18:47,394 - INFO - Started prediction script
-2025-02-14 13:18:47,415 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smoteenn/validation_data_original.json', total records: 1562
-2025-02-14 13:18:47,444 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:18:47,446 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:18:47,501 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smoteenn/xgboost_model.json
-2025-02-14 13:18:47,513 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smoteenn
-2025-02-14 13:18:47,781 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_rdkit-only_smoteenn.csv
-2025-02-14 13:18:47,781 - INFO - Prediction script completed successfully.
-2025-02-14 13:18:48,482 - INFO - Started prediction script
-2025-02-14 13:18:48,503 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smotetomek/validation_data_original.json', total records: 1562
-2025-02-14 13:18:48,532 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:18:48,534 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:18:48,629 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smotetomek/xgboost_model.json
-2025-02-14 13:18:48,642 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smotetomek
-2025-02-14 13:18:48,914 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_rdkit-only_smotetomek.csv
-2025-02-14 13:18:48,914 - INFO - Prediction script completed successfully.
-2025-02-14 13:18:49,617 - INFO - Started prediction script
-2025-02-14 13:18:49,636 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/none/validation_data_original.json', total records: 1562
-2025-02-14 13:18:49,665 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:18:49,667 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:18:49,756 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/none/xgboost_model.json
-2025-02-14 13:18:49,767 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/none
-2025-02-14 13:18:49,992 - INFO - Loaded training features for KNN from o/evaluation-single/rdkit-only/none/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:18:50,001 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 13:19:52,012 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 13:19:52,186 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_rdkit-only_none.csv
-2025-02-14 13:19:52,187 - INFO - Prediction script completed successfully.
-2025-02-14 13:19:53,160 - INFO - Started prediction script
-2025-02-14 13:19:53,180 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smote/validation_data_original.json', total records: 1562
-2025-02-14 13:19:53,209 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:19:53,211 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:19:53,301 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smote/xgboost_model.json
-2025-02-14 13:19:53,314 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smote
-2025-02-14 13:19:53,540 - INFO - Loaded training features for KNN from o/evaluation-single/rdkit-only/smote/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:19:53,548 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 13:20:57,109 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 13:20:57,281 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_rdkit-only_smote.csv
-2025-02-14 13:20:57,281 - INFO - Prediction script completed successfully.
-2025-02-14 13:20:58,286 - INFO - Started prediction script
-2025-02-14 13:20:58,306 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smoteenn/validation_data_original.json', total records: 1562
-2025-02-14 13:20:58,337 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:20:58,339 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:20:58,394 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smoteenn/xgboost_model.json
-2025-02-14 13:20:58,407 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smoteenn
-2025-02-14 13:20:58,646 - INFO - Loaded training features for KNN from o/evaluation-single/rdkit-only/smoteenn/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:20:58,657 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 13:22:00,672 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 13:22:00,846 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_rdkit-only_smoteenn.csv
-2025-02-14 13:22:00,846 - INFO - Prediction script completed successfully.
-2025-02-14 13:22:01,759 - INFO - Started prediction script
-2025-02-14 13:22:01,779 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smotetomek/validation_data_original.json', total records: 1562
-2025-02-14 13:22:01,809 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:22:01,811 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:22:01,906 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smotetomek/xgboost_model.json
-2025-02-14 13:22:01,919 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smotetomek
-2025-02-14 13:22:02,150 - INFO - Loaded training features for KNN from o/evaluation-single/rdkit-only/smotetomek/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:22:02,161 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 13:23:05,279 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 13:23:05,458 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_rdkit-only_smotetomek.csv
-2025-02-14 13:23:05,458 - INFO - Prediction script completed successfully.
-2025-02-14 13:23:06,367 - INFO - Started prediction script
-2025-02-14 13:23:06,388 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/none/validation_data_original.json', total records: 1562
-2025-02-14 13:23:06,418 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:23:06,420 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:23:06,520 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/none/xgboost_model.json
-2025-02-14 13:23:06,534 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/none
-2025-02-14 13:23:06,832 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_pubchem-only_none.csv
-2025-02-14 13:23:06,832 - INFO - Prediction script completed successfully.
-2025-02-14 13:23:07,544 - INFO - Started prediction script
-2025-02-14 13:23:07,565 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smote/validation_data_original.json', total records: 1562
-2025-02-14 13:23:07,595 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:23:07,597 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:23:07,719 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smote/xgboost_model.json
-2025-02-14 13:23:07,733 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smote
-2025-02-14 13:23:08,006 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_pubchem-only_smote.csv
-2025-02-14 13:23:08,006 - INFO - Prediction script completed successfully.
-2025-02-14 13:23:08,711 - INFO - Started prediction script
-2025-02-14 13:23:08,733 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smoteenn/validation_data_original.json', total records: 1562
-2025-02-14 13:23:08,762 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:23:08,764 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:23:08,819 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smoteenn/xgboost_model.json
-2025-02-14 13:23:08,832 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smoteenn
-2025-02-14 13:23:09,106 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_pubchem-only_smoteenn.csv
-2025-02-14 13:23:09,106 - INFO - Prediction script completed successfully.
-2025-02-14 13:23:09,810 - INFO - Started prediction script
-2025-02-14 13:23:09,831 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smotetomek/validation_data_original.json', total records: 1562
-2025-02-14 13:23:09,860 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:23:09,863 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:23:09,953 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smotetomek/xgboost_model.json
-2025-02-14 13:23:09,966 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smotetomek
-2025-02-14 13:23:10,238 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_pubchem-only_smotetomek.csv
-2025-02-14 13:23:10,238 - INFO - Prediction script completed successfully.
-2025-02-14 13:23:10,941 - INFO - Started prediction script
-2025-02-14 13:23:10,960 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/none/validation_data_original.json', total records: 1562
-2025-02-14 13:23:10,990 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:23:10,992 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:23:11,089 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/none/xgboost_model.json
-2025-02-14 13:23:11,100 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/none
-2025-02-14 13:23:11,326 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-only/none/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:23:11,336 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 13:24:13,821 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 13:24:14,002 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_pubchem-only_none.csv
-2025-02-14 13:24:14,002 - INFO - Prediction script completed successfully.
-2025-02-14 13:24:15,001 - INFO - Started prediction script
-2025-02-14 13:24:15,022 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smote/validation_data_original.json', total records: 1562
-2025-02-14 13:24:15,051 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:24:15,054 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:24:15,177 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smote/xgboost_model.json
-2025-02-14 13:24:15,191 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smote
-2025-02-14 13:24:15,427 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-only/smote/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:24:15,436 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 13:25:18,605 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 13:25:18,786 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_pubchem-only_smote.csv
-2025-02-14 13:25:18,786 - INFO - Prediction script completed successfully.
-2025-02-14 13:25:19,763 - INFO - Started prediction script
-2025-02-14 13:25:19,784 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smoteenn/validation_data_original.json', total records: 1562
-2025-02-14 13:25:19,814 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:25:19,816 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:25:19,866 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smoteenn/xgboost_model.json
-2025-02-14 13:25:19,879 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smoteenn
-2025-02-14 13:25:20,113 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-only/smoteenn/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:25:20,123 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 13:26:22,983 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 13:26:23,156 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_pubchem-only_smoteenn.csv
-2025-02-14 13:26:23,157 - INFO - Prediction script completed successfully.
-2025-02-14 13:26:24,182 - INFO - Started prediction script
-2025-02-14 13:26:24,203 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smotetomek/validation_data_original.json', total records: 1562
-2025-02-14 13:26:24,233 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:26:24,235 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:26:24,327 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smotetomek/xgboost_model.json
-2025-02-14 13:26:24,343 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smotetomek
-2025-02-14 13:26:24,577 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-only/smotetomek/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:26:24,587 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 13:27:28,608 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 13:27:28,782 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_pubchem-only_smotetomek.csv
-2025-02-14 13:27:28,782 - INFO - Prediction script completed successfully.
-2025-02-14 13:27:29,774 - INFO - Started prediction script
-2025-02-14 13:27:29,795 - INFO - Data loaded from 'o/evaluation-single/avg/none/validation_data_original.json', total records: 1562
-2025-02-14 13:27:29,825 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:27:29,827 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:27:29,932 - INFO - Loaded XGBoost model from o/evaluation-single/avg/none/xgboost_model.json
-2025-02-14 13:27:29,945 - INFO - Building features for single-model scenario: o/evaluation-single/avg/none
-2025-02-14 13:27:30,217 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_avg_none.csv
-2025-02-14 13:27:30,217 - INFO - Prediction script completed successfully.
-2025-02-14 13:27:30,923 - INFO - Started prediction script
-2025-02-14 13:27:30,944 - INFO - Data loaded from 'o/evaluation-single/avg/smote/validation_data_original.json', total records: 1562
-2025-02-14 13:27:30,974 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:27:30,976 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:27:31,099 - INFO - Loaded XGBoost model from o/evaluation-single/avg/smote/xgboost_model.json
-2025-02-14 13:27:31,112 - INFO - Building features for single-model scenario: o/evaluation-single/avg/smote
-2025-02-14 13:27:31,388 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_avg_smote.csv
-2025-02-14 13:27:31,388 - INFO - Prediction script completed successfully.
-2025-02-14 13:27:32,095 - INFO - Started prediction script
-2025-02-14 13:27:32,116 - INFO - Data loaded from 'o/evaluation-single/avg/smoteenn/validation_data_original.json', total records: 1562
-2025-02-14 13:27:32,146 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:27:32,148 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:27:32,197 - INFO - Loaded XGBoost model from o/evaluation-single/avg/smoteenn/xgboost_model.json
-2025-02-14 13:27:32,211 - INFO - Building features for single-model scenario: o/evaluation-single/avg/smoteenn
-2025-02-14 13:27:32,478 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_avg_smoteenn.csv
-2025-02-14 13:27:32,478 - INFO - Prediction script completed successfully.
-2025-02-14 13:27:33,183 - INFO - Started prediction script
-2025-02-14 13:27:33,204 - INFO - Data loaded from 'o/evaluation-single/avg/smotetomek/validation_data_original.json', total records: 1562
-2025-02-14 13:27:33,233 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:27:33,235 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:27:33,327 - INFO - Loaded XGBoost model from o/evaluation-single/avg/smotetomek/xgboost_model.json
-2025-02-14 13:27:33,341 - INFO - Building features for single-model scenario: o/evaluation-single/avg/smotetomek
-2025-02-14 13:27:33,612 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_avg_smotetomek.csv
-2025-02-14 13:27:33,612 - INFO - Prediction script completed successfully.
-2025-02-14 13:27:34,316 - INFO - Started prediction script
-2025-02-14 13:27:34,335 - INFO - Data loaded from 'o/evaluation-single/avg/none/validation_data_original.json', total records: 1562
-2025-02-14 13:27:34,365 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:27:34,367 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:27:34,469 - INFO - Loaded XGBoost model from o/evaluation-single/avg/none/xgboost_model.json
-2025-02-14 13:27:34,480 - INFO - Building features for single-model scenario: o/evaluation-single/avg/none
-2025-02-14 13:27:34,710 - INFO - Loaded training features for KNN from o/evaluation-single/avg/none/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:27:34,719 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 13:28:38,361 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 13:28:38,540 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_avg_none.csv
-2025-02-14 13:28:38,540 - INFO - Prediction script completed successfully.
-2025-02-14 13:28:39,526 - INFO - Started prediction script
-2025-02-14 13:28:39,547 - INFO - Data loaded from 'o/evaluation-single/avg/smote/validation_data_original.json', total records: 1562
-2025-02-14 13:28:39,577 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:28:39,579 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:28:39,704 - INFO - Loaded XGBoost model from o/evaluation-single/avg/smote/xgboost_model.json
-2025-02-14 13:28:39,718 - INFO - Building features for single-model scenario: o/evaluation-single/avg/smote
-2025-02-14 13:28:39,944 - INFO - Loaded training features for KNN from o/evaluation-single/avg/smote/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:28:39,955 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 13:29:46,779 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 13:29:46,959 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_avg_smote.csv
-2025-02-14 13:29:46,959 - INFO - Prediction script completed successfully.
-2025-02-14 13:29:48,021 - INFO - Started prediction script
-2025-02-14 13:29:48,042 - INFO - Data loaded from 'o/evaluation-single/avg/smoteenn/validation_data_original.json', total records: 1562
-2025-02-14 13:29:48,072 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:29:48,075 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:29:48,124 - INFO - Loaded XGBoost model from o/evaluation-single/avg/smoteenn/xgboost_model.json
-2025-02-14 13:29:48,138 - INFO - Building features for single-model scenario: o/evaluation-single/avg/smoteenn
-2025-02-14 13:29:48,377 - INFO - Loaded training features for KNN from o/evaluation-single/avg/smoteenn/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:29:48,389 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 13:30:53,031 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 13:30:53,204 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_avg_smoteenn.csv
-2025-02-14 13:30:53,204 - INFO - Prediction script completed successfully.
-2025-02-14 13:30:54,189 - INFO - Started prediction script
-2025-02-14 13:30:54,209 - INFO - Data loaded from 'o/evaluation-single/avg/smotetomek/validation_data_original.json', total records: 1562
-2025-02-14 13:30:54,238 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:30:54,240 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:30:54,330 - INFO - Loaded XGBoost model from o/evaluation-single/avg/smotetomek/xgboost_model.json
-2025-02-14 13:30:54,344 - INFO - Building features for single-model scenario: o/evaluation-single/avg/smotetomek
-2025-02-14 13:30:54,567 - INFO - Loaded training features for KNN from o/evaluation-single/avg/smotetomek/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:30:54,577 - INFO - Combined train+predict data shape for KNN: (7807, 1327)
-2025-02-14 13:32:00,821 - INFO - KNN-imputed new data shape: (1562, 1327)
-2025-02-14 13:32:00,996 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_avg_smotetomek.csv
-2025-02-14 13:32:00,996 - INFO - Prediction script completed successfully.
-2025-02-14 13:38:07,742 - INFO - Started prediction script
-2025-02-14 13:38:07,765 - INFO - Data loaded from 'o/evaluation-single/both/none/validation_data_original.json', total records: 1562
-2025-02-14 13:38:07,800 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:38:07,804 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:38:07,915 - INFO - Loaded XGBoost model from o/evaluation-single/both/none/xgboost_model.json
-2025-02-14 13:38:07,928 - INFO - Building features for single-model scenario: o/evaluation-single/both/none
-2025-02-14 13:38:08,239 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_both_none.csv
-2025-02-14 13:38:08,240 - INFO - Prediction script completed successfully.
-2025-02-14 13:38:08,987 - INFO - Started prediction script
-2025-02-14 13:38:09,007 - INFO - Data loaded from 'o/evaluation-single/both/smote/validation_data_original.json', total records: 1562
-2025-02-14 13:38:09,037 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:38:09,039 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:38:09,145 - INFO - Loaded XGBoost model from o/evaluation-single/both/smote/xgboost_model.json
-2025-02-14 13:38:09,158 - INFO - Building features for single-model scenario: o/evaluation-single/both/smote
-2025-02-14 13:38:09,442 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_both_smote.csv
-2025-02-14 13:38:09,442 - INFO - Prediction script completed successfully.
-2025-02-14 13:38:10,153 - INFO - Started prediction script
-2025-02-14 13:38:10,174 - INFO - Data loaded from 'o/evaluation-single/both/smoteenn/validation_data_original.json', total records: 1562
-2025-02-14 13:38:10,204 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:38:10,206 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:38:10,265 - INFO - Loaded XGBoost model from o/evaluation-single/both/smoteenn/xgboost_model.json
-2025-02-14 13:38:10,278 - INFO - Building features for single-model scenario: o/evaluation-single/both/smoteenn
-2025-02-14 13:38:10,553 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_both_smoteenn.csv
-2025-02-14 13:38:10,553 - INFO - Prediction script completed successfully.
-2025-02-14 13:38:11,269 - INFO - Started prediction script
-2025-02-14 13:38:11,290 - INFO - Data loaded from 'o/evaluation-single/both/smotetomek/validation_data_original.json', total records: 1562
-2025-02-14 13:38:11,320 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:38:11,324 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:38:11,395 - INFO - Loaded XGBoost model from o/evaluation-single/both/smotetomek/xgboost_model.json
-2025-02-14 13:38:11,408 - INFO - Building features for single-model scenario: o/evaluation-single/both/smotetomek
-2025-02-14 13:38:11,765 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_both_smotetomek.csv
-2025-02-14 13:38:11,765 - INFO - Prediction script completed successfully.
-2025-02-14 13:38:12,493 - INFO - Started prediction script
-2025-02-14 13:38:12,512 - INFO - Data loaded from 'o/evaluation-single/both/none/validation_data_original.json', total records: 1562
-2025-02-14 13:38:12,541 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:38:12,543 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:38:12,641 - INFO - Loaded XGBoost model from o/evaluation-single/both/none/xgboost_model.json
-2025-02-14 13:38:12,652 - INFO - Building features for single-model scenario: o/evaluation-single/both/none
-2025-02-14 13:38:12,921 - INFO - Loaded training features for KNN from o/evaluation-single/both/none/train_matrix.csv, shape: (6245, 1332)
-2025-02-14 13:38:12,939 - INFO - Combined train+predict data shape for KNN: (7807, 1333)
-2025-02-14 13:39:17,120 - INFO - KNN-imputed new data shape: (1562, 1333)
-2025-02-14 13:39:17,295 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_both_none.csv
-2025-02-14 13:39:17,295 - INFO - Prediction script completed successfully.
-2025-02-14 13:39:18,276 - INFO - Started prediction script
-2025-02-14 13:39:18,296 - INFO - Data loaded from 'o/evaluation-single/both/smote/validation_data_original.json', total records: 1562
-2025-02-14 13:39:18,326 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:39:18,328 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:39:18,432 - INFO - Loaded XGBoost model from o/evaluation-single/both/smote/xgboost_model.json
-2025-02-14 13:39:18,445 - INFO - Building features for single-model scenario: o/evaluation-single/both/smote
-2025-02-14 13:39:18,677 - INFO - Loaded training features for KNN from o/evaluation-single/both/smote/train_matrix.csv, shape: (6245, 1332)
-2025-02-14 13:39:18,687 - INFO - Combined train+predict data shape for KNN: (7807, 1333)
-2025-02-14 13:40:23,907 - INFO - KNN-imputed new data shape: (1562, 1333)
-2025-02-14 13:40:24,085 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_both_smote.csv
-2025-02-14 13:40:24,085 - INFO - Prediction script completed successfully.
-2025-02-14 13:40:25,069 - INFO - Started prediction script
-2025-02-14 13:40:25,089 - INFO - Data loaded from 'o/evaluation-single/both/smoteenn/validation_data_original.json', total records: 1562
-2025-02-14 13:40:25,119 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:40:25,121 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:40:25,180 - INFO - Loaded XGBoost model from o/evaluation-single/both/smoteenn/xgboost_model.json
-2025-02-14 13:40:25,193 - INFO - Building features for single-model scenario: o/evaluation-single/both/smoteenn
-2025-02-14 13:40:25,425 - INFO - Loaded training features for KNN from o/evaluation-single/both/smoteenn/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:40:25,436 - INFO - Combined train+predict data shape for KNN: (7807, 1333)
-2025-02-14 13:41:31,274 - INFO - KNN-imputed new data shape: (1562, 1333)
-2025-02-14 13:41:31,458 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_both_smoteenn.csv
-2025-02-14 13:41:31,458 - INFO - Prediction script completed successfully.
-2025-02-14 13:41:32,508 - INFO - Started prediction script
-2025-02-14 13:41:32,529 - INFO - Data loaded from 'o/evaluation-single/both/smotetomek/validation_data_original.json', total records: 1562
-2025-02-14 13:41:32,564 - INFO - Preprocessed DataFrame shape: (1562, 53)
-2025-02-14 13:41:32,567 - INFO - No valid subfolders found. Checking single-model scenario at top level...
-2025-02-14 13:41:32,644 - INFO - Loaded XGBoost model from o/evaluation-single/both/smotetomek/xgboost_model.json
-2025-02-14 13:41:32,657 - INFO - Building features for single-model scenario: o/evaluation-single/both/smotetomek
-2025-02-14 13:41:32,894 - INFO - Loaded training features for KNN from o/evaluation-single/both/smotetomek/train_matrix.csv, shape: (6245, 1325)
-2025-02-14 13:41:32,905 - INFO - Combined train+predict data shape for KNN: (7807, 1333)
-2025-02-14 13:42:41,520 - INFO - KNN-imputed new data shape: (1562, 1333)
-2025-02-14 13:42:41,697 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_both_smotetomek.csv
-2025-02-14 13:42:41,697 - INFO - Prediction script completed successfully.
+2025-02-14 17:28:59,269 - INFO - Started prediction script
+2025-02-14 17:28:59,290 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/none/validation_data_original.json', total records: 1562
+2025-02-14 17:28:59,321 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:28:59,324 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:28:59,372 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/none/xgboost_model.json
+2025-02-14 17:28:59,384 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/none
+2025-02-14 17:28:59,630 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_pubchem-else-rdkit_none.csv
+2025-02-14 17:28:59,631 - INFO - Prediction script completed successfully.
+2025-02-14 17:29:00,348 - INFO - Started prediction script
+2025-02-14 17:29:00,369 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smote/validation_data_original.json', total records: 1562
+2025-02-14 17:29:00,399 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:29:00,403 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:29:00,508 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smote/xgboost_model.json
+2025-02-14 17:29:00,521 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smote
+2025-02-14 17:29:00,776 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_pubchem-else-rdkit_smote.csv
+2025-02-14 17:29:00,776 - INFO - Prediction script completed successfully.
+2025-02-14 17:29:01,483 - INFO - Started prediction script
+2025-02-14 17:29:01,504 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smoteenn/validation_data_original.json', total records: 1562
+2025-02-14 17:29:01,533 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:29:01,536 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:29:01,594 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smoteenn/xgboost_model.json
+2025-02-14 17:29:01,606 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smoteenn
+2025-02-14 17:29:01,859 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_pubchem-else-rdkit_smoteenn.csv
+2025-02-14 17:29:01,859 - INFO - Prediction script completed successfully.
+2025-02-14 17:29:02,562 - INFO - Started prediction script
+2025-02-14 17:29:02,583 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smotetomek/validation_data_original.json', total records: 1562
+2025-02-14 17:29:02,613 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:29:02,615 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:29:02,684 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smotetomek/xgboost_model.json
+2025-02-14 17:29:02,695 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smotetomek
+2025-02-14 17:29:02,949 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_pubchem-else-rdkit_smotetomek.csv
+2025-02-14 17:29:02,949 - INFO - Prediction script completed successfully.
+2025-02-14 17:29:03,657 - INFO - Started prediction script
+2025-02-14 17:29:03,677 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/none/validation_data_original.json', total records: 1562
+2025-02-14 17:29:03,707 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:29:03,709 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:29:03,733 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/none/xgboost_model.json
+2025-02-14 17:29:03,744 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/none
+2025-02-14 17:29:04,002 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-else-rdkit/none/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:29:04,020 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:29:17,737 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:29:17,891 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_pubchem-else-rdkit_none.csv
+2025-02-14 17:29:17,891 - INFO - Prediction script completed successfully.
+2025-02-14 17:29:18,809 - INFO - Started prediction script
+2025-02-14 17:29:18,829 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smote/validation_data_original.json', total records: 1562
+2025-02-14 17:29:18,858 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:29:18,860 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:29:18,964 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smote/xgboost_model.json
+2025-02-14 17:29:18,977 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smote
+2025-02-14 17:29:19,194 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-else-rdkit/smote/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:29:19,201 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:29:32,501 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:29:32,661 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_pubchem-else-rdkit_smote.csv
+2025-02-14 17:29:32,661 - INFO - Prediction script completed successfully.
+2025-02-14 17:29:33,613 - INFO - Started prediction script
+2025-02-14 17:29:33,634 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smoteenn/validation_data_original.json', total records: 1562
+2025-02-14 17:29:33,664 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:29:33,666 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:29:33,724 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smoteenn/xgboost_model.json
+2025-02-14 17:29:33,737 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smoteenn
+2025-02-14 17:29:33,961 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-else-rdkit/smoteenn/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:29:33,971 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:29:47,074 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:29:47,236 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_pubchem-else-rdkit_smoteenn.csv
+2025-02-14 17:29:47,236 - INFO - Prediction script completed successfully.
+2025-02-14 17:29:47,953 - INFO - Started prediction script
+2025-02-14 17:29:47,974 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smotetomek/validation_data_original.json', total records: 1562
+2025-02-14 17:29:48,003 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:29:48,006 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:29:48,075 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smotetomek/xgboost_model.json
+2025-02-14 17:29:48,088 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smotetomek
+2025-02-14 17:29:48,311 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-else-rdkit/smotetomek/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:29:48,320 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:30:01,318 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:30:01,480 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_pubchem-else-rdkit_smotetomek.csv
+2025-02-14 17:30:01,480 - INFO - Prediction script completed successfully.
+2025-02-14 17:30:02,402 - INFO - Started prediction script
+2025-02-14 17:30:02,422 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/none/validation_data_original.json', total records: 1562
+2025-02-14 17:30:02,451 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:30:02,454 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:30:02,546 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/none/xgboost_model.json
+2025-02-14 17:30:02,559 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/none
+2025-02-14 17:30:02,808 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_rdkit-only_none.csv
+2025-02-14 17:30:02,808 - INFO - Prediction script completed successfully.
+2025-02-14 17:30:03,508 - INFO - Started prediction script
+2025-02-14 17:30:03,529 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smote/validation_data_original.json', total records: 1562
+2025-02-14 17:30:03,558 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:30:03,561 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:30:03,650 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smote/xgboost_model.json
+2025-02-14 17:30:03,663 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smote
+2025-02-14 17:30:03,913 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_rdkit-only_smote.csv
+2025-02-14 17:30:03,913 - INFO - Prediction script completed successfully.
+2025-02-14 17:30:04,617 - INFO - Started prediction script
+2025-02-14 17:30:04,638 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smoteenn/validation_data_original.json', total records: 1562
+2025-02-14 17:30:04,667 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:30:04,669 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:30:04,724 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smoteenn/xgboost_model.json
+2025-02-14 17:30:04,738 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smoteenn
+2025-02-14 17:30:04,986 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_rdkit-only_smoteenn.csv
+2025-02-14 17:30:04,986 - INFO - Prediction script completed successfully.
+2025-02-14 17:30:05,690 - INFO - Started prediction script
+2025-02-14 17:30:05,711 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smotetomek/validation_data_original.json', total records: 1562
+2025-02-14 17:30:05,740 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:30:05,742 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:30:05,837 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smotetomek/xgboost_model.json
+2025-02-14 17:30:05,851 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smotetomek
+2025-02-14 17:30:06,102 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_rdkit-only_smotetomek.csv
+2025-02-14 17:30:06,102 - INFO - Prediction script completed successfully.
+2025-02-14 17:30:06,806 - INFO - Started prediction script
+2025-02-14 17:30:06,825 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/none/validation_data_original.json', total records: 1562
+2025-02-14 17:30:06,854 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:30:06,856 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:30:06,946 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/none/xgboost_model.json
+2025-02-14 17:30:06,957 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/none
+2025-02-14 17:30:07,178 - INFO - Loaded training features for KNN from o/evaluation-single/rdkit-only/none/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:30:07,187 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:30:20,203 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:30:20,372 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_rdkit-only_none.csv
+2025-02-14 17:30:20,372 - INFO - Prediction script completed successfully.
+2025-02-14 17:30:21,278 - INFO - Started prediction script
+2025-02-14 17:30:21,298 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smote/validation_data_original.json', total records: 1562
+2025-02-14 17:30:21,327 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:30:21,329 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:30:21,419 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smote/xgboost_model.json
+2025-02-14 17:30:21,432 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smote
+2025-02-14 17:30:21,654 - INFO - Loaded training features for KNN from o/evaluation-single/rdkit-only/smote/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:30:21,662 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:30:34,805 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:30:34,966 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_rdkit-only_smote.csv
+2025-02-14 17:30:34,966 - INFO - Prediction script completed successfully.
+2025-02-14 17:30:35,903 - INFO - Started prediction script
+2025-02-14 17:30:35,923 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smoteenn/validation_data_original.json', total records: 1562
+2025-02-14 17:30:35,953 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:30:35,955 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:30:36,010 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smoteenn/xgboost_model.json
+2025-02-14 17:30:36,023 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smoteenn
+2025-02-14 17:30:36,247 - INFO - Loaded training features for KNN from o/evaluation-single/rdkit-only/smoteenn/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:30:36,255 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:30:49,396 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:30:49,557 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_rdkit-only_smoteenn.csv
+2025-02-14 17:30:49,557 - INFO - Prediction script completed successfully.
+2025-02-14 17:30:50,430 - INFO - Started prediction script
+2025-02-14 17:30:50,451 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smotetomek/validation_data_original.json', total records: 1562
+2025-02-14 17:30:50,480 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:30:50,483 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:30:50,578 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smotetomek/xgboost_model.json
+2025-02-14 17:30:50,592 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smotetomek
+2025-02-14 17:30:50,814 - INFO - Loaded training features for KNN from o/evaluation-single/rdkit-only/smotetomek/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:30:50,823 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:31:03,968 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:31:04,132 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_rdkit-only_smotetomek.csv
+2025-02-14 17:31:04,132 - INFO - Prediction script completed successfully.
+2025-02-14 17:31:05,066 - INFO - Started prediction script
+2025-02-14 17:31:05,087 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/none/validation_data_original.json', total records: 1562
+2025-02-14 17:31:05,116 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:31:05,118 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:31:05,223 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/none/xgboost_model.json
+2025-02-14 17:31:05,236 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/none
+2025-02-14 17:31:05,486 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_pubchem-only_none.csv
+2025-02-14 17:31:05,486 - INFO - Prediction script completed successfully.
+2025-02-14 17:31:06,189 - INFO - Started prediction script
+2025-02-14 17:31:06,210 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smote/validation_data_original.json', total records: 1562
+2025-02-14 17:31:06,239 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:31:06,241 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:31:06,363 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smote/xgboost_model.json
+2025-02-14 17:31:06,376 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smote
+2025-02-14 17:31:06,629 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_pubchem-only_smote.csv
+2025-02-14 17:31:06,629 - INFO - Prediction script completed successfully.
+2025-02-14 17:31:07,329 - INFO - Started prediction script
+2025-02-14 17:31:07,350 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smoteenn/validation_data_original.json', total records: 1562
+2025-02-14 17:31:07,380 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:31:07,382 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:31:07,430 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smoteenn/xgboost_model.json
+2025-02-14 17:31:07,444 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smoteenn
+2025-02-14 17:31:07,695 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_pubchem-only_smoteenn.csv
+2025-02-14 17:31:07,695 - INFO - Prediction script completed successfully.
+2025-02-14 17:31:08,396 - INFO - Started prediction script
+2025-02-14 17:31:08,417 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smotetomek/validation_data_original.json', total records: 1562
+2025-02-14 17:31:08,446 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:31:08,448 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:31:08,538 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smotetomek/xgboost_model.json
+2025-02-14 17:31:08,551 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smotetomek
+2025-02-14 17:31:08,800 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_pubchem-only_smotetomek.csv
+2025-02-14 17:31:08,800 - INFO - Prediction script completed successfully.
+2025-02-14 17:31:09,503 - INFO - Started prediction script
+2025-02-14 17:31:09,522 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/none/validation_data_original.json', total records: 1562
+2025-02-14 17:31:09,551 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:31:09,553 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:31:09,650 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/none/xgboost_model.json
+2025-02-14 17:31:09,662 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/none
+2025-02-14 17:31:09,879 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-only/none/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:31:09,887 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:31:33,899 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:31:34,073 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_pubchem-only_none.csv
+2025-02-14 17:31:34,073 - INFO - Prediction script completed successfully.
+2025-02-14 17:31:35,032 - INFO - Started prediction script
+2025-02-14 17:31:35,052 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smote/validation_data_original.json', total records: 1562
+2025-02-14 17:31:35,082 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:31:35,084 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:31:35,206 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smote/xgboost_model.json
+2025-02-14 17:31:35,219 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smote
+2025-02-14 17:31:35,438 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-only/smote/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:31:35,447 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:31:59,299 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:31:59,470 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_pubchem-only_smote.csv
+2025-02-14 17:31:59,470 - INFO - Prediction script completed successfully.
+2025-02-14 17:32:00,408 - INFO - Started prediction script
+2025-02-14 17:32:00,429 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smoteenn/validation_data_original.json', total records: 1562
+2025-02-14 17:32:00,460 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:32:00,462 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:32:00,511 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smoteenn/xgboost_model.json
+2025-02-14 17:32:00,525 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smoteenn
+2025-02-14 17:32:00,752 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-only/smoteenn/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:32:00,761 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:32:28,050 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:32:28,225 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_pubchem-only_smoteenn.csv
+2025-02-14 17:32:28,225 - INFO - Prediction script completed successfully.
+2025-02-14 17:32:29,243 - INFO - Started prediction script
+2025-02-14 17:32:29,264 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smotetomek/validation_data_original.json', total records: 1562
+2025-02-14 17:32:29,294 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:32:29,296 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:32:29,388 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smotetomek/xgboost_model.json
+2025-02-14 17:32:29,401 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smotetomek
+2025-02-14 17:32:29,655 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-only/smotetomek/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:32:29,673 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:32:55,401 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:32:55,579 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_pubchem-only_smotetomek.csv
+2025-02-14 17:32:55,579 - INFO - Prediction script completed successfully.
+2025-02-14 17:32:56,537 - INFO - Started prediction script
+2025-02-14 17:32:56,557 - INFO - Data loaded from 'o/evaluation-single/avg/none/validation_data_original.json', total records: 1562
+2025-02-14 17:32:56,588 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:32:56,590 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:32:56,696 - INFO - Loaded XGBoost model from o/evaluation-single/avg/none/xgboost_model.json
+2025-02-14 17:32:56,709 - INFO - Building features for single-model scenario: o/evaluation-single/avg/none
+2025-02-14 17:32:56,972 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_avg_none.csv
+2025-02-14 17:32:56,972 - INFO - Prediction script completed successfully.
+2025-02-14 17:32:57,708 - INFO - Started prediction script
+2025-02-14 17:32:57,729 - INFO - Data loaded from 'o/evaluation-single/avg/smote/validation_data_original.json', total records: 1562
+2025-02-14 17:32:57,759 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:32:57,764 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:32:57,873 - INFO - Loaded XGBoost model from o/evaluation-single/avg/smote/xgboost_model.json
+2025-02-14 17:32:57,886 - INFO - Building features for single-model scenario: o/evaluation-single/avg/smote
+2025-02-14 17:32:58,157 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_avg_smote.csv
+2025-02-14 17:32:58,157 - INFO - Prediction script completed successfully.
+2025-02-14 17:32:58,881 - INFO - Started prediction script
+2025-02-14 17:32:58,902 - INFO - Data loaded from 'o/evaluation-single/avg/smoteenn/validation_data_original.json', total records: 1562
+2025-02-14 17:32:58,934 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:32:58,936 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:32:58,992 - INFO - Loaded XGBoost model from o/evaluation-single/avg/smoteenn/xgboost_model.json
+2025-02-14 17:32:59,005 - INFO - Building features for single-model scenario: o/evaluation-single/avg/smoteenn
+2025-02-14 17:32:59,262 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_avg_smoteenn.csv
+2025-02-14 17:32:59,262 - INFO - Prediction script completed successfully.
+2025-02-14 17:32:59,993 - INFO - Started prediction script
+2025-02-14 17:33:00,014 - INFO - Data loaded from 'o/evaluation-single/avg/smotetomek/validation_data_original.json', total records: 1562
+2025-02-14 17:33:00,044 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:33:00,046 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:33:00,185 - INFO - Loaded XGBoost model from o/evaluation-single/avg/smotetomek/xgboost_model.json
+2025-02-14 17:33:00,199 - INFO - Building features for single-model scenario: o/evaluation-single/avg/smotetomek
+2025-02-14 17:33:00,475 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_avg_smotetomek.csv
+2025-02-14 17:33:00,475 - INFO - Prediction script completed successfully.
+2025-02-14 17:33:01,209 - INFO - Started prediction script
+2025-02-14 17:33:01,229 - INFO - Data loaded from 'o/evaluation-single/avg/none/validation_data_original.json', total records: 1562
+2025-02-14 17:33:01,259 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:33:01,260 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:33:01,364 - INFO - Loaded XGBoost model from o/evaluation-single/avg/none/xgboost_model.json
+2025-02-14 17:33:01,375 - INFO - Building features for single-model scenario: o/evaluation-single/avg/none
+2025-02-14 17:33:01,628 - INFO - Loaded training features for KNN from o/evaluation-single/avg/none/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:33:01,648 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:33:15,454 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:33:15,641 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_avg_none.csv
+2025-02-14 17:33:15,641 - INFO - Prediction script completed successfully.
+2025-02-14 17:33:16,571 - INFO - Started prediction script
+2025-02-14 17:33:16,591 - INFO - Data loaded from 'o/evaluation-single/avg/smote/validation_data_original.json', total records: 1562
+2025-02-14 17:33:16,620 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:33:16,622 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:33:16,732 - INFO - Loaded XGBoost model from o/evaluation-single/avg/smote/xgboost_model.json
+2025-02-14 17:33:16,745 - INFO - Building features for single-model scenario: o/evaluation-single/avg/smote
+2025-02-14 17:33:16,997 - INFO - Loaded training features for KNN from o/evaluation-single/avg/smote/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:33:17,014 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:33:30,914 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:33:31,095 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_avg_smote.csv
+2025-02-14 17:33:31,095 - INFO - Prediction script completed successfully.
+2025-02-14 17:33:32,200 - INFO - Started prediction script
+2025-02-14 17:33:32,222 - INFO - Data loaded from 'o/evaluation-single/avg/smoteenn/validation_data_original.json', total records: 1562
+2025-02-14 17:33:32,269 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:33:32,272 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:33:32,331 - INFO - Loaded XGBoost model from o/evaluation-single/avg/smoteenn/xgboost_model.json
+2025-02-14 17:33:32,344 - INFO - Building features for single-model scenario: o/evaluation-single/avg/smoteenn
+2025-02-14 17:33:32,662 - INFO - Loaded training features for KNN from o/evaluation-single/avg/smoteenn/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:33:32,680 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:33:46,371 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:33:46,550 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_avg_smoteenn.csv
+2025-02-14 17:33:46,550 - INFO - Prediction script completed successfully.
+2025-02-14 17:33:47,505 - INFO - Started prediction script
+2025-02-14 17:33:47,526 - INFO - Data loaded from 'o/evaluation-single/avg/smotetomek/validation_data_original.json', total records: 1562
+2025-02-14 17:33:47,557 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:33:47,560 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:33:47,698 - INFO - Loaded XGBoost model from o/evaluation-single/avg/smotetomek/xgboost_model.json
+2025-02-14 17:33:47,713 - INFO - Building features for single-model scenario: o/evaluation-single/avg/smotetomek
+2025-02-14 17:33:47,960 - INFO - Loaded training features for KNN from o/evaluation-single/avg/smotetomek/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:33:47,989 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:34:02,284 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:34:02,474 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_avg_smotetomek.csv
+2025-02-14 17:34:02,474 - INFO - Prediction script completed successfully.
+2025-02-14 17:34:03,390 - INFO - Started prediction script
+2025-02-14 17:34:03,410 - INFO - Data loaded from 'o/evaluation-single/both/none/validation_data_original.json', total records: 1562
+2025-02-14 17:34:03,440 - INFO - Preprocessed DataFrame shape: (1562, 60)
+2025-02-14 17:34:03,443 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:34:03,548 - INFO - Loaded XGBoost model from o/evaluation-single/both/none/xgboost_model.json
+2025-02-14 17:34:03,561 - INFO - Building features for single-model scenario: o/evaluation-single/both/none
+2025-02-14 17:34:03,839 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_both_none.csv
+2025-02-14 17:34:03,839 - INFO - Prediction script completed successfully.
+2025-02-14 17:34:04,585 - INFO - Started prediction script
+2025-02-14 17:34:04,608 - INFO - Data loaded from 'o/evaluation-single/both/smote/validation_data_original.json', total records: 1562
+2025-02-14 17:34:04,640 - INFO - Preprocessed DataFrame shape: (1562, 60)
+2025-02-14 17:34:04,642 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:34:04,748 - INFO - Loaded XGBoost model from o/evaluation-single/both/smote/xgboost_model.json
+2025-02-14 17:34:04,761 - INFO - Building features for single-model scenario: o/evaluation-single/both/smote
+2025-02-14 17:34:05,030 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_both_smote.csv
+2025-02-14 17:34:05,030 - INFO - Prediction script completed successfully.
+2025-02-14 17:34:05,773 - INFO - Started prediction script
+2025-02-14 17:34:05,794 - INFO - Data loaded from 'o/evaluation-single/both/smoteenn/validation_data_original.json', total records: 1562
+2025-02-14 17:34:05,825 - INFO - Preprocessed DataFrame shape: (1562, 60)
+2025-02-14 17:34:05,827 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:34:05,883 - INFO - Loaded XGBoost model from o/evaluation-single/both/smoteenn/xgboost_model.json
+2025-02-14 17:34:05,896 - INFO - Building features for single-model scenario: o/evaluation-single/both/smoteenn
+2025-02-14 17:34:06,157 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_both_smoteenn.csv
+2025-02-14 17:34:06,157 - INFO - Prediction script completed successfully.
+2025-02-14 17:34:06,972 - INFO - Started prediction script
+2025-02-14 17:34:06,994 - INFO - Data loaded from 'o/evaluation-single/both/smotetomek/validation_data_original.json', total records: 1562
+2025-02-14 17:34:07,026 - INFO - Preprocessed DataFrame shape: (1562, 60)
+2025-02-14 17:34:07,029 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:34:07,119 - INFO - Loaded XGBoost model from o/evaluation-single/both/smotetomek/xgboost_model.json
+2025-02-14 17:34:07,133 - INFO - Building features for single-model scenario: o/evaluation-single/both/smotetomek
+2025-02-14 17:34:07,409 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_both_smotetomek.csv
+2025-02-14 17:34:07,409 - INFO - Prediction script completed successfully.
+2025-02-14 17:34:08,139 - INFO - Started prediction script
+2025-02-14 17:34:08,160 - INFO - Data loaded from 'o/evaluation-single/both/none/validation_data_original.json', total records: 1562
+2025-02-14 17:34:08,190 - INFO - Preprocessed DataFrame shape: (1562, 60)
+2025-02-14 17:34:08,192 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:34:08,294 - INFO - Loaded XGBoost model from o/evaluation-single/both/none/xgboost_model.json
+2025-02-14 17:34:08,305 - INFO - Building features for single-model scenario: o/evaluation-single/both/none
+2025-02-14 17:34:08,581 - INFO - Loaded training features for KNN from o/evaluation-single/both/none/train_matrix.csv, shape: (6245, 1332)
+2025-02-14 17:34:08,599 - INFO - Combined train+predict data shape for KNN: (7807, 1332)
+2025-02-14 17:34:33,881 - INFO - KNN-imputed new data shape: (1562, 1332)
+2025-02-14 17:34:34,056 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_both_none.csv
+2025-02-14 17:34:34,056 - INFO - Prediction script completed successfully.
+2025-02-14 17:34:35,122 - INFO - Started prediction script
+2025-02-14 17:34:35,143 - INFO - Data loaded from 'o/evaluation-single/both/smote/validation_data_original.json', total records: 1562
+2025-02-14 17:34:35,175 - INFO - Preprocessed DataFrame shape: (1562, 60)
+2025-02-14 17:34:35,177 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:34:35,283 - INFO - Loaded XGBoost model from o/evaluation-single/both/smote/xgboost_model.json
+2025-02-14 17:34:35,297 - INFO - Building features for single-model scenario: o/evaluation-single/both/smote
+2025-02-14 17:34:35,561 - INFO - Loaded training features for KNN from o/evaluation-single/both/smote/train_matrix.csv, shape: (6245, 1332)
+2025-02-14 17:34:35,579 - INFO - Combined train+predict data shape for KNN: (7807, 1332)
+2025-02-14 17:35:02,245 - INFO - KNN-imputed new data shape: (1562, 1332)
+2025-02-14 17:35:02,427 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_both_smote.csv
+2025-02-14 17:35:02,428 - INFO - Prediction script completed successfully.
+2025-02-14 17:35:03,408 - INFO - Started prediction script
+2025-02-14 17:35:03,428 - INFO - Data loaded from 'o/evaluation-single/both/smoteenn/validation_data_original.json', total records: 1562
+2025-02-14 17:35:03,459 - INFO - Preprocessed DataFrame shape: (1562, 60)
+2025-02-14 17:35:03,462 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:35:03,517 - INFO - Loaded XGBoost model from o/evaluation-single/both/smoteenn/xgboost_model.json
+2025-02-14 17:35:03,530 - INFO - Building features for single-model scenario: o/evaluation-single/both/smoteenn
+2025-02-14 17:35:03,799 - INFO - Loaded training features for KNN from o/evaluation-single/both/smoteenn/train_matrix.csv, shape: (6245, 1332)
+2025-02-14 17:35:03,817 - INFO - Combined train+predict data shape for KNN: (7807, 1332)
+2025-02-14 17:35:29,797 - INFO - KNN-imputed new data shape: (1562, 1332)
+2025-02-14 17:35:29,969 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_both_smoteenn.csv
+2025-02-14 17:35:29,969 - INFO - Prediction script completed successfully.
+2025-02-14 17:35:30,917 - INFO - Started prediction script
+2025-02-14 17:35:30,938 - INFO - Data loaded from 'o/evaluation-single/both/smotetomek/validation_data_original.json', total records: 1562
+2025-02-14 17:35:30,969 - INFO - Preprocessed DataFrame shape: (1562, 60)
+2025-02-14 17:35:30,971 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:35:31,060 - INFO - Loaded XGBoost model from o/evaluation-single/both/smotetomek/xgboost_model.json
+2025-02-14 17:35:31,073 - INFO - Building features for single-model scenario: o/evaluation-single/both/smotetomek
+2025-02-14 17:35:31,303 - INFO - Loaded training features for KNN from o/evaluation-single/both/smotetomek/train_matrix.csv, shape: (6245, 1332)
+2025-02-14 17:35:31,325 - INFO - Combined train+predict data shape for KNN: (7807, 1332)
+2025-02-14 17:35:55,183 - INFO - KNN-imputed new data shape: (1562, 1332)
+2025-02-14 17:35:55,353 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only-pred_knn_both_smotetomek.csv
+2025-02-14 17:35:55,353 - INFO - Prediction script completed successfully.
+2025-02-14 17:35:56,286 - INFO - Started prediction script
+2025-02-14 17:35:56,306 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/none/validation_data_original.json', total records: 1562
+2025-02-14 17:35:56,339 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:35:56,341 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:35:56,367 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/none/xgboost_model.json
+2025-02-14 17:35:56,380 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/none
+2025-02-14 17:35:56,625 - INFO - Predictions saved at: predictions/evaluation-single/pubchem-else-rdkit_none.csv
+2025-02-14 17:35:56,625 - INFO - Prediction script completed successfully.
+2025-02-14 17:35:57,328 - INFO - Started prediction script
+2025-02-14 17:35:57,349 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smote/validation_data_original.json', total records: 1562
+2025-02-14 17:35:57,381 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:35:57,385 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:35:57,489 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smote/xgboost_model.json
+2025-02-14 17:35:57,502 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smote
+2025-02-14 17:35:57,754 - INFO - Predictions saved at: predictions/evaluation-single/pubchem-else-rdkit_smote.csv
+2025-02-14 17:35:57,754 - INFO - Prediction script completed successfully.
+2025-02-14 17:35:58,456 - INFO - Started prediction script
+2025-02-14 17:35:58,477 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smoteenn/validation_data_original.json', total records: 1562
+2025-02-14 17:35:58,509 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:35:58,511 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:35:58,570 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smoteenn/xgboost_model.json
+2025-02-14 17:35:58,583 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smoteenn
+2025-02-14 17:35:58,835 - INFO - Predictions saved at: predictions/evaluation-single/pubchem-else-rdkit_smoteenn.csv
+2025-02-14 17:35:58,835 - INFO - Prediction script completed successfully.
+2025-02-14 17:35:59,540 - INFO - Started prediction script
+2025-02-14 17:35:59,561 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smotetomek/validation_data_original.json', total records: 1562
+2025-02-14 17:35:59,594 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:35:59,597 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:35:59,666 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smotetomek/xgboost_model.json
+2025-02-14 17:35:59,679 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smotetomek
+2025-02-14 17:35:59,930 - INFO - Predictions saved at: predictions/evaluation-single/pubchem-else-rdkit_smotetomek.csv
+2025-02-14 17:35:59,930 - INFO - Prediction script completed successfully.
+2025-02-14 17:36:00,633 - INFO - Started prediction script
+2025-02-14 17:36:00,652 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/none/validation_data_original.json', total records: 1562
+2025-02-14 17:36:00,684 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:36:00,686 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:36:00,709 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/none/xgboost_model.json
+2025-02-14 17:36:00,720 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/none
+2025-02-14 17:36:00,948 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-else-rdkit/none/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:36:00,958 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:36:14,744 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:36:14,909 - INFO - Predictions saved at: predictions/evaluation-single/knn_pubchem-else-rdkit_none.csv
+2025-02-14 17:36:14,909 - INFO - Prediction script completed successfully.
+2025-02-14 17:36:15,857 - INFO - Started prediction script
+2025-02-14 17:36:15,878 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smote/validation_data_original.json', total records: 1562
+2025-02-14 17:36:15,911 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:36:15,914 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:36:16,019 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smote/xgboost_model.json
+2025-02-14 17:36:16,031 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smote
+2025-02-14 17:36:16,273 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-else-rdkit/smote/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:36:16,298 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:36:29,763 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:36:29,937 - INFO - Predictions saved at: predictions/evaluation-single/knn_pubchem-else-rdkit_smote.csv
+2025-02-14 17:36:29,938 - INFO - Prediction script completed successfully.
+2025-02-14 17:36:30,884 - INFO - Started prediction script
+2025-02-14 17:36:30,905 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smoteenn/validation_data_original.json', total records: 1562
+2025-02-14 17:36:30,938 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:36:30,941 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:36:31,001 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smoteenn/xgboost_model.json
+2025-02-14 17:36:31,014 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smoteenn
+2025-02-14 17:36:31,253 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-else-rdkit/smoteenn/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:36:31,265 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:36:44,801 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:36:44,982 - INFO - Predictions saved at: predictions/evaluation-single/knn_pubchem-else-rdkit_smoteenn.csv
+2025-02-14 17:36:44,982 - INFO - Prediction script completed successfully.
+2025-02-14 17:36:45,942 - INFO - Started prediction script
+2025-02-14 17:36:45,963 - INFO - Data loaded from 'o/evaluation-single/pubchem-else-rdkit/smotetomek/validation_data_original.json', total records: 1562
+2025-02-14 17:36:45,996 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:36:45,998 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:36:46,070 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-else-rdkit/smotetomek/xgboost_model.json
+2025-02-14 17:36:46,083 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-else-rdkit/smotetomek
+2025-02-14 17:36:46,330 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-else-rdkit/smotetomek/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:36:46,340 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:36:59,983 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:37:00,233 - INFO - Predictions saved at: predictions/evaluation-single/knn_pubchem-else-rdkit_smotetomek.csv
+2025-02-14 17:37:00,233 - INFO - Prediction script completed successfully.
+2025-02-14 17:37:01,250 - INFO - Started prediction script
+2025-02-14 17:37:01,271 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/none/validation_data_original.json', total records: 1562
+2025-02-14 17:37:01,302 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:37:01,304 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:37:01,396 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/none/xgboost_model.json
+2025-02-14 17:37:01,409 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/none
+2025-02-14 17:37:01,669 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only_none.csv
+2025-02-14 17:37:01,669 - INFO - Prediction script completed successfully.
+2025-02-14 17:37:02,391 - INFO - Started prediction script
+2025-02-14 17:37:02,412 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smote/validation_data_original.json', total records: 1562
+2025-02-14 17:37:02,446 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:37:02,448 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:37:02,541 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smote/xgboost_model.json
+2025-02-14 17:37:02,555 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smote
+2025-02-14 17:37:02,821 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only_smote.csv
+2025-02-14 17:37:02,821 - INFO - Prediction script completed successfully.
+2025-02-14 17:37:03,635 - INFO - Started prediction script
+2025-02-14 17:37:03,658 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smoteenn/validation_data_original.json', total records: 1562
+2025-02-14 17:37:03,689 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:37:03,691 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:37:03,750 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smoteenn/xgboost_model.json
+2025-02-14 17:37:03,764 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smoteenn
+2025-02-14 17:37:04,026 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only_smoteenn.csv
+2025-02-14 17:37:04,026 - INFO - Prediction script completed successfully.
+2025-02-14 17:37:04,744 - INFO - Started prediction script
+2025-02-14 17:37:04,765 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smotetomek/validation_data_original.json', total records: 1562
+2025-02-14 17:37:04,796 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:37:04,800 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:37:04,897 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smotetomek/xgboost_model.json
+2025-02-14 17:37:04,910 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smotetomek
+2025-02-14 17:37:05,168 - INFO - Predictions saved at: predictions/evaluation-single/rdkit-only_smotetomek.csv
+2025-02-14 17:37:05,168 - INFO - Prediction script completed successfully.
+2025-02-14 17:37:05,897 - INFO - Started prediction script
+2025-02-14 17:37:05,916 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/none/validation_data_original.json', total records: 1562
+2025-02-14 17:37:05,946 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:37:05,948 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:37:06,038 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/none/xgboost_model.json
+2025-02-14 17:37:06,049 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/none
+2025-02-14 17:37:06,301 - INFO - Loaded training features for KNN from o/evaluation-single/rdkit-only/none/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:37:06,317 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:37:19,765 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:37:19,933 - INFO - Predictions saved at: predictions/evaluation-single/knn_rdkit-only_none.csv
+2025-02-14 17:37:19,933 - INFO - Prediction script completed successfully.
+2025-02-14 17:37:20,911 - INFO - Started prediction script
+2025-02-14 17:37:20,932 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smote/validation_data_original.json', total records: 1562
+2025-02-14 17:37:20,962 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:37:20,964 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:37:21,054 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smote/xgboost_model.json
+2025-02-14 17:37:21,068 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smote
+2025-02-14 17:37:21,296 - INFO - Loaded training features for KNN from o/evaluation-single/rdkit-only/smote/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:37:21,310 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:37:34,709 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:37:34,880 - INFO - Predictions saved at: predictions/evaluation-single/knn_rdkit-only_smote.csv
+2025-02-14 17:37:34,880 - INFO - Prediction script completed successfully.
+2025-02-14 17:37:35,830 - INFO - Started prediction script
+2025-02-14 17:37:35,851 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smoteenn/validation_data_original.json', total records: 1562
+2025-02-14 17:37:35,880 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:37:35,882 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:37:35,938 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smoteenn/xgboost_model.json
+2025-02-14 17:37:35,951 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smoteenn
+2025-02-14 17:37:36,198 - INFO - Loaded training features for KNN from o/evaluation-single/rdkit-only/smoteenn/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:37:36,217 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:37:49,926 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:37:50,100 - INFO - Predictions saved at: predictions/evaluation-single/knn_rdkit-only_smoteenn.csv
+2025-02-14 17:37:50,100 - INFO - Prediction script completed successfully.
+2025-02-14 17:37:51,042 - INFO - Started prediction script
+2025-02-14 17:37:51,063 - INFO - Data loaded from 'o/evaluation-single/rdkit-only/smotetomek/validation_data_original.json', total records: 1562
+2025-02-14 17:37:51,093 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:37:51,096 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:37:51,193 - INFO - Loaded XGBoost model from o/evaluation-single/rdkit-only/smotetomek/xgboost_model.json
+2025-02-14 17:37:51,206 - INFO - Building features for single-model scenario: o/evaluation-single/rdkit-only/smotetomek
+2025-02-14 17:37:51,435 - INFO - Loaded training features for KNN from o/evaluation-single/rdkit-only/smotetomek/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:37:51,448 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:38:06,508 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:38:06,692 - INFO - Predictions saved at: predictions/evaluation-single/knn_rdkit-only_smotetomek.csv
+2025-02-14 17:38:06,692 - INFO - Prediction script completed successfully.
+2025-02-14 17:38:07,673 - INFO - Started prediction script
+2025-02-14 17:38:07,693 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/none/validation_data_original.json', total records: 1562
+2025-02-14 17:38:07,723 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:38:07,725 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:38:07,827 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/none/xgboost_model.json
+2025-02-14 17:38:07,841 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/none
+2025-02-14 17:38:08,123 - INFO - Predictions saved at: predictions/evaluation-single/pubchem-only_none.csv
+2025-02-14 17:38:08,123 - INFO - Prediction script completed successfully.
+2025-02-14 17:38:08,860 - INFO - Started prediction script
+2025-02-14 17:38:08,880 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smote/validation_data_original.json', total records: 1562
+2025-02-14 17:38:08,910 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:38:08,912 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:38:09,036 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smote/xgboost_model.json
+2025-02-14 17:38:09,049 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smote
+2025-02-14 17:38:09,327 - INFO - Predictions saved at: predictions/evaluation-single/pubchem-only_smote.csv
+2025-02-14 17:38:09,327 - INFO - Prediction script completed successfully.
+2025-02-14 17:38:10,097 - INFO - Started prediction script
+2025-02-14 17:38:10,118 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smoteenn/validation_data_original.json', total records: 1562
+2025-02-14 17:38:10,148 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:38:10,150 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:38:10,202 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smoteenn/xgboost_model.json
+2025-02-14 17:38:10,216 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smoteenn
+2025-02-14 17:38:10,472 - INFO - Predictions saved at: predictions/evaluation-single/pubchem-only_smoteenn.csv
+2025-02-14 17:38:10,472 - INFO - Prediction script completed successfully.
+2025-02-14 17:38:11,182 - INFO - Started prediction script
+2025-02-14 17:38:11,203 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smotetomek/validation_data_original.json', total records: 1562
+2025-02-14 17:38:11,233 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:38:11,235 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:38:11,328 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smotetomek/xgboost_model.json
+2025-02-14 17:38:11,341 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smotetomek
+2025-02-14 17:38:11,598 - INFO - Predictions saved at: predictions/evaluation-single/pubchem-only_smotetomek.csv
+2025-02-14 17:38:11,598 - INFO - Prediction script completed successfully.
+2025-02-14 17:38:12,304 - INFO - Started prediction script
+2025-02-14 17:38:12,323 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/none/validation_data_original.json', total records: 1562
+2025-02-14 17:38:12,353 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:38:12,355 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:38:12,452 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/none/xgboost_model.json
+2025-02-14 17:38:12,463 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/none
+2025-02-14 17:38:12,729 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-only/none/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:38:12,745 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:38:36,545 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:38:36,720 - INFO - Predictions saved at: predictions/evaluation-single/knn_pubchem-only_none.csv
+2025-02-14 17:38:36,720 - INFO - Prediction script completed successfully.
+2025-02-14 17:38:37,660 - INFO - Started prediction script
+2025-02-14 17:38:37,681 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smote/validation_data_original.json', total records: 1562
+2025-02-14 17:38:37,710 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:38:37,713 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:38:37,835 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smote/xgboost_model.json
+2025-02-14 17:38:37,848 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smote
+2025-02-14 17:38:38,082 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-only/smote/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:38:38,092 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:39:01,729 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:39:01,899 - INFO - Predictions saved at: predictions/evaluation-single/knn_pubchem-only_smote.csv
+2025-02-14 17:39:01,900 - INFO - Prediction script completed successfully.
+2025-02-14 17:39:02,844 - INFO - Started prediction script
+2025-02-14 17:39:02,864 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smoteenn/validation_data_original.json', total records: 1562
+2025-02-14 17:39:02,894 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:39:02,896 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:39:02,945 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smoteenn/xgboost_model.json
+2025-02-14 17:39:02,958 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smoteenn
+2025-02-14 17:39:03,184 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-only/smoteenn/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:39:03,194 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:39:28,357 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:39:28,527 - INFO - Predictions saved at: predictions/evaluation-single/knn_pubchem-only_smoteenn.csv
+2025-02-14 17:39:28,527 - INFO - Prediction script completed successfully.
+2025-02-14 17:39:29,471 - INFO - Started prediction script
+2025-02-14 17:39:29,492 - INFO - Data loaded from 'o/evaluation-single/pubchem-only/smotetomek/validation_data_original.json', total records: 1562
+2025-02-14 17:39:29,522 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:39:29,524 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:39:29,614 - INFO - Loaded XGBoost model from o/evaluation-single/pubchem-only/smotetomek/xgboost_model.json
+2025-02-14 17:39:29,627 - INFO - Building features for single-model scenario: o/evaluation-single/pubchem-only/smotetomek
+2025-02-14 17:39:29,877 - INFO - Loaded training features for KNN from o/evaluation-single/pubchem-only/smotetomek/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:39:29,897 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:39:54,230 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:39:54,401 - INFO - Predictions saved at: predictions/evaluation-single/knn_pubchem-only_smotetomek.csv
+2025-02-14 17:39:54,401 - INFO - Prediction script completed successfully.
+2025-02-14 17:39:55,360 - INFO - Started prediction script
+2025-02-14 17:39:55,380 - INFO - Data loaded from 'o/evaluation-single/avg/none/validation_data_original.json', total records: 1562
+2025-02-14 17:39:55,410 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:39:55,412 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:39:55,518 - INFO - Loaded XGBoost model from o/evaluation-single/avg/none/xgboost_model.json
+2025-02-14 17:39:55,531 - INFO - Building features for single-model scenario: o/evaluation-single/avg/none
+2025-02-14 17:39:55,788 - INFO - Predictions saved at: predictions/evaluation-single/avg_none.csv
+2025-02-14 17:39:55,789 - INFO - Prediction script completed successfully.
+2025-02-14 17:39:56,512 - INFO - Started prediction script
+2025-02-14 17:39:56,533 - INFO - Data loaded from 'o/evaluation-single/avg/smote/validation_data_original.json', total records: 1562
+2025-02-14 17:39:56,562 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:39:56,564 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:39:56,675 - INFO - Loaded XGBoost model from o/evaluation-single/avg/smote/xgboost_model.json
+2025-02-14 17:39:56,688 - INFO - Building features for single-model scenario: o/evaluation-single/avg/smote
+2025-02-14 17:39:56,944 - INFO - Predictions saved at: predictions/evaluation-single/avg_smote.csv
+2025-02-14 17:39:56,944 - INFO - Prediction script completed successfully.
+2025-02-14 17:39:57,658 - INFO - Started prediction script
+2025-02-14 17:39:57,679 - INFO - Data loaded from 'o/evaluation-single/avg/smoteenn/validation_data_original.json', total records: 1562
+2025-02-14 17:39:57,708 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:39:57,710 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:39:57,768 - INFO - Loaded XGBoost model from o/evaluation-single/avg/smoteenn/xgboost_model.json
+2025-02-14 17:39:57,781 - INFO - Building features for single-model scenario: o/evaluation-single/avg/smoteenn
+2025-02-14 17:39:58,038 - INFO - Predictions saved at: predictions/evaluation-single/avg_smoteenn.csv
+2025-02-14 17:39:58,038 - INFO - Prediction script completed successfully.
+2025-02-14 17:39:58,762 - INFO - Started prediction script
+2025-02-14 17:39:58,784 - INFO - Data loaded from 'o/evaluation-single/avg/smotetomek/validation_data_original.json', total records: 1562
+2025-02-14 17:39:58,813 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:39:58,818 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:39:58,927 - INFO - Loaded XGBoost model from o/evaluation-single/avg/smotetomek/xgboost_model.json
+2025-02-14 17:39:58,940 - INFO - Building features for single-model scenario: o/evaluation-single/avg/smotetomek
+2025-02-14 17:39:59,201 - INFO - Predictions saved at: predictions/evaluation-single/avg_smotetomek.csv
+2025-02-14 17:39:59,201 - INFO - Prediction script completed successfully.
+2025-02-14 17:39:59,911 - INFO - Started prediction script
+2025-02-14 17:39:59,930 - INFO - Data loaded from 'o/evaluation-single/avg/none/validation_data_original.json', total records: 1562
+2025-02-14 17:39:59,960 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:39:59,962 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:40:00,067 - INFO - Loaded XGBoost model from o/evaluation-single/avg/none/xgboost_model.json
+2025-02-14 17:40:00,078 - INFO - Building features for single-model scenario: o/evaluation-single/avg/none
+2025-02-14 17:40:00,321 - INFO - Loaded training features for KNN from o/evaluation-single/avg/none/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:40:00,337 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:40:15,116 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:40:15,299 - INFO - Predictions saved at: predictions/evaluation-single/knn_avg_none.csv
+2025-02-14 17:40:15,299 - INFO - Prediction script completed successfully.
+2025-02-14 17:40:16,251 - INFO - Started prediction script
+2025-02-14 17:40:16,272 - INFO - Data loaded from 'o/evaluation-single/avg/smote/validation_data_original.json', total records: 1562
+2025-02-14 17:40:16,301 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:40:16,303 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:40:16,411 - INFO - Loaded XGBoost model from o/evaluation-single/avg/smote/xgboost_model.json
+2025-02-14 17:40:16,424 - INFO - Building features for single-model scenario: o/evaluation-single/avg/smote
+2025-02-14 17:40:16,688 - INFO - Loaded training features for KNN from o/evaluation-single/avg/smote/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:40:16,704 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:40:29,978 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:40:30,154 - INFO - Predictions saved at: predictions/evaluation-single/knn_avg_smote.csv
+2025-02-14 17:40:30,154 - INFO - Prediction script completed successfully.
+2025-02-14 17:40:31,107 - INFO - Started prediction script
+2025-02-14 17:40:31,127 - INFO - Data loaded from 'o/evaluation-single/avg/smoteenn/validation_data_original.json', total records: 1562
+2025-02-14 17:40:31,156 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:40:31,158 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:40:31,213 - INFO - Loaded XGBoost model from o/evaluation-single/avg/smoteenn/xgboost_model.json
+2025-02-14 17:40:31,227 - INFO - Building features for single-model scenario: o/evaluation-single/avg/smoteenn
+2025-02-14 17:40:31,454 - INFO - Loaded training features for KNN from o/evaluation-single/avg/smoteenn/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:40:31,464 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:40:44,671 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:40:44,844 - INFO - Predictions saved at: predictions/evaluation-single/knn_avg_smoteenn.csv
+2025-02-14 17:40:44,844 - INFO - Prediction script completed successfully.
+2025-02-14 17:40:45,765 - INFO - Started prediction script
+2025-02-14 17:40:45,785 - INFO - Data loaded from 'o/evaluation-single/avg/smotetomek/validation_data_original.json', total records: 1562
+2025-02-14 17:40:45,814 - INFO - Preprocessed DataFrame shape: (1562, 53)
+2025-02-14 17:40:45,817 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:40:45,925 - INFO - Loaded XGBoost model from o/evaluation-single/avg/smotetomek/xgboost_model.json
+2025-02-14 17:40:45,939 - INFO - Building features for single-model scenario: o/evaluation-single/avg/smotetomek
+2025-02-14 17:40:46,160 - INFO - Loaded training features for KNN from o/evaluation-single/avg/smotetomek/train_matrix.csv, shape: (6245, 1325)
+2025-02-14 17:40:46,168 - INFO - Combined train+predict data shape for KNN: (7807, 1325)
+2025-02-14 17:40:59,264 - INFO - KNN-imputed new data shape: (1562, 1325)
+2025-02-14 17:40:59,436 - INFO - Predictions saved at: predictions/evaluation-single/knn_avg_smotetomek.csv
+2025-02-14 17:40:59,436 - INFO - Prediction script completed successfully.
+2025-02-14 17:41:00,363 - INFO - Started prediction script
+2025-02-14 17:41:00,383 - INFO - Data loaded from 'o/evaluation-single/both/none/validation_data_original.json', total records: 1562
+2025-02-14 17:41:00,414 - INFO - Preprocessed DataFrame shape: (1562, 60)
+2025-02-14 17:41:00,416 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:41:00,521 - INFO - Loaded XGBoost model from o/evaluation-single/both/none/xgboost_model.json
+2025-02-14 17:41:00,534 - INFO - Building features for single-model scenario: o/evaluation-single/both/none
+2025-02-14 17:41:00,785 - INFO - Predictions saved at: predictions/evaluation-single/both_none.csv
+2025-02-14 17:41:00,785 - INFO - Prediction script completed successfully.
+2025-02-14 17:41:01,487 - INFO - Started prediction script
+2025-02-14 17:41:01,508 - INFO - Data loaded from 'o/evaluation-single/both/smote/validation_data_original.json', total records: 1562
+2025-02-14 17:41:01,538 - INFO - Preprocessed DataFrame shape: (1562, 60)
+2025-02-14 17:41:01,540 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:41:01,644 - INFO - Loaded XGBoost model from o/evaluation-single/both/smote/xgboost_model.json
+2025-02-14 17:41:01,657 - INFO - Building features for single-model scenario: o/evaluation-single/both/smote
+2025-02-14 17:41:01,907 - INFO - Predictions saved at: predictions/evaluation-single/both_smote.csv
+2025-02-14 17:41:01,907 - INFO - Prediction script completed successfully.
+2025-02-14 17:41:02,609 - INFO - Started prediction script
+2025-02-14 17:41:02,630 - INFO - Data loaded from 'o/evaluation-single/both/smoteenn/validation_data_original.json', total records: 1562
+2025-02-14 17:41:02,660 - INFO - Preprocessed DataFrame shape: (1562, 60)
+2025-02-14 17:41:02,662 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:41:02,720 - INFO - Loaded XGBoost model from o/evaluation-single/both/smoteenn/xgboost_model.json
+2025-02-14 17:41:02,733 - INFO - Building features for single-model scenario: o/evaluation-single/both/smoteenn
+2025-02-14 17:41:02,983 - INFO - Predictions saved at: predictions/evaluation-single/both_smoteenn.csv
+2025-02-14 17:41:02,983 - INFO - Prediction script completed successfully.
+2025-02-14 17:41:03,685 - INFO - Started prediction script
+2025-02-14 17:41:03,706 - INFO - Data loaded from 'o/evaluation-single/both/smotetomek/validation_data_original.json', total records: 1562
+2025-02-14 17:41:03,737 - INFO - Preprocessed DataFrame shape: (1562, 60)
+2025-02-14 17:41:03,739 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:41:03,829 - INFO - Loaded XGBoost model from o/evaluation-single/both/smotetomek/xgboost_model.json
+2025-02-14 17:41:03,842 - INFO - Building features for single-model scenario: o/evaluation-single/both/smotetomek
+2025-02-14 17:41:04,091 - INFO - Predictions saved at: predictions/evaluation-single/both_smotetomek.csv
+2025-02-14 17:41:04,091 - INFO - Prediction script completed successfully.
+2025-02-14 17:41:04,791 - INFO - Started prediction script
+2025-02-14 17:41:04,810 - INFO - Data loaded from 'o/evaluation-single/both/none/validation_data_original.json', total records: 1562
+2025-02-14 17:41:04,841 - INFO - Preprocessed DataFrame shape: (1562, 60)
+2025-02-14 17:41:04,843 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:41:04,946 - INFO - Loaded XGBoost model from o/evaluation-single/both/none/xgboost_model.json
+2025-02-14 17:41:04,956 - INFO - Building features for single-model scenario: o/evaluation-single/both/none
+2025-02-14 17:41:05,177 - INFO - Loaded training features for KNN from o/evaluation-single/both/none/train_matrix.csv, shape: (6245, 1332)
+2025-02-14 17:41:05,188 - INFO - Combined train+predict data shape for KNN: (7807, 1332)
+2025-02-14 17:41:29,515 - INFO - KNN-imputed new data shape: (1562, 1332)
+2025-02-14 17:41:29,687 - INFO - Predictions saved at: predictions/evaluation-single/knn_both_none.csv
+2025-02-14 17:41:29,687 - INFO - Prediction script completed successfully.
+2025-02-14 17:41:30,624 - INFO - Started prediction script
+2025-02-14 17:41:30,644 - INFO - Data loaded from 'o/evaluation-single/both/smote/validation_data_original.json', total records: 1562
+2025-02-14 17:41:30,675 - INFO - Preprocessed DataFrame shape: (1562, 60)
+2025-02-14 17:41:30,677 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:41:30,781 - INFO - Loaded XGBoost model from o/evaluation-single/both/smote/xgboost_model.json
+2025-02-14 17:41:30,794 - INFO - Building features for single-model scenario: o/evaluation-single/both/smote
+2025-02-14 17:41:31,019 - INFO - Loaded training features for KNN from o/evaluation-single/both/smote/train_matrix.csv, shape: (6245, 1332)
+2025-02-14 17:41:31,029 - INFO - Combined train+predict data shape for KNN: (7807, 1332)
+2025-02-14 17:41:55,108 - INFO - KNN-imputed new data shape: (1562, 1332)
+2025-02-14 17:41:55,278 - INFO - Predictions saved at: predictions/evaluation-single/knn_both_smote.csv
+2025-02-14 17:41:55,278 - INFO - Prediction script completed successfully.
+2025-02-14 17:41:56,218 - INFO - Started prediction script
+2025-02-14 17:41:56,238 - INFO - Data loaded from 'o/evaluation-single/both/smoteenn/validation_data_original.json', total records: 1562
+2025-02-14 17:41:56,270 - INFO - Preprocessed DataFrame shape: (1562, 60)
+2025-02-14 17:41:56,272 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:41:56,328 - INFO - Loaded XGBoost model from o/evaluation-single/both/smoteenn/xgboost_model.json
+2025-02-14 17:41:56,341 - INFO - Building features for single-model scenario: o/evaluation-single/both/smoteenn
+2025-02-14 17:41:56,560 - INFO - Loaded training features for KNN from o/evaluation-single/both/smoteenn/train_matrix.csv, shape: (6245, 1332)
+2025-02-14 17:41:56,569 - INFO - Combined train+predict data shape for KNN: (7807, 1332)
+2025-02-14 17:42:21,235 - INFO - KNN-imputed new data shape: (1562, 1332)
+2025-02-14 17:42:21,407 - INFO - Predictions saved at: predictions/evaluation-single/knn_both_smoteenn.csv
+2025-02-14 17:42:21,407 - INFO - Prediction script completed successfully.
+2025-02-14 17:42:22,369 - INFO - Started prediction script
+2025-02-14 17:42:22,390 - INFO - Data loaded from 'o/evaluation-single/both/smotetomek/validation_data_original.json', total records: 1562
+2025-02-14 17:42:22,422 - INFO - Preprocessed DataFrame shape: (1562, 60)
+2025-02-14 17:42:22,424 - INFO - No valid subfolders found. Checking single-model scenario at top level...
+2025-02-14 17:42:22,514 - INFO - Loaded XGBoost model from o/evaluation-single/both/smotetomek/xgboost_model.json
+2025-02-14 17:42:22,527 - INFO - Building features for single-model scenario: o/evaluation-single/both/smotetomek
+2025-02-14 17:42:22,791 - INFO - Loaded training features for KNN from o/evaluation-single/both/smotetomek/train_matrix.csv, shape: (6245, 1332)
+2025-02-14 17:42:22,811 - INFO - Combined train+predict data shape for KNN: (7807, 1332)
+2025-02-14 17:42:47,556 - INFO - KNN-imputed new data shape: (1562, 1332)
+2025-02-14 17:42:47,766 - INFO - Predictions saved at: predictions/evaluation-single/knn_both_smotetomek.csv
+2025-02-14 17:42:47,766 - INFO - Prediction script completed successfully.

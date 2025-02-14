@@ -246,35 +246,71 @@ def preprocess_data(data):
             continue
         if 'BBB+/BBB-' not in entry:
             continue
+        
+        """ Extracted from row_data as causing errors"""
+        # Testing: Use PubChem only if exist then RDKit if not
+        """# Testing: 'LogP': entry.get('LogP_PubChem', np.nan) 
+            if not pd.isna(entry.get('LogP_PubChem', np.nan)) 
+            else entry.get('LogP_RDKit', np.nan),
+        'Flexibility': entry.get('Flexibility_PubChem', np.nan) 
+            if not pd.isna(entry.get('Flexibility_PubChem', np.nan)) 
+            else entry.get('Flexibility_RDKit', np.nan),
+        'HBA': entry.get('HBA_PubChem', np.nan) 
+            if not pd.isna(entry.get('HBA_PubChem', np.nan)) 
+            else entry.get('HBA_RDKit', np.nan),
+        'HBD': entry.get('HBD_PubChem', np.nan) 
+            if not pd.isna(entry.get('HBD_PubChem', np.nan)) 
+            else entry.get('HBD_RDKit', np.nan),
+        'TPSA': entry.get('TPSA_PubChem', np.nan) 
+            if not pd.isna(entry.get('TPSA_PubChem', np.nan)) 
+            else entry.get('TPSA_RDKit', np.nan),
+        'Charge': entry.get('Charge_PubChem', np.nan) 
+            if not pd.isna(entry.get('Charge_PubChem', np.nan)) 
+            else entry.get('Charge_RDKit', np.nan),
+        'Atom_Stereo': entry.get('AtomStereo_PubChem', np.nan) 
+            if not pd.isna(entry.get('AtomStereo_PubChem', np.nan)) 
+            else entry.get('AtomStereo_RDKit', np.nan),"""
+            
+        # Testing: PubChem only
+        """'LogP': entry.get('LogP_PubChem', np.nan),
+        'Flexibility': entry.get('Flexibility_PubChem', np.nan),
+        'HBA': entry.get('HBA_PubChem', np.nan),
+        'HBD': entry.get('HBD_PubChem', np.nan),
+        'TPSA': entry.get('TPSA_PubChem', np.nan),
+        'Charge': entry.get('Charge_PubChem', np.nan),
+        'Atom_Stereo': entry.get('AtomStereo_PubChem', np.nan),"""
+        
+        # Testing: Average (RDKit and PubChem) only
+        """'LogP': entry.get('LogP_Avg', np.nan),
+        'Flexibility': entry.get('Flexibility_Avg', np.nan),
+        'HBA': entry.get('HBA_Avg', np.nan),
+        'HBD': entry.get('HBD_Avg', np.nan),
+        'TPSA': entry.get('TPSA_Avg', np.nan),
+        'Charge': entry.get('Charge_Avg', np.nan),
+        'Atom_Stereo': entry.get('AtomStereo_Avg', np.nan),"""
+        
+        # Testing: Both RDKit and PubChem
+        """'LogP-P': entry.get('LogP_PubChem', np.nan),
+        'Flexibility-P': entry.get('Flexibility_PubChem', np.nan),
+        'HBA-P': entry.get('HBA_PubChem', np.nan),
+        'HBD-P': entry.get('HBD_PubChem', np.nan),
+        'TPSA-P': entry.get('TPSA_PubChem', np.nan),
+        'Charge-P': entry.get('Charge_PubChem', np.nan),
+        'Atom_Stereo-P': entry.get('AtomStereo_PubChem', np.nan),
+        
+        'LogP-R': entry.get('LogP_RDKit', np.nan),
+        'Flexibility-R': entry.get('Flexibility_RDKit', np.nan),
+        'HBA-R': entry.get('HBA_RDKit', np.nan),
+        'HBD-R': entry.get('HBD_RDKit', np.nan),
+        'TPSA-R': entry.get('TPSA_RDKit', np.nan),
+        'Charge-R': entry.get('Charge_RDKit', np.nan),
+        'Atom_Stereo-R': entry.get('AtomStereo_RDKit', np.nan),"""
 
         # Add row data for each molecule
         row_data = {
             'NO.': entry.get('NO.', np.nan),
             'BBB': entry.get('BBB+/BBB-', np.nan),
             'SMILES': entry.get('SMILES', np.nan),
-
-            # Testing: Use PubChem only if exist then RDKit if not
-            """# Testing: 'LogP': entry.get('LogP_PubChem', np.nan) 
-                if not pd.isna(entry.get('LogP_PubChem', np.nan)) 
-                else entry.get('LogP_RDKit', np.nan),
-            'Flexibility': entry.get('Flexibility_PubChem', np.nan) 
-                if not pd.isna(entry.get('Flexibility_PubChem', np.nan)) 
-                else entry.get('Flexibility_RDKit', np.nan),
-            'HBA': entry.get('HBA_PubChem', np.nan) 
-                if not pd.isna(entry.get('HBA_PubChem', np.nan)) 
-                else entry.get('HBA_RDKit', np.nan),
-            'HBD': entry.get('HBD_PubChem', np.nan) 
-                if not pd.isna(entry.get('HBD_PubChem', np.nan)) 
-                else entry.get('HBD_RDKit', np.nan),
-            'TPSA': entry.get('TPSA_PubChem', np.nan) 
-                if not pd.isna(entry.get('TPSA_PubChem', np.nan)) 
-                else entry.get('TPSA_RDKit', np.nan),
-            'Charge': entry.get('Charge_PubChem', np.nan) 
-                if not pd.isna(entry.get('Charge_PubChem', np.nan)) 
-                else entry.get('Charge_RDKit', np.nan),
-            'Atom_Stereo': entry.get('AtomStereo_PubChem', np.nan) 
-                if not pd.isna(entry.get('AtomStereo_PubChem', np.nan)) 
-                else entry.get('AtomStereo_RDKit', np.nan),"""
             
             # Testing: RDKit only
             'LogP': entry.get('LogP_RDKit', np.nan),
@@ -284,41 +320,6 @@ def preprocess_data(data):
             'TPSA': entry.get('TPSA_RDKit', np.nan),
             'Charge': entry.get('Charge_RDKit', np.nan),
             'Atom_Stereo': entry.get('AtomStereo_RDKit', np.nan),
-            
-            # Testing: PubChem only
-            """'LogP': entry.get('LogP_PubChem', np.nan),
-            'Flexibility': entry.get('Flexibility_PubChem', np.nan),
-            'HBA': entry.get('HBA_PubChem', np.nan),
-            'HBD': entry.get('HBD_PubChem', np.nan),
-            'TPSA': entry.get('TPSA_PubChem', np.nan),
-            'Charge': entry.get('Charge_PubChem', np.nan),
-            'Atom_Stereo': entry.get('AtomStereo_PubChem', np.nan),"""
-            
-            # Testing: Average (RDKit and PubChem) only
-            """'LogP': entry.get('LogP_Avg', np.nan),
-            'Flexibility': entry.get('Flexibility_Avg', np.nan),
-            'HBA': entry.get('HBA_Avg', np.nan),
-            'HBD': entry.get('HBD_Avg', np.nan),
-            'TPSA': entry.get('TPSA_Avg', np.nan),
-            'Charge': entry.get('Charge_Avg', np.nan),
-            'Atom_Stereo': entry.get('AtomStereo_Avg', np.nan),"""
-            
-            # Testing: Both RDKit and PubChem
-            """'LogP-P': entry.get('LogP_PubChem', np.nan),
-            'Flexibility-P': entry.get('Flexibility_PubChem', np.nan),
-            'HBA-P': entry.get('HBA_PubChem', np.nan),
-            'HBD-P': entry.get('HBD_PubChem', np.nan),
-            'TPSA-P': entry.get('TPSA_PubChem', np.nan),
-            'Charge-P': entry.get('Charge_PubChem', np.nan),
-            'Atom_Stereo-P': entry.get('AtomStereo_PubChem', np.nan),
-            
-            'LogP-R': entry.get('LogP_RDKit', np.nan),
-            'Flexibility-R': entry.get('Flexibility_RDKit', np.nan),
-            'HBA-R': entry.get('HBA_RDKit', np.nan),
-            'HBD-R': entry.get('HBD_RDKit', np.nan),
-            'TPSA-R': entry.get('TPSA_RDKit', np.nan),
-            'Charge-R': entry.get('Charge_RDKit', np.nan),
-            'Atom_Stereo-R': entry.get('AtomStereo_RDKit', np.nan),"""
 
             # More Descriptors
             'HeavyAtom': entry.get('HeavyAtom_RDKit', np.nan),

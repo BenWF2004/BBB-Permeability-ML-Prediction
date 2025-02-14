@@ -67,41 +67,42 @@ def calculate_metrics_from_csv(file_path):
     results = {}
 
     for model in sorted(models):
-        prob_col = f'Prob_{model}'
-        pred_col = f'Pred_{model}'
+        if "Mean" not in model and "Median" not in model:
+            prob_col = f'Prob_{model}'
+            pred_col = f'Pred_{model}'
 
-        if prob_col not in data.columns or pred_col not in data.columns:
-            print(f"Skipping model '{model}' due to missing columns.")
-            continue
+            if prob_col not in data.columns or pred_col not in data.columns:
+                print(f"Skipping model '{model}' due to missing columns.")
+                continue
 
-        # Extract probability and prediction columns
-        prob_predictions = pd.to_numeric(data[prob_col], errors='coerce')
-        if prob_predictions.isnull().any():
-            raise ValueError(f"Probabilities for model '{model}' contain non-numeric values.")
+            # Extract probability and prediction columns
+            prob_predictions = pd.to_numeric(data[prob_col], errors='coerce')
+            if prob_predictions.isnull().any():
+                raise ValueError(f"Probabilities for model '{model}' contain non-numeric values.")
 
-        # Convert probabilities to binary predictions using a 0.5 threshold
-        binary_predictions = (prob_predictions > 0.5).astype(int)
+            # Convert probabilities to binary predictions using a 0.5 threshold
+            binary_predictions = (prob_predictions > 0.5).astype(int)
 
-        # Map predicted labels to binary
-        pred_labels = data[pred_col].map(label_mapping)
-        if pred_labels.isnull().any():
-            raise ValueError(f"Predictions for model '{model}' contain values outside the mapping keys.")
+            # Map predicted labels to binary
+            pred_labels = data[pred_col].map(label_mapping)
+            if pred_labels.isnull().any():
+                raise ValueError(f"Predictions for model '{model}' contain values outside the mapping keys.")
 
-        # Calculate metrics
-        sn, sp, auc, mcc, f1 = calculate_individual_metrics(true_labels, binary_predictions, prob_predictions)
-        
-        # Calculate mean and median probabilities
-        mean_prob = prob_predictions.mean()
-        median_prob = prob_predictions.median()
+            # Calculate metrics
+            sn, sp, auc, mcc, f1 = calculate_individual_metrics(true_labels, binary_predictions, prob_predictions)
+            
+            # Calculate mean and median probabilities
+            mean_prob = prob_predictions.mean()
+            median_prob = prob_predictions.median()
 
-        # Store metrics
-        results[model] = {
-            "SN": round(sn, 3),
-            "SP": round(sp, 3),
-            "AUC": round(auc, 3) if auc is not None else None,
-            "MCC": round(mcc, 3) if mcc is not None else None,
-            "F1": round(f1, 3) if f1 is not None else None,
-        }
+            # Store metrics
+            results[model] = {
+                "SN": round(sn, 3),
+                "SP": round(sp, 3),
+                "AUC": round(auc, 3) if auc is not None else None,
+                "MCC": round(mcc, 3) if mcc is not None else None,
+                "F1": round(f1, 3) if f1 is not None else None,
+            }
 
     return results
 
@@ -136,14 +137,19 @@ def generate_comparative_table(files):
 
 if __name__ == "__main__":
     # Ask the user to input CSV filenames, separated by commas
-    file_input = input("Enter CSV filenames (comma-separated): ").strip()
-    file_output = input("Enter CSV filename for saved metrics (default: predictions/comparative_metrics.csv): ").strip()
+    #file_input = input("Enter CSV filenames (comma-separated): ").strip()
+    #file_output = input("Enter CSV filename for saved metrics (default: predictions/comparative_metrics.csv): ").strip()
+    
+    file_input = "avg_none.csv,avg_smote.csv,avg_smoteenn.csv,avg_smotetomek.csv,both_none.csv,both_smote.csv,both_smoteenn.csv,both_smotetomek.csv,knn_avg_none.csv,knn_avg_smote.csv,knn_avg_smoteenn.csv,knn_avg_smotetomek.csv,knn_both_none.csv,knn_both_smote.csv,knn_pubchem-else-rdkit_none.csv,knn_pubchem-else-rdkit_smote.csv,knn_pubchem-else-rdkit_smoteenn.csv,knn_pubchem-else-rdkit_smotetomek.csv,knn_pubchem-only_none.csv,knn_pubchem-only_smote.csv,knn_pubchem-only_smoteenn.csv,knn_pubchem-only_smotetomek.csv,knn_rdkit-only_none.csv,knn_rdkit-only_smote.csv,knn_rdkit-only_smoteenn.csv,knn_rdkit-only_smotetomek.csv,pubchem-else-rdkit_none.csv,pubchem-else-rdkit_smote.csv,pubchem-else-rdkit_smoteenn.csv,pubchem-else-rdkit_smotetomek.csv,pubchem-only_none.csv,pubchem-only_smote.csv,pubchem-only_smoteenn.csv,pubchem-only_smotetomek.csv,rdkit-only-pred_avg_none.csv,rdkit-only-pred_avg_smote.csv,rdkit-only-pred_avg_smoteenn.csv,rdkit-only-pred_avg_smotetomek.csv,rdkit-only-pred_both_none.csv,rdkit-only-pred_both_smote.csv,rdkit-only-pred_both_smoteenn.csv,rdkit-only-pred_both_smotetomek.csv,rdkit-only-pred_knn_avg_none.csv,rdkit-only-pred_knn_avg_smote.csv,rdkit-only-pred_knn_avg_smoteenn.csv,rdkit-only-pred_knn_avg_smotetomek.csv,rdkit-only-pred_knn_both_none.csv,rdkit-only-pred_knn_both_smote.csv,rdkit-only-pred_knn_both_smoteenn.csv,rdkit-only-pred_knn_both_smotetomek.csv,rdkit-only-pred_knn_pubchem-else-rdkit_none.csv,rdkit-only-pred_knn_pubchem-else-rdkit_smote.csv,rdkit-only-pred_knn_pubchem-else-rdkit_smoteenn.csv,rdkit-only-pred_knn_pubchem-else-rdkit_smotetomek.csv,rdkit-only-pred_knn_pubchem-only_none.csv,rdkit-only-pred_knn_pubchem-only_smote.csv,rdkit-only-pred_knn_pubchem-only_smoteenn.csv,rdkit-only-pred_knn_pubchem-only_smotetomek.csv,rdkit-only-pred_knn_rdkit-only_none.csv,rdkit-only-pred_knn_rdkit-only_smote.csv,rdkit-only-pred_knn_rdkit-only_smoteenn.csv,rdkit-only-pred_knn_rdkit-only_smotetomek.csv,rdkit-only-pred_pubchem-else-rdkit_none.csv,rdkit-only-pred_pubchem-else-rdkit_smote.csv,rdkit-only-pred_pubchem-else-rdkit_smoteenn.csv,rdkit-only-pred_pubchem-else-rdkit_smotetomek.csv,rdkit-only-pred_pubchem-only_none.csv,rdkit-only-pred_pubchem-only_smote.csv,rdkit-only-pred_pubchem-only_smoteenn.csv,rdkit-only-pred_pubchem-only_smotetomek.csv,rdkit-only-pred_rdkit-only_none.csv,rdkit-only-pred_rdkit-only_smote.csv,rdkit-only-pred_rdkit-only_smoteenn.csv,rdkit-only-pred_rdkit-only_smotetomek.csv,rdkit-only_none.csv,rdkit-only_smote.csv,rdkit-only_smoteenn.csv,rdkit-only_smotetomek.csv"
+    file_output = "predictions/model_evaluations.csv"
     
     if not file_output:
         file_output = "predictions/comparative_metrics.csv"
 
     # Convert input string to a list, removing any whitespace
-    files = [file.strip() for file in file_input.split(",")]
+    #files = [file.strip() for file in file_input.split(",")]
+
+    files = ["predictions/evaluation-single/" + file.strip() for file in file_input.split(",")]
 
     # Generate the comparative table
     comparison_df = generate_comparative_table(files)

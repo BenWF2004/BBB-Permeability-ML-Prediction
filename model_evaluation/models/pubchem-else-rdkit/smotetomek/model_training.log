@@ -1,60 +1,60 @@
-2025-02-14 10:50:35,616 - INFO - Started model training pipeline
-2025-02-14 10:50:35,710 - INFO - Data loaded from data/B3DB_processed/processed.cut.min.json
-2025-02-14 10:50:35,837 - INFO - Preprocessed DataFrame shape: (7807, 53)
-2025-02-14 10:50:35,848 - INFO - Class distribution:
+2025-02-14 17:26:44,556 - INFO - Started model training pipeline
+2025-02-14 17:26:44,669 - INFO - Data loaded from data/B3DB_processed/processed.cut.min.json
+2025-02-14 17:26:44,813 - INFO - Preprocessed DataFrame shape: (7807, 53)
+2025-02-14 17:26:44,823 - INFO - Class distribution:
 BBB
 BBB+    4956
 BBB-    2851
 Name: count, dtype: int64
-2025-02-14 10:50:35,849 - INFO - Labels encoded successfully.
-2025-02-14 10:50:37,373 - INFO - KNN imputation on 1324 numeric columns in training set.
-2025-02-14 10:50:38,363 - INFO - All missing values imputed successfully.
-2025-02-14 10:50:40,041 - INFO - Starting XGBoost training.
-2025-02-14 10:50:45,365 - INFO - XGBoost training complete.
-2025-02-14 10:50:45,367 - INFO - Evaluating model.
-2025-02-14 10:50:45,467 - INFO - Model evaluation complete.
-2025-02-14 10:50:45,633 - INFO - Starting XGBoost training.
-2025-02-14 10:50:50,746 - INFO - XGBoost training complete.
-2025-02-14 10:50:50,749 - INFO - Evaluating model.
-2025-02-14 10:50:50,900 - INFO - Model evaluation complete.
-2025-02-14 10:50:51,031 - INFO - Starting XGBoost training.
-2025-02-14 10:50:56,016 - INFO - XGBoost training complete.
-2025-02-14 10:50:56,019 - INFO - Evaluating model.
-2025-02-14 10:50:56,171 - INFO - Model evaluation complete.
-2025-02-14 10:50:56,251 - INFO - Starting XGBoost training.
-2025-02-14 10:51:01,309 - INFO - XGBoost training complete.
-2025-02-14 10:51:01,312 - INFO - Evaluating model.
-2025-02-14 10:51:01,460 - INFO - Model evaluation complete.
-2025-02-14 10:51:01,548 - INFO - Starting XGBoost training.
-2025-02-14 10:51:06,558 - INFO - XGBoost training complete.
-2025-02-14 10:51:06,560 - INFO - Evaluating model.
-2025-02-14 10:51:06,709 - INFO - Model evaluation complete.
-2025-02-14 10:51:06,801 - INFO - Starting XGBoost training.
-2025-02-14 10:51:11,816 - INFO - XGBoost training complete.
-2025-02-14 10:51:11,819 - INFO - Evaluating model.
-2025-02-14 10:51:11,917 - INFO - Model evaluation complete.
-2025-02-14 10:51:12,060 - INFO - Starting XGBoost training.
-2025-02-14 10:51:17,327 - INFO - XGBoost training complete.
-2025-02-14 10:51:17,331 - INFO - Evaluating model.
-2025-02-14 10:51:17,488 - INFO - Model evaluation complete.
-2025-02-14 10:51:17,578 - INFO - Starting XGBoost training.
-2025-02-14 10:51:22,491 - INFO - XGBoost training complete.
-2025-02-14 10:51:22,493 - INFO - Evaluating model.
-2025-02-14 10:51:22,647 - INFO - Model evaluation complete.
-2025-02-14 10:51:22,740 - INFO - Starting XGBoost training.
-2025-02-14 10:51:28,039 - INFO - XGBoost training complete.
-2025-02-14 10:51:28,044 - INFO - Evaluating model.
-2025-02-14 10:51:28,217 - INFO - Model evaluation complete.
-2025-02-14 10:51:28,344 - INFO - Starting XGBoost training.
-2025-02-14 10:51:33,331 - INFO - XGBoost training complete.
-2025-02-14 10:51:33,334 - INFO - Evaluating model.
-2025-02-14 10:51:33,434 - INFO - Model evaluation complete.
-2025-02-14 10:51:33,436 - INFO - K-fold cross-validation saved to o/evaluation-single/smotetomek/cross_validation_results.csv
-2025-02-14 10:51:33,436 - INFO - Starting XGBoost training.
-2025-02-14 10:51:44,513 - INFO - XGBoost training complete.
-2025-02-14 10:51:44,738 - INFO - Evaluating model.
-2025-02-14 10:51:44,912 - INFO - Model evaluation complete.
-2025-02-14 10:51:44,914 - INFO - Confusion matrix saved at o/evaluation-single/smotetomek/validation_confusion_matrix_initial.csv
-2025-02-14 10:51:45,230 - INFO - Starting SHAP analysis.
-2025-02-14 10:51:54,500 - INFO - SHAP analysis complete.
-2025-02-14 10:51:54,624 - INFO - Model saved at o/evaluation-single/smotetomek/xgboost_model.json
+2025-02-14 17:26:44,824 - INFO - Labels encoded successfully.
+2025-02-14 17:26:46,455 - INFO - KNN imputation on 1324 numeric columns in training set.
+2025-02-14 17:26:47,526 - INFO - All missing values imputed successfully.
+2025-02-14 17:26:49,589 - INFO - Starting XGBoost training.
+2025-02-14 17:26:56,089 - INFO - XGBoost training complete.
+2025-02-14 17:26:56,092 - INFO - Evaluating model.
+2025-02-14 17:26:56,215 - INFO - Model evaluation complete.
+2025-02-14 17:26:56,373 - INFO - Starting XGBoost training.
+2025-02-14 17:27:02,790 - INFO - XGBoost training complete.
+2025-02-14 17:27:02,793 - INFO - Evaluating model.
+2025-02-14 17:27:02,978 - INFO - Model evaluation complete.
+2025-02-14 17:27:03,094 - INFO - Starting XGBoost training.
+2025-02-14 17:27:10,081 - INFO - XGBoost training complete.
+2025-02-14 17:27:10,085 - INFO - Evaluating model.
+2025-02-14 17:27:10,313 - INFO - Model evaluation complete.
+2025-02-14 17:27:10,419 - INFO - Starting XGBoost training.
+2025-02-14 17:27:17,221 - INFO - XGBoost training complete.
+2025-02-14 17:27:17,228 - INFO - Evaluating model.
+2025-02-14 17:27:17,504 - INFO - Model evaluation complete.
+2025-02-14 17:27:17,671 - INFO - Starting XGBoost training.
+2025-02-14 17:27:28,882 - INFO - XGBoost training complete.
+2025-02-14 17:27:28,892 - INFO - Evaluating model.
+2025-02-14 17:27:29,409 - INFO - Model evaluation complete.
+2025-02-14 17:27:29,656 - INFO - Starting XGBoost training.
+2025-02-14 17:27:39,893 - INFO - XGBoost training complete.
+2025-02-14 17:27:39,898 - INFO - Evaluating model.
+2025-02-14 17:27:40,277 - INFO - Model evaluation complete.
+2025-02-14 17:27:40,766 - INFO - Starting XGBoost training.
+2025-02-14 17:27:55,099 - INFO - XGBoost training complete.
+2025-02-14 17:27:55,105 - INFO - Evaluating model.
+2025-02-14 17:27:55,459 - INFO - Model evaluation complete.
+2025-02-14 17:27:55,712 - INFO - Starting XGBoost training.
+2025-02-14 17:28:04,333 - INFO - XGBoost training complete.
+2025-02-14 17:28:04,341 - INFO - Evaluating model.
+2025-02-14 17:28:04,597 - INFO - Model evaluation complete.
+2025-02-14 17:28:04,816 - INFO - Starting XGBoost training.
+2025-02-14 17:28:11,270 - INFO - XGBoost training complete.
+2025-02-14 17:28:11,275 - INFO - Evaluating model.
+2025-02-14 17:28:11,450 - INFO - Model evaluation complete.
+2025-02-14 17:28:11,547 - INFO - Starting XGBoost training.
+2025-02-14 17:28:17,564 - INFO - XGBoost training complete.
+2025-02-14 17:28:17,566 - INFO - Evaluating model.
+2025-02-14 17:28:17,691 - INFO - Model evaluation complete.
+2025-02-14 17:28:17,699 - INFO - K-fold cross-validation saved to o/evaluation-single/pubchem-else-rdkit/smotetomek/cross_validation_results.csv
+2025-02-14 17:28:17,699 - INFO - Starting XGBoost training.
+2025-02-14 17:28:32,807 - INFO - XGBoost training complete.
+2025-02-14 17:28:33,117 - INFO - Evaluating model.
+2025-02-14 17:28:33,356 - INFO - Model evaluation complete.
+2025-02-14 17:28:33,359 - INFO - Confusion matrix saved at o/evaluation-single/pubchem-else-rdkit/smotetomek/validation_confusion_matrix_initial.csv
+2025-02-14 17:28:33,940 - INFO - Starting SHAP analysis.
+2025-02-14 17:28:44,258 - INFO - SHAP analysis complete.
+2025-02-14 17:28:44,382 - INFO - Model saved at o/evaluation-single/pubchem-else-rdkit/smotetomek/xgboost_model.json
