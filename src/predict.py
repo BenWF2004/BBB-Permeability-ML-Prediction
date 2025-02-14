@@ -9,7 +9,7 @@ Overview:
     
 Usage example:  
 python3 src/predict.py \
-  --model_path o/output1/best_model.pth \
+  --model_path published_model \
   --input_json data/example_prediction/model_ready.json \
   --output_csv results/predictions.csv \
   --use_knn y
@@ -128,8 +128,8 @@ def preprocess_data(raw_data: list) -> pd.DataFrame:
             'BBB': entry.get('BBB+/BBB-', np.nan),
             'SMILES': entry.get('SMILES', np.nan),
 
-            # Use PubChem is valid, else RDKit
-            'LogP': entry.get('LogP_PubChem', np.nan)
+            # Testing: Use PubChem is valid, else RDKit
+            """'LogP': entry.get('LogP_PubChem', np.nan)
                 if not pd.isna(entry.get('LogP_PubChem', np.nan))
                 else entry.get('LogP_RDKit', np.nan),
             'Flexibility': entry.get('Flexibility_PubChem', np.nan)
@@ -149,7 +149,51 @@ def preprocess_data(raw_data: list) -> pd.DataFrame:
                 else entry.get('Charge_RDKit', np.nan),
             'Atom_Stereo': entry.get('AtomStereo_PubChem', np.nan)
                 if not pd.isna(entry.get('AtomStereo_PubChem', np.nan))
-                else entry.get('AtomStereo_RDKit', np.nan),
+                else entry.get('AtomStereo_RDKit', np.nan),"""
+                
+            # Testing: RDKit only
+            'LogP': entry.get('LogP_RDKit', np.nan),
+            'Flexibility': entry.get('Flexibility_RDKit', np.nan),
+            'HBA': entry.get('HBA_RDKit', np.nan),
+            'HBD': entry.get('HBD_RDKit', np.nan),
+            'TPSA': entry.get('TPSA_RDKit', np.nan),
+            'Charge': entry.get('Charge_RDKit', np.nan),
+            'Atom_Stereo': entry.get('AtomStereo_RDKit', np.nan),
+            
+            # Testing: PubChem only
+            """'LogP': entry.get('LogP_PubChem', np.nan),
+            'Flexibility': entry.get('Flexibility_PubChem', np.nan),
+            'HBA': entry.get('HBA_PubChem', np.nan),
+            'HBD': entry.get('HBD_PubChem', np.nan),
+            'TPSA': entry.get('TPSA_PubChem', np.nan),
+            'Charge': entry.get('Charge_PubChem', np.nan),
+            'Atom_Stereo': entry.get('AtomStereo_PubChem', np.nan),"""
+            
+            # Testing: Average (RDKit and PubChem) only
+            """'LogP': entry.get('LogP_Avg', np.nan),
+            'Flexibility': entry.get('Flexibility_Avg', np.nan),
+            'HBA': entry.get('HBA_Avg', np.nan),
+            'HBD': entry.get('HBD_Avg', np.nan),
+            'TPSA': entry.get('TPSA_Avg', np.nan),
+            'Charge': entry.get('Charge_Avg', np.nan),
+            'Atom_Stereo': entry.get('AtomStereo_Avg', np.nan),"""
+            
+            # Testing: Both RDKit and PubChem
+            """'LogP-P': entry.get('LogP_PubChem', np.nan),
+            'Flexibility-P': entry.get('Flexibility_PubChem', np.nan),
+            'HBA-P': entry.get('HBA_PubChem', np.nan),
+            'HBD-P': entry.get('HBD_PubChem', np.nan),
+            'TPSA-P': entry.get('TPSA_PubChem', np.nan),
+            'Charge-P': entry.get('Charge_PubChem', np.nan),
+            'Atom_Stereo-P': entry.get('AtomStereo_PubChem', np.nan),
+            
+            'LogP-R': entry.get('LogP_RDKit', np.nan),
+            'Flexibility-R': entry.get('Flexibility_RDKit', np.nan),
+            'HBA-R': entry.get('HBA_RDKit', np.nan),
+            'HBD-R': entry.get('HBD_RDKit', np.nan),
+            'TPSA-R': entry.get('TPSA_RDKit', np.nan),
+            'Charge-R': entry.get('Charge_RDKit', np.nan),
+            'Atom_Stereo-R': entry.get('AtomStereo_RDKit', np.nan),"""
 
             'HeavyAtom': entry.get('HeavyAtom_RDKit', np.nan),
             'Radius_Of_Gyration': entry.get('RadiusOfGyration_RDKit', np.nan),
