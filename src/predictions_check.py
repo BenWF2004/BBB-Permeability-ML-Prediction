@@ -31,7 +31,7 @@ def calculate_metrics_from_csv(file_path):
     true_label_col = true_label_col[0]
 
     # Map true labels to binary (adjust mapping as per your dataset)
-    label_mapping = {"BBB+": 0, "BBB-": 1}
+    label_mapping = {"BBB+": 1, "BBB-": 0}
     true_labels = data[true_label_col].map(label_mapping)
     if true_labels.isnull().any():
         raise ValueError("True labels contain values outside the mapping keys.")
@@ -137,19 +137,19 @@ def generate_comparative_table(files):
 
 if __name__ == "__main__":
     # Ask the user to input CSV filenames, separated by commas
-    #file_input = input("Enter CSV filenames (comma-separated): ").strip()
-    #file_output = input("Enter CSV filename for saved metrics (default: predictions/comparative_metrics.csv): ").strip()
+    file_input = input("Enter CSV filenames (comma-separated): ").strip()
+    file_output = input("Enter CSV filename for saved metrics (default: predictions/comparative_metrics.csv): ").strip()
     
-    file_input = "avg_none.csv,avg_smote.csv,avg_smoteenn.csv,avg_smotetomek.csv,both_none.csv,both_smote.csv,both_smoteenn.csv,both_smotetomek.csv,knn_avg_none.csv,knn_avg_smote.csv,knn_avg_smoteenn.csv,knn_avg_smotetomek.csv,knn_both_none.csv,knn_both_smote.csv,knn_pubchem-else-rdkit_none.csv,knn_pubchem-else-rdkit_smote.csv,knn_pubchem-else-rdkit_smoteenn.csv,knn_pubchem-else-rdkit_smotetomek.csv,knn_pubchem-only_none.csv,knn_pubchem-only_smote.csv,knn_pubchem-only_smoteenn.csv,knn_pubchem-only_smotetomek.csv,knn_rdkit-only_none.csv,knn_rdkit-only_smote.csv,knn_rdkit-only_smoteenn.csv,knn_rdkit-only_smotetomek.csv,pubchem-else-rdkit_none.csv,pubchem-else-rdkit_smote.csv,pubchem-else-rdkit_smoteenn.csv,pubchem-else-rdkit_smotetomek.csv,pubchem-only_none.csv,pubchem-only_smote.csv,pubchem-only_smoteenn.csv,pubchem-only_smotetomek.csv,rdkit-only-pred_avg_none.csv,rdkit-only-pred_avg_smote.csv,rdkit-only-pred_avg_smoteenn.csv,rdkit-only-pred_avg_smotetomek.csv,rdkit-only-pred_both_none.csv,rdkit-only-pred_both_smote.csv,rdkit-only-pred_both_smoteenn.csv,rdkit-only-pred_both_smotetomek.csv,rdkit-only-pred_knn_avg_none.csv,rdkit-only-pred_knn_avg_smote.csv,rdkit-only-pred_knn_avg_smoteenn.csv,rdkit-only-pred_knn_avg_smotetomek.csv,rdkit-only-pred_knn_both_none.csv,rdkit-only-pred_knn_both_smote.csv,rdkit-only-pred_knn_both_smoteenn.csv,rdkit-only-pred_knn_both_smotetomek.csv,rdkit-only-pred_knn_pubchem-else-rdkit_none.csv,rdkit-only-pred_knn_pubchem-else-rdkit_smote.csv,rdkit-only-pred_knn_pubchem-else-rdkit_smoteenn.csv,rdkit-only-pred_knn_pubchem-else-rdkit_smotetomek.csv,rdkit-only-pred_knn_pubchem-only_none.csv,rdkit-only-pred_knn_pubchem-only_smote.csv,rdkit-only-pred_knn_pubchem-only_smoteenn.csv,rdkit-only-pred_knn_pubchem-only_smotetomek.csv,rdkit-only-pred_knn_rdkit-only_none.csv,rdkit-only-pred_knn_rdkit-only_smote.csv,rdkit-only-pred_knn_rdkit-only_smoteenn.csv,rdkit-only-pred_knn_rdkit-only_smotetomek.csv,rdkit-only-pred_pubchem-else-rdkit_none.csv,rdkit-only-pred_pubchem-else-rdkit_smote.csv,rdkit-only-pred_pubchem-else-rdkit_smoteenn.csv,rdkit-only-pred_pubchem-else-rdkit_smotetomek.csv,rdkit-only-pred_pubchem-only_none.csv,rdkit-only-pred_pubchem-only_smote.csv,rdkit-only-pred_pubchem-only_smoteenn.csv,rdkit-only-pred_pubchem-only_smotetomek.csv,rdkit-only-pred_rdkit-only_none.csv,rdkit-only-pred_rdkit-only_smote.csv,rdkit-only-pred_rdkit-only_smoteenn.csv,rdkit-only-pred_rdkit-only_smotetomek.csv,rdkit-only_none.csv,rdkit-only_smote.csv,rdkit-only_smoteenn.csv,rdkit-only_smotetomek.csv"
-    file_output = "predictions/model_evaluations.csv"
+    #file_input = "avg_none.csv,avg_smote.csv,avg_smoteenn.csv,avg_smotetomek.csv,both_none.csv,both_smote.csv,both_smoteenn.csv,both_smotetomek.csv,knn_avg_none.csv,knn_avg_smote.csv,knn_avg_smoteenn.csv,knn_avg_smotetomek.csv,knn_both_none.csv,knn_both_smote.csv,knn_pubchem-else-rdkit_none.csv,knn_pubchem-else-rdkit_smote.csv,knn_pubchem-else-rdkit_smoteenn.csv,knn_pubchem-else-rdkit_smotetomek.csv,knn_pubchem-only_none.csv,knn_pubchem-only_smote.csv,knn_pubchem-only_smoteenn.csv,knn_pubchem-only_smotetomek.csv,knn_rdkit-only_none.csv,knn_rdkit-only_smote.csv,knn_rdkit-only_smoteenn.csv,knn_rdkit-only_smotetomek.csv,pubchem-else-rdkit_none.csv,pubchem-else-rdkit_smote.csv,pubchem-else-rdkit_smoteenn.csv,pubchem-else-rdkit_smotetomek.csv,pubchem-only_none.csv,pubchem-only_smote.csv,pubchem-only_smoteenn.csv,pubchem-only_smotetomek.csv,rdkit-only-pred_avg_none.csv,rdkit-only-pred_avg_smote.csv,rdkit-only-pred_avg_smoteenn.csv,rdkit-only-pred_avg_smotetomek.csv,rdkit-only-pred_both_none.csv,rdkit-only-pred_both_smote.csv,rdkit-only-pred_both_smoteenn.csv,rdkit-only-pred_both_smotetomek.csv,rdkit-only-pred_knn_avg_none.csv,rdkit-only-pred_knn_avg_smote.csv,rdkit-only-pred_knn_avg_smoteenn.csv,rdkit-only-pred_knn_avg_smotetomek.csv,rdkit-only-pred_knn_both_none.csv,rdkit-only-pred_knn_both_smote.csv,rdkit-only-pred_knn_both_smoteenn.csv,rdkit-only-pred_knn_both_smotetomek.csv,rdkit-only-pred_knn_pubchem-else-rdkit_none.csv,rdkit-only-pred_knn_pubchem-else-rdkit_smote.csv,rdkit-only-pred_knn_pubchem-else-rdkit_smoteenn.csv,rdkit-only-pred_knn_pubchem-else-rdkit_smotetomek.csv,rdkit-only-pred_knn_pubchem-only_none.csv,rdkit-only-pred_knn_pubchem-only_smote.csv,rdkit-only-pred_knn_pubchem-only_smoteenn.csv,rdkit-only-pred_knn_pubchem-only_smotetomek.csv,rdkit-only-pred_knn_rdkit-only_none.csv,rdkit-only-pred_knn_rdkit-only_smote.csv,rdkit-only-pred_knn_rdkit-only_smoteenn.csv,rdkit-only-pred_knn_rdkit-only_smotetomek.csv,rdkit-only-pred_pubchem-else-rdkit_none.csv,rdkit-only-pred_pubchem-else-rdkit_smote.csv,rdkit-only-pred_pubchem-else-rdkit_smoteenn.csv,rdkit-only-pred_pubchem-else-rdkit_smotetomek.csv,rdkit-only-pred_pubchem-only_none.csv,rdkit-only-pred_pubchem-only_smote.csv,rdkit-only-pred_pubchem-only_smoteenn.csv,rdkit-only-pred_pubchem-only_smotetomek.csv,rdkit-only-pred_rdkit-only_none.csv,rdkit-only-pred_rdkit-only_smote.csv,rdkit-only-pred_rdkit-only_smoteenn.csv,rdkit-only-pred_rdkit-only_smotetomek.csv,rdkit-only_none.csv,rdkit-only_smote.csv,rdkit-only_smoteenn.csv,rdkit-only_smotetomek.csv"
+    #file_output = "predictions/model_evaluations.csv"
     
     if not file_output:
         file_output = "predictions/comparative_metrics.csv"
 
     # Convert input string to a list, removing any whitespace
-    #files = [file.strip() for file in file_input.split(",")]
+    files = [file.strip() for file in file_input.split(",")]
 
-    files = ["predictions/evaluation-single/" + file.strip() for file in file_input.split(",")]
+    #files = ["predictions/evaluation-single/" + file.strip() for file in file_input.split(",")]
 
     # Generate the comparative table
     comparison_df = generate_comparative_table(files)

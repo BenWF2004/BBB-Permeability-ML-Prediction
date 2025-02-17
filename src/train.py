@@ -322,8 +322,8 @@ def preprocess_data(data):
             'Atom_Stereo': entry.get('AtomStereo_RDKit', np.nan),
 
             # More Descriptors
-            'MolecularWeight': entry.get('MW_RDKit', np.nan),
-            'HeavyAtom': entry.get('HeavyAtom_RDKit', np.nan),
+            'Molecular_Weight': entry.get('MW_RDKit', np.nan),
+            'Heavy_Atom_Count': entry.get('HeavyAtom_RDKit', np.nan),
             'Radius_Of_Gyration': entry.get('RadiusOfGyration_RDKit', np.nan),
             'Wiener_Index': entry.get('WienerIndex_RDKit', np.nan),
             'Eccentric_Connectivity_Index': entry.get('EccentricConnectivityIndex_RDKit', np.nan),
@@ -473,10 +473,18 @@ def encode_labels(df):
     """
     
     try:
-        le = LabelEncoder()
-        df['BBB_Label'] = le.fit_transform(df['BBB'])
+        label_mapping = {'BBB+': 1, 'BBB-': 0}
+        df['BBB_Label'] = df['BBB'].map(label_mapping)
+
+        # Check if all labels are properly mapped
+        if df['BBB_Label'].isnull().any():
+            missing_labels = df['BBB'][df['BBB_Label'].isnull()].unique()
+            logging.error(f"Unrecognized labels found: {missing_labels}")
+            sys.exit(f"Critical error: Unrecognized BBB labels: {missing_labels}")
+
         logging.info("Labels encoded successfully.")
-        return df, le
+        return df, label_mapping  # Return mapping dictionary for decoding if needed
+
     except Exception as e:
         logging.error(f"Error encoding labels: {e}")
         sys.exit(f"Critical error: {e}")
@@ -1479,7 +1487,7 @@ def run_optuna_optimization(
         plt.legend()
         plt.tight_layout()
         
-        chart_path = os.path.join(metric_subfolder, "comparison_evaluation_chart2.png")
+        chart_path = os.path.join(metric_subfolder, "comparison_evaluation_chart.png")
         plt.savefig(chart_path, dpi=300)
         plt.close()
 

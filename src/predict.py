@@ -123,33 +123,68 @@ def preprocess_data(raw_data: list) -> pd.DataFrame:
             # Skip if no SMILES present
             continue
 
+        # Testing: Use PubChem is valid, else RDKit
+        """'LogP': entry.get('LogP_PubChem', np.nan)
+            if not pd.isna(entry.get('LogP_PubChem', np.nan))
+            else entry.get('LogP_RDKit', np.nan),
+        'Flexibility': entry.get('Flexibility_PubChem', np.nan)
+            if not pd.isna(entry.get('Flexibility_PubChem', np.nan))
+            else entry.get('Flexibility_RDKit', np.nan),
+        'HBA': entry.get('HBA_PubChem', np.nan)
+            if not pd.isna(entry.get('HBA_PubChem', np.nan))
+            else entry.get('HBA_RDKit', np.nan),
+        'HBD': entry.get('HBD_PubChem', np.nan)
+            if not pd.isna(entry.get('HBD_PubChem', np.nan))
+            else entry.get('HBD_RDKit', np.nan),
+        'TPSA': entry.get('TPSA_PubChem', np.nan)
+            if not pd.isna(entry.get('TPSA_PubChem', np.nan))
+            else entry.get('TPSA_RDKit', np.nan),
+        'Charge': entry.get('Charge_PubChem', np.nan)
+            if not pd.isna(entry.get('Charge_PubChem', np.nan))
+            else entry.get('Charge_RDKit', np.nan),
+        'Atom_Stereo': entry.get('AtomStereo_PubChem', np.nan)
+            if not pd.isna(entry.get('AtomStereo_PubChem', np.nan))
+            else entry.get('AtomStereo_RDKit', np.nan),"""
+
+        # Testing: PubChem only
+        """'LogP': entry.get('LogP_PubChem', np.nan),
+        'Flexibility': entry.get('Flexibility_PubChem', np.nan),
+        'HBA': entry.get('HBA_PubChem', np.nan),
+        'HBD': entry.get('HBD_PubChem', np.nan),
+        'TPSA': entry.get('TPSA_PubChem', np.nan),
+        'Charge': entry.get('Charge_PubChem', np.nan),
+        'Atom_Stereo': entry.get('AtomStereo_PubChem', np.nan),"""
+        
+        # Testing: Average (RDKit and PubChem) only
+        """'LogP': entry.get('LogP_Avg', np.nan),
+        'Flexibility': entry.get('Flexibility_Avg', np.nan),
+        'HBA': entry.get('HBA_Avg', np.nan),
+        'HBD': entry.get('HBD_Avg', np.nan),
+        'TPSA': entry.get('TPSA_Avg', np.nan),
+        'Charge': entry.get('Charge_Avg', np.nan),
+        'Atom_Stereo': entry.get('AtomStereo_Avg', np.nan),"""
+        
+        # Testing: Both RDKit and PubChem
+        """'LogP-P': entry.get('LogP_PubChem', np.nan),
+        'Flexibility-P': entry.get('Flexibility_PubChem', np.nan),
+        'HBA-P': entry.get('HBA_PubChem', np.nan),
+        'HBD-P': entry.get('HBD_PubChem', np.nan),
+        'TPSA-P': entry.get('TPSA_PubChem', np.nan),
+        'Charge-P': entry.get('Charge_PubChem', np.nan),
+        'Atom_Stereo-P': entry.get('AtomStereo_PubChem', np.nan),
+        
+        'LogP-R': entry.get('LogP_RDKit', np.nan),
+        'Flexibility-R': entry.get('Flexibility_RDKit', np.nan),
+        'HBA-R': entry.get('HBA_RDKit', np.nan),
+        'HBD-R': entry.get('HBD_RDKit', np.nan),
+        'TPSA-R': entry.get('TPSA_RDKit', np.nan),
+        'Charge-R': entry.get('Charge_RDKit', np.nan),
+        'Atom_Stereo-R': entry.get('AtomStereo_RDKit', np.nan),"""
+        
         row_data = {
             'NO.': entry.get('NO.', np.nan),
             'BBB': entry.get('BBB+/BBB-', np.nan),
             'SMILES': entry.get('SMILES', np.nan),
-
-            # Testing: Use PubChem is valid, else RDKit
-            """'LogP': entry.get('LogP_PubChem', np.nan)
-                if not pd.isna(entry.get('LogP_PubChem', np.nan))
-                else entry.get('LogP_RDKit', np.nan),
-            'Flexibility': entry.get('Flexibility_PubChem', np.nan)
-                if not pd.isna(entry.get('Flexibility_PubChem', np.nan))
-                else entry.get('Flexibility_RDKit', np.nan),
-            'HBA': entry.get('HBA_PubChem', np.nan)
-                if not pd.isna(entry.get('HBA_PubChem', np.nan))
-                else entry.get('HBA_RDKit', np.nan),
-            'HBD': entry.get('HBD_PubChem', np.nan)
-                if not pd.isna(entry.get('HBD_PubChem', np.nan))
-                else entry.get('HBD_RDKit', np.nan),
-            'TPSA': entry.get('TPSA_PubChem', np.nan)
-                if not pd.isna(entry.get('TPSA_PubChem', np.nan))
-                else entry.get('TPSA_RDKit', np.nan),
-            'Charge': entry.get('Charge_PubChem', np.nan)
-                if not pd.isna(entry.get('Charge_PubChem', np.nan))
-                else entry.get('Charge_RDKit', np.nan),
-            'Atom_Stereo': entry.get('AtomStereo_PubChem', np.nan)
-                if not pd.isna(entry.get('AtomStereo_PubChem', np.nan))
-                else entry.get('AtomStereo_RDKit', np.nan),"""
                 
             # Testing: RDKit only
             'LogP': entry.get('LogP_RDKit', np.nan),
@@ -159,43 +194,9 @@ def preprocess_data(raw_data: list) -> pd.DataFrame:
             'TPSA': entry.get('TPSA_RDKit', np.nan),
             'Charge': entry.get('Charge_RDKit', np.nan),
             'Atom_Stereo': entry.get('AtomStereo_RDKit', np.nan),
-            
-            # Testing: PubChem only
-            """'LogP': entry.get('LogP_PubChem', np.nan),
-            'Flexibility': entry.get('Flexibility_PubChem', np.nan),
-            'HBA': entry.get('HBA_PubChem', np.nan),
-            'HBD': entry.get('HBD_PubChem', np.nan),
-            'TPSA': entry.get('TPSA_PubChem', np.nan),
-            'Charge': entry.get('Charge_PubChem', np.nan),
-            'Atom_Stereo': entry.get('AtomStereo_PubChem', np.nan),"""
-            
-            # Testing: Average (RDKit and PubChem) only
-            """'LogP': entry.get('LogP_Avg', np.nan),
-            'Flexibility': entry.get('Flexibility_Avg', np.nan),
-            'HBA': entry.get('HBA_Avg', np.nan),
-            'HBD': entry.get('HBD_Avg', np.nan),
-            'TPSA': entry.get('TPSA_Avg', np.nan),
-            'Charge': entry.get('Charge_Avg', np.nan),
-            'Atom_Stereo': entry.get('AtomStereo_Avg', np.nan),"""
-            
-            # Testing: Both RDKit and PubChem
-            """'LogP-P': entry.get('LogP_PubChem', np.nan),
-            'Flexibility-P': entry.get('Flexibility_PubChem', np.nan),
-            'HBA-P': entry.get('HBA_PubChem', np.nan),
-            'HBD-P': entry.get('HBD_PubChem', np.nan),
-            'TPSA-P': entry.get('TPSA_PubChem', np.nan),
-            'Charge-P': entry.get('Charge_PubChem', np.nan),
-            'Atom_Stereo-P': entry.get('AtomStereo_PubChem', np.nan),
-            
-            'LogP-R': entry.get('LogP_RDKit', np.nan),
-            'Flexibility-R': entry.get('Flexibility_RDKit', np.nan),
-            'HBA-R': entry.get('HBA_RDKit', np.nan),
-            'HBD-R': entry.get('HBD_RDKit', np.nan),
-            'TPSA-R': entry.get('TPSA_RDKit', np.nan),
-            'Charge-R': entry.get('Charge_RDKit', np.nan),
-            'Atom_Stereo-R': entry.get('AtomStereo_RDKit', np.nan),"""
 
-            'HeavyAtom': entry.get('HeavyAtom_RDKit', np.nan),
+            'Molecular_Weight': entry.get('MW_RDKit', np.nan),
+            'Heavy_Atom_Count': entry.get('HeavyAtom_RDKit', np.nan),
             'Radius_Of_Gyration': entry.get('RadiusOfGyration_RDKit', np.nan),
             'Wiener_Index': entry.get('WienerIndex_RDKit', np.nan),
             'Eccentric_Connectivity_Index': entry.get('EccentricConnectivityIndex_RDKit', np.nan),
@@ -405,8 +406,8 @@ def map_predictions(pred_array: np.ndarray) -> np.ndarray:
     """
     Converts binary predictions (0/1) into human-readable BBB classification labels.
 
-    - Maps `1` to `'BBB-'` (indicating poor BBB permeability).
-    - Maps `0` to `'BBB+'` (indicating good BBB permeability).
+    - Maps `0` to `'BBB-'` (indicating poor BBB permeability).
+    - Maps `1` to `'BBB+'` (indicating good BBB permeability).
     - Ensures correct label mapping, accounting for any potential inversion.
 
     Parameters:
@@ -415,7 +416,7 @@ def map_predictions(pred_array: np.ndarray) -> np.ndarray:
     Returns:
         np.ndarray: A NumPy array of corresponding string labels (`'BBB+'` or `'BBB-'`).
     """
-    return np.where(pred_array == 0, 'BBB+', 'BBB-')
+    return np.where(pred_array == 1, 'BBB+', 'BBB-')
 
 
 def load_subfolder_assets(folder_path: str) -> dict:
@@ -763,14 +764,14 @@ def main():
         output_df['Prob_Mean'] = output_df[prob_cols].mean(axis=1)
         # Classify as 'BBB+' if the mean probability is below or equal to the threshold, else 'BBB-'
         output_df['Pred_Mean'] = np.where(
-            output_df['Prob_Mean'] <= avg_threshold, 'BBB+', 'BBB-'
+            output_df['Prob_Mean'] >= avg_threshold, 'BBB+', 'BBB-'
         )
 
         # Median Probability approach
         output_df['Prob_Median'] = output_df[prob_cols].median(axis=1)
         # Classify as 'BBB+' if the mean probability is below or equal to the threshold, else 'BBB-'
         output_df['Pred_Median'] = np.where(
-            output_df['Prob_Median'] <= avg_threshold, 'BBB+', 'BBB-'
+            output_df['Prob_Median'] >= avg_threshold, 'BBB+', 'BBB-'
         )
     else:
         # Should not happen unless no valid models
