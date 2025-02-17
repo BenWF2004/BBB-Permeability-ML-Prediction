@@ -1,6 +1,6 @@
 """
 Author: Ben Franey
-Version: 11.2.0 - Publish: 1.1
+Version: 11.2.0 - Publish: 1.2
 Last Review Date: 06-02-2025
 Overview:
     Predict BBB+/- labels for molecules using pre-trained XGBoost models.

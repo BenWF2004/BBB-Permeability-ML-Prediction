@@ -1,7 +1,7 @@
 """
 Author: Ben Franey
-Version: 5.2.4 - Publish: 1.0
-Last Review Date: 29-01-2025
+Version: 5.3.1 - Publish: 1.2
+Last Review Date: 16-02-2025
 Overview:
 Processes a CSV of molecular data (B3DB_full.csv), computes RDKit descriptors, optionally 
 retrieves PubChem properties, and extracts molecular fragments (BRIC, RING, SIDE_CHAIN). 
@@ -11,7 +11,7 @@ Key Features:
 - Computes RDKit 2D/3D descriptors: MW, LogP, HBA, HBD, TPSA, charge, bond types, 
   Wiener Index, Eccentric Connectivity Index, and Radius of Gyration.
 - Optional PubChem descriptor retrieval with retry handling.
-- Extracts and analyzes molecular fragments:
+- Extracts and analyses molecular fragments:
   - Computes 2D descriptors for BRIC, RING, and SIDE_CHAIN fragments.
   - Tracks BBB+ and BBB- occurrence, normalizing counts.
 - Merges RDKit and PubChem descriptors with averaged properties.
@@ -214,70 +214,81 @@ def is_valid_smiles(smiles: str) -> bool:
 
 def calculate_wiener_index(mol: Chem.Mol) -> float:
     """
-    Computes the Wiener index for a given molecular structure.
-
-    - The Wiener index is computed from the adjacency matrix.
-    - Uses NetworkX to determine shortest path lengths in the molecular graph.
-    - Assumes an unweighted molecular graph (all bond types treated equally).
-    - Only applicable to fully connected molecular structures.
-
+    Calculates the Wiener index based on the correct literature equation:
+      W = sum_{i<j} d(i,j)
+    
+    - Implicit hydrogens are added.
+    - If the molecular graph is disconnected or an error occurs, returns np.nan.
+    
     Parameters:
-        mol (Chem.Mol): RDKit molecule object.
-
+        mol (Chem.Mol): Input RDKit molecule.
+        
     Returns:
-        float: The computed Wiener index.
-
-    Raises:
-        ValueError: If the adjacency matrix cannot be generated.
+        float: Wiener index or np.nan on failure.
     """
-    # Generate adjacency matrix
-    adj_matrix = GetAdjacencyMatrix(mol)
-    
-    # Create a graph from the adjacency matrix
-    G = nx.Graph(adj_matrix)
-    
-    # Compute shortest path lengths for all node pairs
-    path_lengths = dict(nx.all_pairs_shortest_path_length(G))
-    
-    # Compute and return Wiener index as half the sum of all shortest path distances
-    wiener_index = 0.0
-    for node, lengths in path_lengths.items():
-        wiener_index += sum(lengths.values())
-    return wiener_index / 2
-
-
-def eccentric_connectivity_index(mol: Chem.Mol) -> float:
-    """
-    Computes the eccentric connectivity index using NetworkX.
-
-    - Calculates node eccentricity and degree from the molecular adjacency matrix.
-    - Returns 0.0 if the eccentricity computation fails.
-
-    Parameters:
-        mol (Chem.Mol): RDKit molecule object.
-
-    Returns:
-        float: The computed eccentric connectivity index.
-    """
-    # Generate adjacency matrix of the molecular graph
-    adj_matrix = GetAdjacencyMatrix(mol)
-    
-    # Construct a graph from the adjacency matrix
-    G = nx.Graph(adj_matrix)
-    
-    # Compute eccentricity for each node (max shortest path length from the node)
     try:
-        eccentricity = nx.eccentricity(G)
-    # Handle errors in eccentricity calculation, returning 0.0
-    except nx.NetworkXError as e:
-        log_debug(f"Eccentricity calculation error: {e}")
-        return 0.0
+        mol_with_H = Chem.AddHs(mol)
+    except Exception as e:
+        log_debug(f"Error adding hydrogens for Wiener index: {e}")
+        return np.nan
+
+    try:
+        # Create the molecular graph from the adjacency matrix
+        adj_matrix = GetAdjacencyMatrix(mol_with_H)
+        G = nx.Graph(adj_matrix)
+        # Ensure the graph is connected; if not, return NaN
+        if not nx.is_connected(G):
+            log_debug("Molecular graph is disconnected; Wiener index undefined.")
+            return np.nan
+
+        # Compute shortest-path distances for all unique pairs (i < j)
+        nodes = list(G.nodes())
+        wiener_sum = 0.0
+        for i in range(len(nodes)):
+            # Get shortest paths from node i
+            lengths = nx.single_source_shortest_path_length(G, nodes[i])
+            for j in range(i + 1, len(nodes)):
+                wiener_sum += lengths.get(nodes[j], 0)
+        return wiener_sum
+    except Exception as e:
+        log_debug(f"Wiener index calculation failed: {e}")
+        return np.nan
+
+
+def calculate_eccentric_connectivity_index(mol: Chem.Mol) -> float:
+    """
+    Calculates the eccentric connectivity index (ECI) defined as:
+      ECI = sum_{v in V} [eccentricity(v) * degree(v)]
     
-    # Compute node degrees
-    degrees = dict(G.degree())
+    - Ensures implicit hydrogens are added.
     
-    # Compute eccentric connectivity index: sum of (eccentricity * degree) for all nodes
-    return sum(eccentricity[node] * degrees[node] for node in G.nodes())
+    Parameters:
+        mol (Chem.Mol): Input RDKit molecule.
+        
+    Returns:
+        float: Eccentric connectivity index or np.nan on failure.
+        np.nan: if the graph is disconnected or if an error occurs.
+    """
+    try:
+        mol_with_H = Chem.AddHs(mol)
+    except Exception as e:
+        log_debug(f"Error adding hydrogens for ECI: {e}")
+        return np.nan
+
+    try:
+        adj_matrix = GetAdjacencyMatrix(mol_with_H)
+        G = nx.Graph(adj_matrix)
+        if not nx.is_connected(G):
+            log_debug("Molecular graph is disconnected; ECI undefined.")
+            return np.nan
+        # Calculate eccentricity for each node
+        ecc = nx.eccentricity(G)
+        degrees = dict(G.degree())
+        eci = sum(ecc[node] * degrees[node] for node in G.nodes())
+        return eci
+    except Exception as e:
+        log_debug(f"Eccentric connectivity index calculation failed: {e}")
+        return np.nan
 
 
 def count_specific_atoms(mol: Chem.Mol, atom_list: list, aromatic: bool = None) -> dict:
@@ -323,7 +334,6 @@ def count_bond_types(mol: Chem.Mol) -> dict:
 
     - Iterates through all bonds in the molecule.
     - Categorizes bonds into Single, Double, Triple, or Aromatic.
-    - Returns bond counts as a dictionary.
 
     Parameters:
         mol (Chem.Mol): RDKit molecule object.
@@ -376,6 +386,10 @@ def count_chiral_centers(mol: Chem.Mol) -> dict:
     """
     # Assign stereochemistry to the molecule
     try:
+        # Add Hydrogens for stereochemistry
+        mol = Chem.AddHs(mol)
+        
+        # Assign sterochemistry
         Chem.AssignStereochemistry(mol, cleanIt=True, force=False)
         
         # Identify chiral centers, excluding unassigned ones
@@ -401,36 +415,41 @@ def count_chiral_centers(mol: Chem.Mol) -> dict:
 
 def count_EZ_isomers(mol: Chem.Mol) -> dict:
     """
-    Counts E and Z isomers for double bonds in the molecule.
-
-    - Identifies double bonds with defined E/Z stereochemistry.
-    - Categorizes bonds as E or Z based on assigned stereochemistry.
+    Counts E and Z isomers in a molecule, ensuring proper assignment of implicit stereochemistry.
+    
+    Fixes:
+    - Assigns stereochemistry before counting.
+    - Identifies unassigned double bond stereochemistry.
 
     Parameters:
         mol (Chem.Mol): RDKit molecule object.
-
+        
     Returns:
-        dict: Dictionary containing counts of E and Z isomers.
-            E_Isomers (int): Count of E Isomers.
-            Z_Isomers (int): Count of Z Isomers.
+        dict: Contains counts for E, Z, and unassigned stereoisomers.
     """
     e_count = 0
     z_count = 0
+    unassigned = 0
     
-    # Iterate through all bonds in the molecule
-    for bond in mol.GetBonds():
-        # If double bond then check stereochemistry
-        if bond.GetBondType() == Chem.rdchem.BondType.DOUBLE:
-            stereo = bond.GetStereo()
-            
-            # Classify the bond as E or Z based on its stereochemistry
-            if stereo == Chem.rdchem.BondStereo.STEREOZ:
-                z_count += 1
-            elif stereo == Chem.rdchem.BondStereo.STEREOE:
-                e_count += 1
+    try:
+        # Ensure stereochemistry is assigned
+        mol = Chem.AddHs(mol)  # Add hydrogens for better stereo perception
+        Chem.AssignStereochemistry(mol, force=True, cleanIt=True)
 
-    # Return dictionary of stereochemistry 
-    return {'E_Isomers': e_count, 'Z_Isomers': z_count}
+        for bond in mol.GetBonds():
+            if bond.GetBondType() == Chem.BondType.DOUBLE:
+                stereo = bond.GetStereo()
+                if stereo == Chem.BondStereo.STEREOE:
+                    e_count += 1
+                elif stereo == Chem.BondStereo.STEREOZ:
+                    z_count += 1
+                elif stereo == Chem.BondStereo.STEREOANY:
+                    unassigned += 1
+
+        return {"E_Isomers": e_count, "Z_Isomers": z_count, "Unassigned_DoubleBonds": unassigned}
+    except Exception as e:
+        print(f"Error detecting E/Z isomers: {e}")
+        return {"E_Isomers": 0, "Z_Isomers": 0, "Unassigned_DoubleBonds": 0}
 
 
 def count_stereocenters(mol):
@@ -513,40 +532,46 @@ def count_rings_by_size_and_aromaticity(mol: Chem.Mol, ring_sizes: list) -> dict
     return ring_counts
 
 
-def calculate_radius_of_gyration(mol: Chem.Mol):
+def calculate_radius_of_gyration(mol: Chem.Mol) -> Optional[float]:
     """
-    Computes the radius of gyration from the 3D conformer.
-
-    - Requires a valid 3D conformer to compute the radius.
-    - Calculates the molecular centroid.
-    - Computes the mean squared distance of all atoms from the centroid.
-    - Returns the square root of the mean squared distance.
-    - Not Mass Weighted radius of gyration.
-
-    Parameters:
-        mol (Chem.Mol): RDKit molecule object with a 3D conformer.
-
+    Computes the radius of gyration using RDKit's built-in function.
+    
+    Steps:
+    - Adds implicit hydrogens.
+    - Embeds a 3D conformer using the ETKDGv3 method.
+    - Performs energy minimization with MMFF.
+    - Uses rdMolDescriptors.CalcRadiusOfGyration to calculate the descriptor.
+    
     Returns:
-        float: Radius of gyration if a 3D conformer is present.
-        None: If no 3D conformer is found.
+        float: Radius of gyration if successful,
+        np.nan: if embedding or minimization fails.
     """
-    # Check if the molecule has at least one 3D conformer
-    if not mol.GetNumConformers():
-        # Return None if no conformer is available
-        return None
-    
-    # Retrieve the first conformer
-    conf = mol.GetConformer()
-    
-    # Extract atomic coordinates as a NumPy array
-    coords = np.array(conf.GetPositions(), dtype=float)
-
-    # Compute the centroid of the molecule
-    centroid = coords.mean(axis=0)
-    
-    # Compute mean squared distance of atoms from the centroid
-    rg_sq = ((coords - centroid)**2).sum(axis=1).mean()
-    return math.sqrt(rg_sq)
+    try:
+        # Add implicit hydrogens
+        mol = Chem.AddHs(mol)
+        
+        # Embed 3D coordinates with ETKDGv3
+        params = AllChem.ETKDGv3()
+        params.useRandomCoords = True
+        params.maxAttempts = 50
+        params.pruneRmsThresh = 0.1
+        result = AllChem.EmbedMolecule(mol, params)
+        if result != 0:
+            # Embedding failed; return NaN
+            return np.nan
+        
+        # Energy minimization using MMFF
+        try:
+            AllChem.MMFFOptimizeMolecule(mol)
+        except Exception:
+            # If minimization fails, proceed with the current coordinates
+            pass
+        
+        # Calculate radius of gyration
+        rg = rdMolDescriptors.CalcRadiusOfGyration(mol)
+        return rg
+    except Exception:
+        return np.nan
 
 
 def compute_2d_descriptors_rdkit(mol: Chem.Mol) -> dict:
@@ -572,15 +597,15 @@ def compute_2d_descriptors_rdkit(mol: Chem.Mol) -> dict:
     # Flexibility
     descriptor_dictionary["Flexibility_RDKit"] = Descriptors.NumRotatableBonds(mol)
     # MW
-    descriptor_dictionary["MW_RDKit"] = round(Descriptors.MolWt(mol), 4)
+    descriptor_dictionary["MW_RDKit"] = Descriptors.MolWt(mol)
     # logP
-    descriptor_dictionary["LogP_RDKit"] = round(Descriptors.MolLogP(mol), 4)
+    descriptor_dictionary["LogP_RDKit"] = Descriptors.MolLogP(mol)
     # HBA
     descriptor_dictionary["HBA_RDKit"] = Descriptors.NumHAcceptors(mol)
     # HBD
     descriptor_dictionary["HBD_RDKit"] = Descriptors.NumHDonors(mol)
     # TPSA
-    descriptor_dictionary["TPSA_RDKit"] = round(Descriptors.TPSA(mol), 4)
+    descriptor_dictionary["TPSA_RDKit"] = Descriptors.TPSA(mol)
     # Charge
     descriptor_dictionary["Charge_RDKit"] = Chem.GetFormalCharge(mol)
     # Heavy atom
@@ -666,8 +691,8 @@ def compute_2d_descriptors_rdkit(mol: Chem.Mol) -> dict:
     descriptor_dictionary["Num_Total_Rings_RDKit"] = total_rings
 
     # Compute Wiener and Eccentric Connectivity indices
-    descriptor_dictionary["WienerIndex_RDKit"] = round(calculate_wiener_index(mol), 4)
-    descriptor_dictionary["EccentricConnectivityIndex_RDKit"] = round(eccentric_connectivity_index(mol), 4)
+    descriptor_dictionary["WienerIndex_RDKit"] = calculate_wiener_index(mol)
+    descriptor_dictionary["EccentricConnectivityIndex_RDKit"] = calculate_eccentric_connectivity_index(mol)
 
     # Return computed descriptor dictionary
     return descriptor_dictionary
@@ -694,19 +719,9 @@ def compute_3d_descriptors_rdkit(mol: Chem.Mol) -> dict:
         "RadiusOfGyration_RDKit": None
     }
     
-    # Check if the molecule has at least one 3D conformer
-    if mol.GetNumConformers() == 0:
-        # Return dictionary with default values if no conformer exists
-        return descriptor_dictionary_3d
-    
-    # TO DO: Energy Minimisation, crashed.
-
-    # Compute radius of gyration
+    # Compute and store radius of gyration
     radius_of_gyration = calculate_radius_of_gyration(mol)
-    
-    # Store computed radius of gyration if valid
-    if radius_of_gyration is not None:
-        descriptor_dictionary_3d["RadiusOfGyration_RDKit"] = round(radius_of_gyration, 4)
+    descriptor_dictionary_3d["RadiusOfGyration_RDKit"] = radius_of_gyration
 
     # Return computed 3D descriptors
     return descriptor_dictionary_3d
@@ -727,7 +742,7 @@ def compute_descriptors_pubchem(smiles: str) -> dict:
     Returns:
         dict: Dictionary containing PubChem descriptors.
               - Keys: Descriptor names ending with "_PubChem".
-              - Values: Rounded numerical values or None if retrieval fails.
+              - Values: Numerical values or None if retrieval fails.
     """
     # Initialize descriptor dictionary with default values (None)
     descriptor_dictionary_pubchem = {
@@ -757,9 +772,9 @@ def compute_descriptors_pubchem(smiles: str) -> dict:
             # Fetch descriptor value from PubChem
             val = get_pubchem_descriptor(smiles, short_name, max_retries=1, backoff_factor=1.0) # No Retries for brevity
             
-            # Store value if valid (numeric type), rounding to 4 decimals
+            # Store value if valid (numeric type)
             if val is not None and isinstance(val, (int,float)):
-                descriptor_dictionary_pubchem[col_name] = round(val, 4)
+                descriptor_dictionary_pubchem[col_name] = val
                 
         # Log retrieval failure and continue with other descriptors
         except Exception as e:
@@ -811,8 +826,8 @@ def merge_rdkit_and_pubchem_descriptors(rd: dict, pc: dict) -> dict:
         if b is None:
             return a
         
-        # Compute rounded average
-        return round((a + b) / 2, 4)
+        # Compute average
+        return (a + b) / 2
 
     # Main descriptors to average
     props = ["LogP", "TPSA", "HBA", "HBD", "Flexibility", "Charge", "AtomStereo"]
@@ -1116,7 +1131,7 @@ class FragmentStore:
             # Compute ratio of BBB- occurrences
             s = d["BBB+_normalised"] + d["BBB-_normalised"]
             if s > 0:
-                d["ratio"] = round(d["BBB-_normalised"] / s, 4)
+                d["ratio"] = round(d["BBB-_normalised"] / s, 8)
             else:
                 d["ratio"] = 0.5
 
@@ -1276,7 +1291,7 @@ def generate_json_from_csv(input_csv: str, output_json: str, use_pubchem=False, 
             if embed_result == 0:
                 AllChem.MMFFOptimizeMolecule(mol_h)
             else:
-                log_debug(f"[Row {idx+1}] 3D embed failed for '{smiles}' -> 3D desc may be None.")
+                log_debug(f"[Row {idx+1}] 3D embed failed for '{smiles}' -> 3D description may be None.")
 
             # Compute 2D and 3D descriptors
             rd_descriptors = compute_2d_descriptors_rdkit(mol_h)
@@ -1442,9 +1457,12 @@ def generate_json_from_csv(input_csv: str, output_json: str, use_pubchem=False, 
             "RING_IDs": "; ".join(sorted(list(ring_id_list))),
             "SIDECHAIN_IDs": "; ".join(sorted(list(sidechain_id_list)))
         }
-        # Add molecule-level descriptors
+        # Add molecule-level descriptors and replace NaN with None
         for k, v in final_desc.items():
-            mol_entry[k] = v
+            mol_entry[k] = None if isinstance(v, float) and np.isnan(v) else v
+        
+        # Ensure all NaN values are converted before storing
+            mol_entry = {k: (None if isinstance(v, float) and np.isnan(v) else v) for k, v in mol_entry.items()}
 
         json_data.append(mol_entry)
         molecule_dicts.append(mol_entry)

@@ -3,7 +3,7 @@ Author: Ben Franey
 Version: 5.0.1 - Publish: 1.0
 Last Review Date: 29-01-2025
 Overview:
-Analyzes molecular data from CSV files, classifying fragments and comparing 
+Analyses molecular data from CSV files, classifying fragments and comparing 
 RDKit and PubChem descriptors. Generates statistical reports and visualizations.
 
 Key Features:
@@ -23,7 +23,7 @@ Key Features:
   - Logs missing data and descriptor inconsistencies.
 
 Usage:
-    python src/analyze.py \
+    python src/analysis.py \
         --parent_dir path/to/processed_data
 """
 
@@ -522,9 +522,9 @@ def classify_fragments(df_in: pd.DataFrame, tag: str) -> pd.DataFrame:
     df_out["BBB+/BBB-"] = np.where(df_out["ratio"] < 0.35, "BBB+", "BBB-")
     return df_out
 
-def analyze_group(df_group: pd.DataFrame, group_name: str, parent_dir: str):
+def analyse_group(df_group: pd.DataFrame, group_name: str, parent_dir: str):
     """
-    Analyzes a molecular group by generating histograms and 
+    Analyses a molecular group by generating histograms and 
     RDKit vs. PubChem descriptor comparisons.
 
     - Creates output directories for histograms and comparisons.
@@ -569,7 +569,7 @@ def analyze_group(df_group: pd.DataFrame, group_name: str, parent_dir: str):
 
 def main(parent_dir):
     """
-    Main function for analyzing molecular data.
+    Main function for analysing molecular data.
 
     - Detects and loads CSV files from the specified directory.
     - Classifies fragments (BRICS, RINGS, SIDECHAINS) based on BBB permeability.
@@ -650,18 +650,18 @@ def main(parent_dir):
     df_rings      = classify_fragments(df_rings, "RINGS")
     df_sidechains = classify_fragments(df_sidechains, "SIDECHAINS")
 
-    # Analyze each group
-    print("\n=== Analyzing Molecules ===")
-    analyze_group(df_molecules, "molecules", parent_dir)
+    # Analyse each group
+    print("\n=== Analysing Molecules ===")
+    analyse_group(df_molecules, "molecules", parent_dir)
 
-    print("\n=== Analyzing BRICS ===")
-    analyze_group(df_brics, "brics", parent_dir)
+    print("\n=== Analysing BRICS ===")
+    analyse_group(df_brics, "brics", parent_dir)
 
-    print("\n=== Analyzing RINGS ===")
-    analyze_group(df_rings, "rings", parent_dir)
+    print("\n=== Analysing RINGS ===")
+    analyse_group(df_rings, "rings", parent_dir)
 
-    print("\n=== Analyzing SIDECHAINS ===")
-    analyze_group(df_sidechains, "sidechains", parent_dir)
+    print("\n=== Analysing SIDECHAINS ===")
+    analyse_group(df_sidechains, "sidechains", parent_dir)
 
     print("\nAll done. Please check the 'grouping' and 'comparisons' subfolders within each group folder.")
 

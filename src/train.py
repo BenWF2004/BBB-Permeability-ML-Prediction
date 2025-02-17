@@ -1,6 +1,6 @@
 """
 Author: Ben Franey
-Version: 11.2.3 - Publish: 1.1
+Version: 11.2.3 - Publish: 1.2
 Last Review Date: 06-02-2025
 Overview:
 This script implements a complete pipeline for training and optimizing an XGBoost model 
@@ -322,6 +322,7 @@ def preprocess_data(data):
             'Atom_Stereo': entry.get('AtomStereo_RDKit', np.nan),
 
             # More Descriptors
+            'MolecularWeight': entry.get('MW_RDKit', np.nan),
             'HeavyAtom': entry.get('HeavyAtom_RDKit', np.nan),
             'Radius_Of_Gyration': entry.get('RadiusOfGyration_RDKit', np.nan),
             'Wiener_Index': entry.get('WienerIndex_RDKit', np.nan),
