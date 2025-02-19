@@ -36,6 +36,7 @@ from matplotlib.lines import Line2D
 from scipy.stats import linregress, norm
 import matplotlib.colors as mcolors
 import matplotlib.cm as cm
+import glob
 
 # Color mapping for plot elements
 GRAPH_COLOR_MAPPING = {
@@ -260,45 +261,55 @@ def plot_histograms(descriptor_key: str, df: pd.DataFrame, bbb_column: str, grou
         ax.legend(loc="upper right", fontsize=24, title="Legend and Metrics", title_fontsize=28)
         ax.set_title(f'Distribution of {desc_prefix} from {source} by BBB Classification', fontsize=30)
 
-        # Create boxplot representation
+        # Create boxplot representation and compute statistics
+        stats_list = []  # Container for saving stats
         box_data   = [data_bbb_neg, data_bbb_pos]
         box_colors = [GRAPH_COLOR_MAPPING['BBB-'], GRAPH_COLOR_MAPPING['BBB+']]
-
         for i, (class_data, color) in enumerate(zip(box_data, box_colors), start=1):
+            group_label = 'BBB-' if i == 1 else 'BBB+'
             mean_ = class_data.mean() if len(class_data) > 0 else 0
             std_  = class_data.std()  if len(class_data) > 1 else 0
             ci_95 = 1.96 * std_
 
-            # Add shaded confidence interval region
+            # Add shaded confidence interval region on the boxplot
             ax_box.fill_betweenx([i - 0.2, i + 0.2], mean_ - std_, mean_ + std_, color=color, alpha=0.5)
             ax_box.plot([mean_ - ci_95, mean_ + ci_95], [i, i], color='black', linestyle='-', linewidth=1.5)
             
-            # Ensure the x-axis does not extend below 0 but captures all data
+            # Set the x-axis limits based on the global min/max
             global_min = min(data_bbb_neg.min(), data_bbb_pos.min())
             global_max = max(data_bbb_neg.max(), data_bbb_pos.max())
-
             if global_min == 0:
-                ax_box.set_xlim(0, global_max * 1.1)  # Keep upper bound dynamic with some padding
+                ax_box.set_xlim(0, global_max * 1.1)
             else:
-                ax_box.set_xlim(global_min * 0.9, global_max * 1.1)  # Allow natural limits
+                ax_box.set_xlim(global_min * 0.9, global_max * 1.1)
 
-            
-            # Custom defintion for max-min height and mean plotting
+            # Custom definition for mean plotting
             ymin_vales = [0, 0.05, 0.7]
             ymax_vales = [0, 0.3, 0.95]
             ax_box.axvline(x=mean_, ymin=ymin_vales[i], ymax=ymax_vales[i], color='black', linewidth=2)
 
-            # Highlight outliers
+            # Identify and plot outliers
             outliers = class_data[(class_data < mean_ - ci_95) | (class_data > mean_ + ci_95)]
             ax_box.scatter(outliers, [i]*len(outliers), color='gray', alpha=0.6, marker='o')
 
-        # Configure boxplot
+            # Save statistics for this group
+            stats_list.append({
+                'Group': group_label,
+                'N': len(class_data),
+                'Mean': mean_,
+                'SD': std_,
+                '95% CI Lower': mean_ - ci_95,
+                '95% CI Upper': mean_ + ci_95,
+                'Number of Outliers': len(outliers)
+            })
+
+        # Configure the boxplot axes
         ax_box.set_yticks([1, 2])
         ax_box.set_yticklabels(['BBB-', 'BBB+'], fontsize=27)
         ax_box.set_xlabel(f'{desc_prefix} ({source})', fontsize=27)
         ax_box.set_title(f'Boxplot Overview of {desc_prefix} from {source}', fontsize=30)
         ax_box.grid(False)
-
+        
         # Save figure to the specified directory
         histogram_filename = f"{descriptor_key}_{source}_histogram.png"
         histogram_filepath = os.path.join(grouping_dir, histogram_filename)
@@ -306,6 +317,13 @@ def plot_histograms(descriptor_key: str, df: pd.DataFrame, bbb_column: str, grou
         plt.savefig(histogram_filepath)
         plt.close()
         print(f"Histogram saved => {histogram_filepath}")
+
+        # Convert the collected statistics to a DataFrame and save as CSV
+        stats_df = pd.DataFrame(stats_list)
+        stats_filename = f"{descriptor_key}_{source}_stats.csv"
+        stats_filepath = os.path.join(grouping_dir, stats_filename)
+        stats_df.to_csv(stats_filepath, index=False)
+        print(f"Stats saved => {stats_filepath}")
 
 
 def compare_and_plot_rdkit_vs_pubchem(
@@ -485,7 +503,7 @@ def classify_fragments(df_in: pd.DataFrame, tag: str) -> pd.DataFrame:
     Classifies molecular fragments based on 'Total_count' and 'ratio', 
     assigning them as BBB+ or BBB-.
 
-    - Filters fragments with at least 3 occurrences.
+    - Filters fragments with at least 5 occurrences.
     - Selects fragments where 'ratio' is below 0.35 (BBB+) or above 0.65 (BBB-).
     - Discards fragments that do not meet filtering criteria.
 
@@ -507,8 +525,8 @@ def classify_fragments(df_in: pd.DataFrame, tag: str) -> pd.DataFrame:
             print(f"{tag}: Missing '{rc}' column. Skipping classification.")
             return df_in
 
-    # Filter fragments with at least 3 occurrences
-    df_out = df_in.loc[df_in["Total_count"] >= 3].copy()
+    # Filter fragments with at least 5 occurrences
+    df_out = df_in.loc[df_in["Total_count"] >= 5].copy()
     
     # Apply ratio-based filtering (retain only strong BBB+ or BBB- classifications)
     df_out = df_out.loc[(df_out["ratio"] < 0.35) | (df_out["ratio"] > 0.65)]
@@ -521,6 +539,69 @@ def classify_fragments(df_in: pd.DataFrame, tag: str) -> pd.DataFrame:
     # Assign BBB+/BBB- labels based on ratio threshold
     df_out["BBB+/BBB-"] = np.where(df_out["ratio"] < 0.35, "BBB+", "BBB-")
     return df_out
+
+def aggregate_stats(grouping_dir: str):
+    """
+    Aggregates individual stats CSV files (named as "<descriptor>_<source>_stats.csv")
+    in the specified grouping directory into a single overall CSV file.
+
+    The overall CSV will contain the columns:
+        Category, Composition/property, Group, N, Mean, SD, 95% CI Lower, 95% CI Upper, Number of Outliers
+
+    Parameters:
+        grouping_dir (str): Directory containing the individual stats CSV files.
+
+    Returns:
+        None: The aggregated overall stats CSV is saved in the grouping directory.
+    """
+
+    # Define the file pattern (files ending with _stats.csv)
+    stats_pattern = os.path.join(grouping_dir, "*_stats.csv")
+    stats_files = glob.glob(stats_pattern)
+
+    if not stats_files:
+        print(f"No stats CSV files found in {grouping_dir}.")
+        return
+
+    df_list = []
+    for filepath in stats_files:
+        filename = os.path.basename(filepath)
+        if not filename.endswith("_stats.csv"):
+            continue
+        # Remove the trailing '_stats.csv'
+        base_name = filename[:-10]
+        # Split from the right to extract descriptor and source (Category)
+        if "_" in base_name:
+            descriptor, source = base_name.rsplit('_', 1)
+        else:
+            descriptor = base_name
+            source = "Unknown"
+        # Read CSV and add the new columns
+        temp_df = pd.read_csv(filepath)
+        temp_df["Composition/property"] = descriptor
+        temp_df["Category"] = source
+        df_list.append(temp_df)
+
+    if df_list:
+        overall_df = pd.concat(df_list, ignore_index=True)
+        # Reorder the columns as desired:
+        desired_cols = [
+            "Category",
+            "Composition/property",
+            "Group",
+            "N",
+            "Mean",
+            "SD",
+            "95% CI Lower",
+            "95% CI Upper",
+            "Number of Outliers"
+        ]
+        overall_df = overall_df[desired_cols]
+        overall_stats_filepath = os.path.join(grouping_dir, "overall_stats.csv")
+        overall_df.to_csv(overall_stats_filepath, index=False)
+        print(f"Overall stats saved => {overall_stats_filepath}")
+    else:
+        print("No valid stats files found for aggregation.")
 
 def analyse_group(df_group: pd.DataFrame, group_name: str, parent_dir: str):
     """
@@ -566,6 +647,9 @@ def analyse_group(df_group: pd.DataFrame, group_name: str, parent_dir: str):
         # If both RDKit and PubChem columns exist, generate comparison plots
         if rd_col in df_group.columns and pub_col in df_group.columns:
             compare_and_plot_rdkit_vs_pubchem(dkey, df_group, comparisons_folder)
+            
+    # After processing all descriptors, aggregate the individual stats CSV files
+    aggregate_stats(grouping_folder)
 
 def main(parent_dir):
     """
