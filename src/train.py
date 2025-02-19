@@ -982,8 +982,6 @@ def perform_shap_analysis(booster, X_train, X_val, y_val, output_dir):
         if isinstance(shap_values_pos, list) and len(shap_values_pos) == 2:
             shap_values_pos = shap_values_pos[1]
 
-        # Flip sign so + => 'drive BBB+'
-        shap_values_pos = -1 * shap_values_pos
         shap_df = pd.DataFrame(shap_values_pos, columns=X_val_num.columns)
         shap_df.to_csv(os.path.join(analysis_dir, 'shap_values.csv'), index=False)
 
@@ -1226,9 +1224,9 @@ def run_optuna_optimization(
         random_seed_trial = random_seed_main
 
         # Suggest fixed minimum frequency values for each fragment type.
-        brics_min_freq = trial.suggest_int("brics_min_freq", 3, 3)      # Temp 5: ideal (1,6)
-        rings_min_freq = trial.suggest_int("rings_min_freq", 3, 3)      # Temp 5: ideal (1,6)
-        side_min_freq = trial.suggest_int("side_min_freq", 5, 5)        # Temp 5: ideal (2,10)
+        brics_min_freq = trial.suggest_int("brics_min_freq", 2, 6)      # Temp: ideal (1,10)
+        rings_min_freq = trial.suggest_int("rings_min_freq", 2, 6)      # Temp: ideal (1,10)
+        side_min_freq = trial.suggest_int("side_min_freq", 2, 6)        # Temp: ideal (1,10)
 
         # Determine the list of tokens to keep based on the frequency thresholds.
         brics_keep_list = brics_freq[brics_freq >= brics_min_freq].index.tolist()

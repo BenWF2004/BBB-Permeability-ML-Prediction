@@ -67,42 +67,42 @@ def calculate_metrics_from_csv(file_path):
     results = {}
 
     for model in sorted(models):
-        if "Mean" not in model and "Median" not in model:
-            prob_col = f'Prob_{model}'
-            pred_col = f'Pred_{model}'
+        #if "Mean" not in model and "Median" not in model:
+        prob_col = f'Prob_{model}'
+        pred_col = f'Pred_{model}'
 
-            if prob_col not in data.columns or pred_col not in data.columns:
-                print(f"Skipping model '{model}' due to missing columns.")
-                continue
+        if prob_col not in data.columns or pred_col not in data.columns:
+            print(f"Skipping model '{model}' due to missing columns.")
+            continue
 
-            # Extract probability and prediction columns
-            prob_predictions = pd.to_numeric(data[prob_col], errors='coerce')
-            if prob_predictions.isnull().any():
-                raise ValueError(f"Probabilities for model '{model}' contain non-numeric values.")
+        # Extract probability and prediction columns
+        prob_predictions = pd.to_numeric(data[prob_col], errors='coerce')
+        if prob_predictions.isnull().any():
+            raise ValueError(f"Probabilities for model '{model}' contain non-numeric values.")
 
-            # Convert probabilities to binary predictions using a 0.5 threshold
-            binary_predictions = (prob_predictions > 0.5).astype(int)
+        # Convert probabilities to binary predictions using a 0.5 threshold
+        binary_predictions = (prob_predictions > 0.5).astype(int)
 
-            # Map predicted labels to binary
-            pred_labels = data[pred_col].map(label_mapping)
-            if pred_labels.isnull().any():
-                raise ValueError(f"Predictions for model '{model}' contain values outside the mapping keys.")
+        # Map predicted labels to binary
+        pred_labels = data[pred_col].map(label_mapping)
+        if pred_labels.isnull().any():
+            raise ValueError(f"Predictions for model '{model}' contain values outside the mapping keys.")
 
-            # Calculate metrics
-            sn, sp, auc, mcc, f1 = calculate_individual_metrics(true_labels, binary_predictions, prob_predictions)
-            
-            # Calculate mean and median probabilities
-            mean_prob = prob_predictions.mean()
-            median_prob = prob_predictions.median()
+        # Calculate metrics
+        sn, sp, auc, mcc, f1 = calculate_individual_metrics(true_labels, binary_predictions, prob_predictions)
+        
+        # Calculate mean and median probabilities
+        mean_prob = prob_predictions.mean()
+        median_prob = prob_predictions.median()
 
-            # Store metrics
-            results[model] = {
-                "SN": round(sn, 3),
-                "SP": round(sp, 3),
-                "AUC": round(auc, 3) if auc is not None else None,
-                "MCC": round(mcc, 3) if mcc is not None else None,
-                "F1": round(f1, 3) if f1 is not None else None,
-            }
+        # Store metrics
+        results[model] = {
+            "SN": round(sn, 3),
+            "SP": round(sp, 3),
+            "AUC": round(auc, 3) if auc is not None else None,
+            "MCC": round(mcc, 3) if mcc is not None else None,
+            "F1": round(f1, 3) if f1 is not None else None,
+        }
 
     return results
 

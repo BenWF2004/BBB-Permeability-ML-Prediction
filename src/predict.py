@@ -9,13 +9,13 @@ Overview:
     
 Usage example:  
 python3 src/predict.py \
-  --model_path published_model \
+  --model_dir published_model \
   --input_json data/example_prediction/model_ready.json \
   --output_csv results/predictions.csv \
   --use_knn y
   
 Available Arguments (argparse)
---model_path: Path to the trained model file.
+--model_dir: Path to the trained model file.
 --input_json: Path to the preprocessed input data in JSON format.
 --output_csv: Path to save the predictions.
 --use_knn: y/n for use of KNN.
@@ -773,6 +773,38 @@ def main():
         output_df['Pred_Median'] = np.where(
             output_df['Prob_Median'] >= avg_threshold, 'BBB+', 'BBB-'
         )
+        
+        # Weighted aggregation using model correlations
+        if model_labels:
+            prob_cols = [f"Prob_{lbl}" for lbl in model_labels]
+            prob_df = output_df[prob_cols]
+
+            # Compute pairwise correlation among models
+            corr_matrix = prob_df.corr()
+
+            # Compute average correlation per model (excluding self-correlation)
+            avg_corr = corr_matrix.apply(lambda x: x.drop(x.name).mean())
+
+            # Normalize weights so they sum to 1
+            weights = avg_corr.copy()
+            # Ensure non-negative weights
+            if weights.min() < 0:
+                weights = weights - weights.min()
+            weights = weights / weights.sum()
+
+            # Compute weighted average probabilities per sample
+            weighted_probs = prob_df.mul(weights, axis=1).sum(axis=1)
+
+            # Compute a weighted average threshold
+            threshold_array = np.array([thresholds_used[model_labels.index(lbl)] for lbl in model_labels])
+            weighted_threshold = np.dot(threshold_array, weights.values)
+
+            output_df['Prob_Weighted'] = weighted_probs
+            output_df['Pred_Weighted'] = np.where(
+                output_df['Prob_Weighted'] >= weighted_threshold, 'BBB+', 'BBB-'
+            )
+
+        
     else:
         # Should not happen unless no valid models
         output_df['Prob_Mean'] = np.nan
