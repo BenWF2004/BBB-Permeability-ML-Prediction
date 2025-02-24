@@ -186,14 +186,28 @@ def preprocess_data(raw_data: list) -> pd.DataFrame:
             'BBB': entry.get('BBB+/BBB-', np.nan),
             'SMILES': entry.get('SMILES', np.nan),
                 
-            # Testing: RDKit only
-            'LogP': entry.get('LogP_RDKit', np.nan),
-            'Flexibility': entry.get('Flexibility_RDKit', np.nan),
-            'HBA': entry.get('HBA_RDKit', np.nan),
-            'HBD': entry.get('HBD_RDKit', np.nan),
-            'TPSA': entry.get('TPSA_RDKit', np.nan),
-            'Charge': entry.get('Charge_RDKit', np.nan),
-            'Atom_Stereo': entry.get('AtomStereo_RDKit', np.nan),
+            # Testing: PubChem else RDKit
+            'LogP': entry.get('LogP_PubChem', np.nan)
+                if not pd.isna(entry.get('LogP_PubChem', np.nan))
+                else entry.get('LogP_RDKit', np.nan),
+            'Flexibility': entry.get('Flexibility_PubChem', np.nan)
+                if not pd.isna(entry.get('Flexibility_PubChem', np.nan))
+                else entry.get('Flexibility_RDKit', np.nan),
+            'HBA': entry.get('HBA_PubChem', np.nan)
+                if not pd.isna(entry.get('HBA_PubChem', np.nan))
+                else entry.get('HBA_RDKit', np.nan),
+            'HBD': entry.get('HBD_PubChem', np.nan)
+                if not pd.isna(entry.get('HBD_PubChem', np.nan))
+                else entry.get('HBD_RDKit', np.nan),
+            'TPSA': entry.get('TPSA_PubChem', np.nan)
+                if not pd.isna(entry.get('TPSA_PubChem', np.nan))
+                else entry.get('TPSA_RDKit', np.nan),
+            'Charge': entry.get('Charge_PubChem', np.nan)
+                if not pd.isna(entry.get('Charge_PubChem', np.nan))
+                else entry.get('Charge_RDKit', np.nan),
+            'Atom_Stereo': entry.get('AtomStereo_PubChem', np.nan)
+                if not pd.isna(entry.get('AtomStereo_PubChem', np.nan))
+                else entry.get('AtomStereo_RDKit', np.nan),
 
             'Molecular_Weight': entry.get('MW_RDKit', np.nan),
             'Heavy_Atom_Count': entry.get('HeavyAtom_RDKit', np.nan),
@@ -416,7 +430,7 @@ def map_predictions(pred_array: np.ndarray) -> np.ndarray:
     Returns:
         np.ndarray: A NumPy array of corresponding string labels (`'BBB+'` or `'BBB-'`).
     """
-    return np.where(pred_array == 1, 'BBB+', 'BBB-')
+    return np.where(pred_array == 0, 'BBB+', 'BBB-')
 
 
 def load_subfolder_assets(folder_path: str) -> dict:
@@ -764,14 +778,14 @@ def main():
         output_df['Prob_Mean'] = output_df[prob_cols].mean(axis=1)
         # Classify as 'BBB+' if the mean probability is below or equal to the threshold, else 'BBB-'
         output_df['Pred_Mean'] = np.where(
-            output_df['Prob_Mean'] >= avg_threshold, 'BBB+', 'BBB-'
+            output_df['Prob_Mean'] <= avg_threshold, 'BBB+', 'BBB-'
         )
 
         # Median Probability approach
         output_df['Prob_Median'] = output_df[prob_cols].median(axis=1)
         # Classify as 'BBB+' if the mean probability is below or equal to the threshold, else 'BBB-'
         output_df['Pred_Median'] = np.where(
-            output_df['Prob_Median'] >= avg_threshold, 'BBB+', 'BBB-'
+            output_df['Prob_Median'] <= avg_threshold, 'BBB+', 'BBB-'
         )
         
         # Weighted aggregation using model correlations

@@ -31,7 +31,7 @@ def calculate_metrics_from_csv(file_path):
     true_label_col = true_label_col[0]
 
     # Map true labels to binary (adjust mapping as per your dataset)
-    label_mapping = {"BBB+": 1, "BBB-": 0}
+    label_mapping = {"BBB+": 0, "BBB-": 1}
     true_labels = data[true_label_col].map(label_mapping)
     if true_labels.isnull().any():
         raise ValueError("True labels contain values outside the mapping keys.")

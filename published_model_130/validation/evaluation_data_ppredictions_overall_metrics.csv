@@ -1,0 +1,9 @@
+File,Model,SN,SP,AUC,MCC,F1
+predictions/pm130.csv,Mean,0.837,0.938,0.959,0.784,0.86
+predictions/pm130.csv,Median,0.839,0.938,0.958,0.786,0.861
+predictions/pm130.csv,accuracy,0.839,0.939,0.958,0.787,0.862
+predictions/pm130.csv,auc,0.835,0.934,0.958,0.779,0.857
+predictions/pm130.csv,balanced_accuracy,0.833,0.934,0.958,0.777,0.856
+predictions/pm130.csv,f1,0.839,0.939,0.957,0.787,0.862
+predictions/pm130.csv,precision,0.781,0.947,0.955,0.751,0.833
+predictions/pm130.csv,recall,0.84,0.93,0.955,0.778,0.857

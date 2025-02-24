@@ -8,6 +8,7 @@ This directory contains the **best-performing model** from **130 Optuna trials**
 - Uses a **static 3-3-5 BRICS, SIDE CHAINS, and RINGS** feature architecture due to computational limitations.
 - Fully **compatible with the latest prediction scripts**.
 - A **new best model is planned for release** in the near future.
+- ```validation``` contains **performance metrics** for each model. 
 
 ## Compatibility & Usage
 **This model is compatible with the current prediction scripts.**
