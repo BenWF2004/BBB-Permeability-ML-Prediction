@@ -5,6 +5,6 @@ RDKit Column: AtomStereo_RDKit
 PubChem Column: AtomStereo_PubChem
 Function Column for Color Mapping: MW_RDKit
 Data Points Used: 6190
-Mean Absolute Error (MAE): 0.1258
-Root Mean Squared Error (RMSE): 0.5208
-R^2 Value: 0.9785
+Mean Absolute Error (MAE): 0.1276
+Root Mean Squared Error (RMSE): 0.5222
+R^2 Value: 0.9784
